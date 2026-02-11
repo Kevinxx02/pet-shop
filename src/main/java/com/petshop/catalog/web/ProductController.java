@@ -3,7 +3,8 @@ package com.petshop.catalog.web;
 import com.petshop.catalog.application.product.create.CreateProductService;
 import com.petshop.catalog.application.product.list.ListProductService;
 import com.petshop.catalog.application.product.list.ProductView;
-import com.petshop.catalog.domain.product.Product;
+import com.petshop.catalog.application.product.update.UpdateProductCommand;
+import com.petshop.catalog.application.product.update.UpdateProductService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,18 +17,27 @@ import java.util.UUID;
 public class ProductController {
 
     private final CreateProductService createProductService;
+    private final UpdateProductService updateProductService;
     private final ListProductService listProductService;
 
     public ProductController(CreateProductService createProductService,
-                             ListProductService listProductService) {
+                             ListProductService listProductService,
+                             UpdateProductService updateProductService) {
         this.createProductService = createProductService;
         this.listProductService = listProductService;
+        this.updateProductService = updateProductService;
     }
 
     public static class CreateProductRequest {
         public String name;
         public String description;
         public BigDecimal price;
+    }
+
+
+    @GetMapping
+    public List<ProductView> list() {
+        return listProductService.list();
     }
 
     @PostMapping
@@ -39,13 +49,23 @@ public class ProductController {
         );
 
         return ResponseEntity.ok(new Object() {
-            public String message = "Producto creado correctamente";
-            public UUID productId = id;
+            public final String message = "Producto creado correctamente";
+            public final UUID productId = id;
         });
     }
 
-    @GetMapping
-    public List<ProductView> list() {
-        return listProductService.list();
+    @PutMapping
+    public ResponseEntity<?> updateProduct(@RequestBody UpdateProductCommand request) {
+        UUID id = updateProductService.updateProduct(
+                request.id(),
+                request.name(),
+                request.description(),
+                request.price()
+        );
+
+        return ResponseEntity.ok(new Object() {
+            public final String message = "Producto actualizado correctamente";
+            public final UUID productId = id;
+        });
     }
 }

@@ -17,20 +17,13 @@ public class JpaProductRepository implements ProductRepository {
     }
 
     @Override
-    public Optional<Product> findById(UUID id) {
-        return jpaRepository.findById(id).map(this::toDomain);
+    public Optional<ProductJpaEntity> findById(UUID id) {
+        return jpaRepository.findById(id);
     }
 
     @Override
     public void save(Product product) {
         jpaRepository.save(toEntity(product));
-    }
-
-    @Override
-    public List<Product> findAll() {
-        return jpaRepository.findAll().stream()
-                .map(this::toDomain)
-                .collect(Collectors.toList());
     }
 
     // Convertir de dominio a JPA
@@ -39,17 +32,7 @@ public class JpaProductRepository implements ProductRepository {
                 product.getId(),
                 product.getName(),
                 product.getDescription(),
-                product.getPrice()
-        );
-    }
-
-    // Convertir de JPA a dominio
-    private Product toDomain(ProductJpaEntity entity) {
-        return Product.rehydrate(
-                entity.getId(),
-                entity.getName(),
-                entity.getDescription(),
-                entity.getPrice()
+                product.getPrice().value()
         );
     }
 }

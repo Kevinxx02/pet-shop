@@ -1,4 +1,4 @@
-package com.petshop.catalog.domain.product;
+package com.petshop.catalog.domain.product.events;
 
 import com.petshop.catalog.domain.DomainEvent;
 
@@ -12,7 +12,7 @@ public class ProductCreated implements DomainEvent {
     public ProductCreated(UUID productId) {
         this.productId = productId;
         this.occurredOn = Instant.now();
-        System.out.println("EVENTO PUBLICADO: " + this.getClass().getSimpleName());
+        System.out.println("Domain/products/events/created: " + this.getClass().getSimpleName());
     }
 
     public UUID getProductId() {

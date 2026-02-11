@@ -9,6 +9,6 @@ public class ProductEventListener {
 
     @RabbitListener(queues = RabbitConfig.QUEUE)
     public void handle(String payload) {
-        System.out.println("CONSUMIDOR RECIBIÓ: " + payload);
+        System.out.println("Infrastructure/Listener: " + payload);
     }
 }
