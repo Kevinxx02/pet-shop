@@ -1,14 +1,17 @@
 package com.petshop.catalog.web;
 
+import com.petshop.catalog.application.product.create.CreateProductCommand;
 import com.petshop.catalog.application.product.create.CreateProductService;
 import com.petshop.catalog.application.product.list.ListProductService;
 import com.petshop.catalog.application.product.list.ProductView;
-import com.petshop.catalog.application.product.update.UpdateProductCommand;
 import com.petshop.catalog.application.product.update.UpdateProductService;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-        import java.math.BigDecimal;
+import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,24 +31,20 @@ public class ProductController {
         this.updateProductService = updateProductService;
     }
 
-    public static class CreateProductRequest {
-        public String name;
-        public String description;
-        public BigDecimal price;
-    }
-
-
     @GetMapping
-    public List<ProductView> list() {
-        return listProductService.list();
+    public List<ProductView> list(@RequestParam(defaultValue = "0") Integer isAdmin) {
+        return listProductService.list(isAdmin);
     }
 
     @PostMapping
-    public ResponseEntity<?> createProduct(@RequestBody CreateProductRequest request) {
+    public ResponseEntity<?> createProduct(
+            @RequestParam String name,
+            @RequestParam BigDecimal price) {
         UUID id = createProductService.createProduct(
-                request.name,
-                request.description,
-                request.price
+                name,
+                "description",
+                price,
+                "file"
         );
 
         return ResponseEntity.ok(new Object() {
@@ -54,13 +53,22 @@ public class ProductController {
         });
     }
 
-    @PutMapping
-    public ResponseEntity<?> updateProduct(@RequestBody UpdateProductCommand request) {
-        UUID id = updateProductService.updateProduct(
-                request.id(),
-                request.name(),
-                request.description(),
-                request.price()
+    @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> updateProduct(
+            @RequestParam UUID id,
+            @RequestParam String name,
+            @RequestParam BigDecimal price,
+            @RequestParam(required = false) MultipartFile file,
+            @RequestParam Boolean isVisible
+            ) throws IOException {
+
+        UUID response = updateProductService.updateProduct(
+                id,
+                name,
+                "description()",
+                price,
+                file,
+                isVisible
         );
 
         return ResponseEntity.ok(new Object() {

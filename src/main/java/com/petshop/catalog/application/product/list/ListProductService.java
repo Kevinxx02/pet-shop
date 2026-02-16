@@ -16,7 +16,7 @@ public class ListProductService {
         this.productRepository = productRepository;
     }
 
-    public List<ProductView> list() {
-        return productRepository.findAll();
+    public List<ProductView> list(Integer isAdmin) {
+        return productRepository.findAll(isAdmin);
     }
 }

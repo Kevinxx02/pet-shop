@@ -32,7 +32,9 @@ public class JpaProductRepository implements ProductRepository {
                 product.getId(),
                 product.getName(),
                 product.getDescription(),
-                product.getPrice().value()
+                product.getPrice().value(),
+                product.getImage(),
+                product.getVisible()
         );
     }
 }

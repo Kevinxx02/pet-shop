@@ -28,8 +28,10 @@ public class CreateProductService {
     }
 
     @Transactional
-    public UUID createProduct(String name, String description, BigDecimal price) {
-        Product product = Product.create(name, description, price);
+    public UUID createProduct(String name, String description, BigDecimal price, String image) {
+        final Boolean isVisible = true;
+
+        Product product = Product.create(name, description, price, image, isVisible);
         productRepository.save(product);
         product.pullDomainEvents().forEach(event -> {
             if (event instanceof ProductCreated pc) {

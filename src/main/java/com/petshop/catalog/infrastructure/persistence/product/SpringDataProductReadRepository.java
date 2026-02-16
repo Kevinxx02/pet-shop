@@ -12,9 +12,17 @@ public interface SpringDataProductReadRepository
 
     @Query("""
         select new com.petshop.catalog.application.product.list.ProductView(
-            p.id, p.name, p.description, p.price
+            p.id, p.name, p.description, p.price, p.image, p.isVisible
         )
         from ProductJpaEntity p
     """)
     List<ProductView> findAllProjected();
+    @Query("""
+        select new com.petshop.catalog.application.product.list.ProductView(
+            p.id, p.name, p.description, p.price, p.image, p.isVisible
+        )
+        from ProductJpaEntity p
+        where p.isVisible
+    """)
+    List<ProductView> findAllVisible();
 }

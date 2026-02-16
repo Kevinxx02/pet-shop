@@ -15,30 +15,40 @@ public class Product {
     private String name;
     private String description;
     private ProductPrice price;
+    private String image;
+    private Boolean isVisible;
+
     private final List<DomainEvent> domainEvents = new ArrayList<>();
 
-    private Product(UUID id, String name, String description, BigDecimal price) {
+    private Product(UUID id, String name, String description, BigDecimal price, Boolean isVisible) {
         this.id = id;
         this.changeName(name);
         this.changeDescription(description);
         this.changePrice(price);
+        this.isVisible = isVisible;
+    }
+
+    private void changeImage(String image) {
+        this.image = image;
     }
 
     public static Product create(
             String name,
             String description,
-            BigDecimal price
+            BigDecimal price,
+            String image,
+            Boolean isVisible
     ) {
         UUID newId = UUID.randomUUID();
         Product product = new Product(
-                UUID.randomUUID(),
+                newId,
                 name,
                 description,
-                price
+                price,
+                isVisible
         );
 
         product.recordEvent(new ProductCreated(newId));
-
         return product;
     }
 
@@ -46,19 +56,22 @@ public class Product {
             UUID id,
             String name,
             String description,
-            BigDecimal price
+            BigDecimal price,
+            String image,
+            Boolean isVisible
     ) {
-        return new Product(id, name, description, price);
+        return new Product(id, name, description, price, isVisible);
     }
 
     public static Product update(
             UUID id,
             String name,
             String description,
-            BigDecimal price
+            BigDecimal price,
+            Boolean isVisible
     ) {
 
-        Product product =  new Product(id, name, description, price);
+        Product product =  new Product(id, name, description, price, isVisible);
         product.recordEvent(new ProductUpdated(product.id));
 
         return product;
@@ -97,5 +110,16 @@ public class Product {
 
     private void changeName(String name) {
         this.name = name;
+    }
+    public String getImage() {
+        return this.image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public Boolean getVisible() {
+        return isVisible;
     }
 }

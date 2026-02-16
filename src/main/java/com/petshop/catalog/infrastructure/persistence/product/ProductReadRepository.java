@@ -14,7 +14,11 @@ public class ProductReadRepository {
     }
 
     @Transactional(readOnly = true)
-    public List<ProductView> findAll(){
-        return this.jpaRepository.findAllProjected();
+    public List<ProductView> findAll(Integer isAdmin){
+        if (isAdmin == 1) {
+            return this.jpaRepository.findAllProjected();
+        }
+
+        return this.jpaRepository.findAllVisible();
     }
 }

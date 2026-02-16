@@ -22,7 +22,7 @@ public class OutboxWorker {
     }
 
     @Transactional
-    @Scheduled(fixedDelay = 5000)
+    //@Scheduled(fixedDelay = 5000)
     public void processPendingEvents() {
         List<OutboxEventJpaEntity> events =
                 repository.findProcessable(Instant.now());

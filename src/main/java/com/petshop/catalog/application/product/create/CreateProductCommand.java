@@ -5,5 +5,6 @@ import java.math.BigDecimal;
 public record CreateProductCommand(
         String name,
         String description,
-        BigDecimal price
+        BigDecimal price,
+        String image
 ) {}
