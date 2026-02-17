@@ -36,7 +36,6 @@ public class Product {
             String name,
             String description,
             BigDecimal price,
-            String image,
             Boolean isVisible
     ) {
         UUID newId = UUID.randomUUID();

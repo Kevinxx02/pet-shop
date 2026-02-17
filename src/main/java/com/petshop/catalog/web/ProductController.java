@@ -32,19 +32,24 @@ public class ProductController {
     }
 
     @GetMapping
-    public List<ProductView> list(@RequestParam(defaultValue = "0") Integer isAdmin) {
-        return listProductService.list(isAdmin);
+    public List<ProductView> list(@RequestParam(required = false) UUID id,
+                                  @RequestParam(defaultValue = "0") Integer isAdmin) {
+        return listProductService.list(id, isAdmin);
     }
 
     @PostMapping
     public ResponseEntity<?> createProduct(
             @RequestParam String name,
-            @RequestParam BigDecimal price) {
+            @RequestParam String description,
+            @RequestParam BigDecimal price,
+            @RequestParam MultipartFile file,
+            @RequestParam Boolean isVisible) throws IOException {
         UUID id = createProductService.createProduct(
                 name,
-                "description",
+                description,
                 price,
-                "file"
+                file,
+                isVisible
         );
 
         return ResponseEntity.ok(new Object() {
@@ -57,15 +62,16 @@ public class ProductController {
     public ResponseEntity<?> updateProduct(
             @RequestParam UUID id,
             @RequestParam String name,
+            @RequestParam String description,
             @RequestParam BigDecimal price,
+            /* Al actualizar no es requerido que suban nuevamente la imagen */
             @RequestParam(required = false) MultipartFile file,
             @RequestParam Boolean isVisible
             ) throws IOException {
-
-        UUID response = updateProductService.updateProduct(
+        updateProductService.updateProduct(
                 id,
                 name,
-                "description()",
+                description,
                 price,
                 file,
                 isVisible

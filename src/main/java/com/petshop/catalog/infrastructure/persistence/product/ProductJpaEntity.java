@@ -22,16 +22,18 @@ public class ProductJpaEntity {
     @Version
     private Long version;
     private Boolean isVisible;
+    private Boolean isCreator;
 
-    protected ProductJpaEntity() {} // constructor por JPA
+    public ProductJpaEntity() {} // constructor por JPA
 
-    public ProductJpaEntity(UUID id, String name, String description, BigDecimal price, String image, Boolean isVisible) {
+    public ProductJpaEntity(UUID id, String name, String description, BigDecimal price, String image, Boolean isVisible, Boolean isCreator) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
         this.image = image;
         this.isVisible = isVisible;
+        this.isCreator = isCreator;
     }
 
     // Getters y Setters
@@ -40,6 +42,7 @@ public class ProductJpaEntity {
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
+    public Boolean getIsCreator() { return isCreator; }
 
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
@@ -58,7 +61,9 @@ public class ProductJpaEntity {
     public void setVisibility(Boolean isVisible) {
         this.isVisible = isVisible;
     }
-
+    public void setIsCreator(Boolean isCreator) {
+        this.isCreator = isCreator;
+    }
     public void updateFrom(Product product) {
         this.name = product.getName();
         this.description = product.getDescription();

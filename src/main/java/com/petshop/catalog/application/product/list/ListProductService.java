@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -16,7 +17,7 @@ public class ListProductService {
         this.productRepository = productRepository;
     }
 
-    public List<ProductView> list(Integer isAdmin) {
-        return productRepository.findAll(isAdmin);
+    public List<ProductView> list(UUID id, Integer isAdmin) {
+        return productRepository.find(id, isAdmin);
     }
 }

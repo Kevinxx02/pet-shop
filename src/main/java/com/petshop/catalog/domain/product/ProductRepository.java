@@ -10,4 +10,5 @@ import java.util.UUID;
 public interface ProductRepository {
     Optional<ProductJpaEntity> findById(UUID id);
     void save(Product product);
+    void save(ProductJpaEntity product);
 }

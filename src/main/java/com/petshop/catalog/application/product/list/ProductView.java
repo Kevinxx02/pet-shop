@@ -9,5 +9,6 @@ public record ProductView (
         String description,
         BigDecimal price,
         String image,
-        Boolean isVisible
+        Boolean isVisible,
+        Boolean isCreator
 ) {}

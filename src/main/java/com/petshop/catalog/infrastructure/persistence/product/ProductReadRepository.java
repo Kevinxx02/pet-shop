@@ -5,6 +5,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 
 @Repository
 public class ProductReadRepository {
@@ -14,11 +16,14 @@ public class ProductReadRepository {
     }
 
     @Transactional(readOnly = true)
-    public List<ProductView> findAll(Integer isAdmin){
+    public List<ProductView> find(UUID id, Integer isAdmin){
         if (isAdmin == 1) {
             return this.jpaRepository.findAllProjected();
         }
+        if (!Objects.isNull(id)) {
+            return this.jpaRepository.findByIdProjected(id);
+        }
 
-        return this.jpaRepository.findAllVisible();
+        return this.jpaRepository.findVisibleProjected();
     }
 }

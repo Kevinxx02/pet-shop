@@ -3,6 +3,7 @@ package com.petshop.catalog.infrastructure.persistence.product;
 import com.petshop.catalog.application.product.list.ProductView;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.UUID;
@@ -11,18 +12,27 @@ public interface SpringDataProductReadRepository
         extends JpaRepository<ProductJpaEntity, UUID> {
 
     @Query("""
-        select new com.petshop.catalog.application.product.list.ProductView(
-            p.id, p.name, p.description, p.price, p.image, p.isVisible
+        SELECT new com.petshop.catalog.application.product.list.ProductView(
+            p.id, p.name, p.description, p.price, p.image, p.isVisible, p.isCreator
         )
-        from ProductJpaEntity p
+        FROM ProductJpaEntity p
     """)
     List<ProductView> findAllProjected();
     @Query("""
-        select new com.petshop.catalog.application.product.list.ProductView(
-            p.id, p.name, p.description, p.price, p.image, p.isVisible
+        SELECT new com.petshop.catalog.application.product.list.ProductView(
+            p.id, p.name, p.description, p.price, p.image, p.isVisible, p.isCreator
         )
-        from ProductJpaEntity p
-        where p.isVisible
+        FROM ProductJpaEntity p
+        WHERE p.isVisible
     """)
-    List<ProductView> findAllVisible();
+    List<ProductView> findVisibleProjected();
+
+    @Query("""
+        SELECT new com.petshop.catalog.application.product.list.ProductView(
+            p.id, p.name, p.description, p.price, p.image, p.isVisible, p.isCreator
+        )
+        FROM ProductJpaEntity p
+        WHERE p.isVisible AND p.id = :id
+    """)
+    List<ProductView> findByIdProjected(@Param("id") UUID id);
 }

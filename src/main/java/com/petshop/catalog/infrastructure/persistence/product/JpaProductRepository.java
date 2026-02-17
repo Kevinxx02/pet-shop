@@ -25,6 +25,9 @@ public class JpaProductRepository implements ProductRepository {
     public void save(Product product) {
         jpaRepository.save(toEntity(product));
     }
+    public void save(ProductJpaEntity product) {
+        jpaRepository.save(product);
+    }
 
     // Convertir de dominio a JPA
     private ProductJpaEntity toEntity(Product product) {
@@ -34,7 +37,8 @@ public class JpaProductRepository implements ProductRepository {
                 product.getDescription(),
                 product.getPrice().value(),
                 product.getImage(),
-                product.getVisible()
+                product.getVisible(),
+                false
         );
     }
 }
