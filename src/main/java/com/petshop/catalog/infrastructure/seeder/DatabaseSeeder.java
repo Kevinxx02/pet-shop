@@ -1,4 +1,4 @@
-package com.petshop.catalog.infrastructure.persistence;
+package com.petshop.catalog.infrastructure.seeder;
 
 import com.petshop.catalog.domain.product.ProductRepository;
 import com.petshop.catalog.infrastructure.persistence.product.ProductJpaEntity;
@@ -30,6 +30,7 @@ public class DatabaseSeeder implements CommandLineRunner {
             entity.setPrice(BigDecimal.ZERO);
             entity.setVisibility(true);
             entity.setIsCreator(true);
+            entity.setImage("agregar.png");
             productRepository.save(entity);
         }
     }

@@ -89,16 +89,6 @@ public class Product {
         return this.price;
     }
 
-    private void recordEvent(DomainEvent event) {
-        domainEvents.add(event);
-    }
-
-    public List<DomainEvent> pullDomainEvents() {
-        List<DomainEvent> events = new ArrayList<>(domainEvents);
-        domainEvents.clear();
-        return events;
-    }
-
     private void changePrice(BigDecimal price) {
         this.price = ProductPrice.from(price);
     }
@@ -120,5 +110,16 @@ public class Product {
 
     public Boolean getVisible() {
         return isVisible;
+    }
+
+
+    private void recordEvent(DomainEvent event) {
+        domainEvents.add(event);
+    }
+
+    public List<DomainEvent> pullDomainEvents() {
+        List<DomainEvent> events = new ArrayList<>(domainEvents);
+        domainEvents.clear();
+        return events;
     }
 }

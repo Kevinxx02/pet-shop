@@ -35,15 +35,21 @@ src/
 │ ├─ java/com/petshop/catalog
 │ │ ├─ application/ # Lógica de Application Services
 │ │ │ ├─ product/create
+│ │ │ ├─ product/update
 │ │ │ └─ product/list
+│ │ │ ├─ user/create
+│ │ │ ├─ user/update
+│ │ │ └─ user/list
 │ │ ├─ domain/ # Agregados, Value Objects, Domain Events
-│ │ ├─ infrastructure/ # Persistencia (JPA, Outbox), RabbitMQ
+│ │ │ ├─ Product
+│ │ │ └─ User
+│ │ ├─ infrastructure/ # Persistencia (JPA, Outbox), RabbitMQ, seeder
 │ │ └─ web/ # Controladores REST
 │ └─ resources/
 │ ├─ application.properties
-│ └─ db/migration (si aplica)
+│ └─ db/migration
 
-1. **Base de datos**: PostgreSQL (o H2 para pruebas).
+1. **Base de datos**: PostgreSQL.
 2. **RabbitMQ**: debe estar corriendo en `localhost:5672` (configurable).
 3. **Dependencias**: Spring Boot, JPA, Jackson, RabbitMQ Client.
 
@@ -67,6 +73,7 @@ Ejecutar la aplicación (mvn spring-boot:run).
 
 Endpoints disponibles:
 
-Método	Ruta	Descripción
+Método	Ruta	    Descripción
 POST	/products	Crear producto
-GET	/products	Listar productos (CQRS read)
+PUT	    /products	Actualizar producto
+GET	    /products	Listar productos (CQRS read) (Acepta parametro id, para devolver ese registro. Y Acepta el parametro isAdmin, para devolver productos ocultos.)

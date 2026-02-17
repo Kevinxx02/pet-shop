@@ -1,6 +1,6 @@
 package com.petshop.catalog.infrastructure.persistence.product;
 
-import com.petshop.catalog.application.product.list.ProductView;
+import com.petshop.catalog.application.product.ProductView;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 

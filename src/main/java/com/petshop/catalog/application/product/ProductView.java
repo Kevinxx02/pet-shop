@@ -1,4 +1,4 @@
-package com.petshop.catalog.application.product.list;
+package com.petshop.catalog.application.product;
 
 import java.math.BigDecimal;
 import java.util.UUID;

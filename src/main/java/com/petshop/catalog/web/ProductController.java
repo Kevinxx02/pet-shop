@@ -1,10 +1,9 @@
 package com.petshop.catalog.web;
 
-import com.petshop.catalog.application.product.create.CreateProductCommand;
-import com.petshop.catalog.application.product.create.CreateProductService;
-import com.petshop.catalog.application.product.list.ListProductService;
-import com.petshop.catalog.application.product.list.ProductView;
-import com.petshop.catalog.application.product.update.UpdateProductService;
+import com.petshop.catalog.application.product.CreateProductService;
+import com.petshop.catalog.application.product.ListProductService;
+import com.petshop.catalog.application.product.ProductView;
+import com.petshop.catalog.application.product.UpdateProductService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -1,6 +1,6 @@
 package com.petshop.catalog.infrastructure.persistence.product;
 
-import com.petshop.catalog.application.product.list.ProductView;
+import com.petshop.catalog.application.product.ProductView;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -12,14 +12,14 @@ public interface SpringDataProductReadRepository
         extends JpaRepository<ProductJpaEntity, UUID> {
 
     @Query("""
-        SELECT new com.petshop.catalog.application.product.list.ProductView(
+        SELECT new com.petshop.catalog.application.product.ProductView(
             p.id, p.name, p.description, p.price, p.image, p.isVisible, p.isCreator
         )
         FROM ProductJpaEntity p
     """)
     List<ProductView> findAllProjected();
     @Query("""
-        SELECT new com.petshop.catalog.application.product.list.ProductView(
+        SELECT new com.petshop.catalog.application.product.ProductView(
             p.id, p.name, p.description, p.price, p.image, p.isVisible, p.isCreator
         )
         FROM ProductJpaEntity p
@@ -28,7 +28,7 @@ public interface SpringDataProductReadRepository
     List<ProductView> findVisibleProjected();
 
     @Query("""
-        SELECT new com.petshop.catalog.application.product.list.ProductView(
+        SELECT new com.petshop.catalog.application.product.ProductView(
             p.id, p.name, p.description, p.price, p.image, p.isVisible, p.isCreator
         )
         FROM ProductJpaEntity p

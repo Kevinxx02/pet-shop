@@ -1,4 +1,4 @@
-package com.petshop.catalog.application.product.list;
+package com.petshop.catalog.application.product;
 
 import com.petshop.catalog.infrastructure.persistence.product.ProductReadRepository;
 import org.springframework.stereotype.Service;

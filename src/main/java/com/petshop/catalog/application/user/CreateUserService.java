@@ -1,51 +1,39 @@
-package com.petshop.catalog.application.product.create;
+package com.petshop.catalog.application.user;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.petshop.catalog.domain.product.Product;
 import com.petshop.catalog.domain.product.events.ProductCreated;
-import com.petshop.catalog.domain.product.ProductRepository;
-import com.petshop.catalog.infrastructure.persistence.ImageStorageService;
+import com.petshop.catalog.domain.user.User;
+import com.petshop.catalog.domain.user.UserRepository;
 import com.petshop.catalog.infrastructure.persistence.outbox.OutboxMessage;
 import com.petshop.catalog.infrastructure.persistence.outbox.OutboxRepository;
 import com.petshop.catalog.infrastructure.persistence.product.ProductCreatedPayload;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.Objects;
 import java.util.UUID;
 
 @Service
 @Transactional
-public class CreateProductService {
-
-    private final ProductRepository productRepository;
+public class CreateUserService {
+    private final UserRepository userRepository;
     private final OutboxRepository outboxRepository;
-    private final ImageStorageService imageStorageService;
 
-    public CreateProductService(ProductRepository productRepository,
-                                ImageStorageService imageStorageService,
+    public CreateUserService(UserRepository userRepository,
                                 OutboxRepository outboxRepository) {
-        this.productRepository = productRepository;
+        this.userRepository = userRepository;
         this.outboxRepository = outboxRepository;
-        this.imageStorageService = imageStorageService;
     }
 
     @Transactional
-    public UUID createProduct(String name, String description, BigDecimal price, MultipartFile image, Boolean isVisible) throws IOException {
-        final Boolean isCreator = false;
+    public UUID createUser(String name, String password) throws IOException {
+        User user = User.create(name, password);
 
-        Product product = Product.create(name, description, price, isVisible);
-        product.setImage(image.getOriginalFilename());
+        userRepository.save(user);
 
-        productRepository.save(product);
 
-        imageStorageService.saveImage(image, product.getId());
-
-        product.pullDomainEvents().forEach(event -> {
+        user.pullDomainEvents().forEach(event -> {
             if (event instanceof ProductCreated pc) {
                 try {
                     ObjectMapper mapper = new ObjectMapper();
@@ -61,6 +49,6 @@ public class CreateProductService {
             }
         });
 
-        return product.getId();
+        return user.getId();
     }
 }
