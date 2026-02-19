@@ -8,6 +8,7 @@ import com.petshop.catalog.domain.user.UserRepository;
 import com.petshop.catalog.infrastructure.persistence.outbox.OutboxMessage;
 import com.petshop.catalog.infrastructure.persistence.outbox.OutboxRepository;
 import com.petshop.catalog.infrastructure.persistence.product.ProductCreatedPayload;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,15 +20,19 @@ import java.util.UUID;
 public class CreateUserService {
     private final UserRepository userRepository;
     private final OutboxRepository outboxRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public CreateUserService(UserRepository userRepository,
-                                OutboxRepository outboxRepository) {
+                             OutboxRepository outboxRepository,
+                             PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.outboxRepository = outboxRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Transactional
-    public UUID createUser(String name, String password) throws IOException {
+    public UUID createUser(String name, String rawPassword) throws IOException {
+        String password = passwordEncoder.encode(rawPassword);
         User user = User.create(name, password);
 
         userRepository.save(user);

@@ -14,8 +14,8 @@ public class JpaUserRepository implements UserRepository {
     public JpaUserRepository(SpringDataUsertRepository jpaRepository) {
         this.jpaRepository = jpaRepository;
     }
-    public Optional<UserJpaEntity> findById(UUID id) {
-        return jpaRepository.findById(id);
+    public Optional<UserJpaEntity> findByName(String name) {
+        return jpaRepository.findByName(name);
     }
 
     public void save(User user) {
