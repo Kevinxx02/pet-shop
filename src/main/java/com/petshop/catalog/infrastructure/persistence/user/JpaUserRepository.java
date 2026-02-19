@@ -5,13 +5,12 @@ import com.petshop.catalog.domain.user.UserRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
-import java.util.UUID;
 
 @Repository
 public class JpaUserRepository implements UserRepository {
-    private final SpringDataUsertRepository jpaRepository;
+    private final SpringDataUserRepository jpaRepository;
 
-    public JpaUserRepository(SpringDataUsertRepository jpaRepository) {
+    public JpaUserRepository(SpringDataUserRepository jpaRepository) {
         this.jpaRepository = jpaRepository;
     }
     public Optional<UserJpaEntity> findByName(String name) {
