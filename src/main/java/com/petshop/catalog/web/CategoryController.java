@@ -30,8 +30,8 @@ public class CategoryController {
     }
 
     @GetMapping("/{categoryId}/products")
-    public List<ProductCategoryJpaEntity> getProductsFromCategory(@PathVariable UUID categoryId) {
-        return this.productCategoryService.findByCategoryId(categoryId);
+    public List<ProductView> getProductsFromCategory(@PathVariable UUID categoryId) {
+        return this.productCategoryService.listProductsFromCategory(categoryId);
     }
 
     @GetMapping

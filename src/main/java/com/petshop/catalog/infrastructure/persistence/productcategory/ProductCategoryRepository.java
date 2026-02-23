@@ -12,8 +12,4 @@ import java.util.UUID;
 public interface ProductCategoryRepository {
     /* Method Overload para que funcione correctamente sin importar el tipo de parametro que se le envie */
     void save(ProductCategory productCategory);
-
-    List<ProductCategory> findAll();
-
-    List<ProductCategoryJpaEntity> findByCategoryId(UUID categoryId);
 }

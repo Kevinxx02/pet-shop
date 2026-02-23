@@ -5,7 +5,6 @@ import com.petshop.catalog.domain.productcategory.ProductCategory;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -15,16 +14,6 @@ public class JpaProductCategoryRepository implements ProductCategoryRepository {
     public JpaProductCategoryRepository(SpringDataProductCategoryRepository jpaRepository) {
         this.jpaRepository = jpaRepository;
     }
-
-    public List<ProductCategory> findAll() {
-        return jpaRepository.findAll().stream().map(this::toDomain).toList();
-    }
-
-    @Override
-    public List<ProductCategoryJpaEntity> findByCategoryId(UUID categoryId) {
-        return jpaRepository.findByIdCategoryId(categoryId);
-    }
-
 
     public void save(ProductCategory productCategory) {
         jpaRepository.save(toEntity(productCategory));
