@@ -20,10 +20,10 @@ public class CreateCategoryService {
 
     @Transactional
     public UUID createCategory(String name, String imageName) throws IOException {
-        Category category = new Category(UUID.randomUUID(), name, imageName);
+        Category category = Category.create(name, imageName);
 
         categoryRepository.save(category);
 
-        return category.id();
+        return category.getId();
     }
 }

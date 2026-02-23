@@ -2,8 +2,11 @@ package com.petshop.catalog.infrastructure.persistence.product;
 
 
 import com.petshop.catalog.domain.product.Product;
+import com.petshop.catalog.infrastructure.persistence.category.CategoryJpaEntity;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity

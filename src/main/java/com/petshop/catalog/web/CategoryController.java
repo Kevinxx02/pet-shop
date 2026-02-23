@@ -2,7 +2,12 @@ package com.petshop.catalog.web;
 
 import com.petshop.catalog.application.category.GetCategoryService;
 import com.petshop.catalog.application.category.CreateCategoryService;
+import com.petshop.catalog.application.category.UpdateCategoryService;
+import com.petshop.catalog.application.product.ProductView;
+import com.petshop.catalog.application.productcategory.ProductCategoryService;
 import com.petshop.catalog.domain.category.Category;
+import com.petshop.catalog.domain.productcategory.ProductCategory;
+import com.petshop.catalog.infrastructure.persistence.productcategory.ProductCategoryJpaEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -14,10 +19,19 @@ import java.util.UUID;
 public class CategoryController {
     private final GetCategoryService getCategoryService;
     private final CreateCategoryService createCategoryService;
+    private final UpdateCategoryService updateCategoryService;
+    private final ProductCategoryService productCategoryService;
 
-    public CategoryController(GetCategoryService getCategoryService, CreateCategoryService createCategoryService) {
+    public CategoryController(GetCategoryService getCategoryService, CreateCategoryService createCategoryService, UpdateCategoryService updateCategoryService, ProductCategoryService productCategoryService) {
         this.getCategoryService = getCategoryService;
         this.createCategoryService = createCategoryService;
+        this.updateCategoryService = updateCategoryService;
+        this.productCategoryService = productCategoryService;
+    }
+
+    @GetMapping("/{categoryId}/products")
+    public List<ProductCategoryJpaEntity> getProductsFromCategory(@PathVariable UUID categoryId) {
+        return this.productCategoryService.findByCategoryId(categoryId);
     }
 
     @GetMapping
@@ -26,10 +40,16 @@ public class CategoryController {
         return getCategoryService.list();
     }
 
-
     @PostMapping
-    public UUID add(@RequestParam String name,
+    public UUID create(@RequestParam String name,
                        @RequestParam String imageName) throws IOException {
         return createCategoryService.createCategory(name, imageName);
+    }
+
+    @PutMapping
+    public UUID update( @RequestParam UUID id,
+                        @RequestParam String name,
+                        @RequestParam String imageName) throws IOException {
+        return updateCategoryService.updateCategory(id, name, imageName);
     }
 }

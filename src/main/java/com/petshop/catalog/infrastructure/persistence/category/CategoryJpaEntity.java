@@ -1,7 +1,11 @@
 package com.petshop.catalog.infrastructure.persistence.category;
 
+import com.petshop.catalog.domain.category.Category;
+import com.petshop.catalog.infrastructure.persistence.product.ProductJpaEntity;
 import jakarta.persistence.*;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -25,6 +29,7 @@ public class CategoryJpaEntity {
         this.name = name;
         this.imageName = imageName;
     }
+
     public UUID getId() {
         return id;
     }
@@ -46,5 +51,11 @@ public class CategoryJpaEntity {
     }
     public void setImageName(String newName) {
         this.imageName = newName;
+    }
+
+    public void updateFrom(Category category) {
+        this.id = category.getId();
+        this.name = category.getName();
+        this.imageName = category.getImageName();
     }
 }

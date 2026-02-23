@@ -4,6 +4,7 @@ import com.petshop.catalog.application.product.CreateProductService;
 import com.petshop.catalog.application.product.ListProductService;
 import com.petshop.catalog.application.product.ProductView;
 import com.petshop.catalog.application.product.UpdateProductService;
+import com.petshop.catalog.application.productcategory.ProductCategoryService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,13 +22,16 @@ public class ProductController {
     private final CreateProductService createProductService;
     private final UpdateProductService updateProductService;
     private final ListProductService listProductService;
+    private final ProductCategoryService productCategoryService;
 
     public ProductController(CreateProductService createProductService,
                              ListProductService listProductService,
-                             UpdateProductService updateProductService) {
+                             UpdateProductService updateProductService,
+                             ProductCategoryService productCategoryService) {
         this.createProductService = createProductService;
         this.listProductService = listProductService;
         this.updateProductService = updateProductService;
+        this.productCategoryService = productCategoryService;
     }
 
     @GetMapping
@@ -65,7 +69,8 @@ public class ProductController {
             @RequestParam BigDecimal price,
             /* Al actualizar no es requerido que suban nuevamente la imagen */
             @RequestParam(required = false) MultipartFile file,
-            @RequestParam Boolean isVisible
+            @RequestParam Boolean isVisible,
+            @RequestParam(required = false) UUID categoryId
             ) throws IOException {
         updateProductService.updateProduct(
                 id,
@@ -75,6 +80,8 @@ public class ProductController {
                 file,
                 isVisible
         );
+
+        productCategoryService.assignCategory(id, categoryId);
 
         return ResponseEntity.ok(new Object() {
             public final String message = "Producto actualizado correctamente";

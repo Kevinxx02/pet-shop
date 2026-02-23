@@ -1,8 +1,11 @@
 package com.petshop.catalog.domain.category;
 
+import com.petshop.catalog.infrastructure.persistence.category.CategoryJpaEntity;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Component
 public interface CategoryRepository {
@@ -10,4 +13,7 @@ public interface CategoryRepository {
     void save(Category user);
 
     List<Category> findAll();
+    Optional<CategoryJpaEntity> findById(UUID Id);
+
+    Boolean existsById(UUID categoryId);
 }
