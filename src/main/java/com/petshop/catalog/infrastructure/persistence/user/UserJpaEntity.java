@@ -14,14 +14,17 @@ public class UserJpaEntity {
 
     private String name;
     private String password;
+    private Boolean isDeleted;
+
     @Version
     private Long version;
     public UserJpaEntity() {} // constructor por JPA
 
-    public UserJpaEntity(UUID id, String name, String password) {
+    public UserJpaEntity(UUID id, String name, String password, Boolean isDeleted) {
         this.id = id;
         this.name = name;
         this.password = password;
+        this.isDeleted = isDeleted;
     }
     public UUID getId() {
         return id;
@@ -45,5 +48,11 @@ public class UserJpaEntity {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+    public void setDeleted(Boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+    public Boolean getIsDeleted() {
+        return this.isDeleted;
     }
 }

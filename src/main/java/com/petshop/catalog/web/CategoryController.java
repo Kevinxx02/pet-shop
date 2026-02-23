@@ -3,11 +3,8 @@ package com.petshop.catalog.web;
 import com.petshop.catalog.application.category.GetCategoryService;
 import com.petshop.catalog.application.category.CreateCategoryService;
 import com.petshop.catalog.application.category.UpdateCategoryService;
-import com.petshop.catalog.application.product.ProductView;
 import com.petshop.catalog.application.productcategory.ProductCategoryService;
 import com.petshop.catalog.domain.category.Category;
-import com.petshop.catalog.domain.productcategory.ProductCategory;
-import com.petshop.catalog.infrastructure.persistence.productcategory.ProductCategoryJpaEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -27,11 +24,6 @@ public class CategoryController {
         this.createCategoryService = createCategoryService;
         this.updateCategoryService = updateCategoryService;
         this.productCategoryService = productCategoryService;
-    }
-
-    @GetMapping("/{categoryId}/products")
-    public List<ProductView> getProductsFromCategory(@PathVariable UUID categoryId) {
-        return this.productCategoryService.listProductsFromCategory(categoryId);
     }
 
     @GetMapping

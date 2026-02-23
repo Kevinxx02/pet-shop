@@ -5,7 +5,6 @@ import com.petshop.catalog.domain.category.CategoryRepository;
 import com.petshop.catalog.domain.productcategory.ProductCategory;
 import com.petshop.catalog.domain.productcategory.ProductCategoryReadRepository;
 import com.petshop.catalog.infrastructure.persistence.product.ProductReadRepository;
-import com.petshop.catalog.infrastructure.persistence.productcategory.ProductCategoryJpaEntity;
 import com.petshop.catalog.infrastructure.persistence.productcategory.ProductCategoryRepository;
 
 import org.springframework.stereotype.Service;
@@ -29,7 +28,7 @@ public class ProductCategoryService {
     }
 
     @Transactional
-    public void assignCategory(UUID productId, UUID categoryId) {
+    public void assignCategoryToProduct(UUID productId, UUID categoryId) {
 
         productRepository.existsById(productId);
         categoryRepository.existsById(categoryId);
@@ -42,5 +41,23 @@ public class ProductCategoryService {
     @Transactional(readOnly = true)
     public List<ProductView> listProductsFromCategory(UUID categoryId) {
         return productCategoryReadRepository.listProductsFromCategory(categoryId);
+    }
+
+    @Transactional
+    public Boolean updateCategoriesFromProduct(UUID productId, List<UUID> categories) {
+        if (productId == null || categories == null || categories.isEmpty()) {
+            return false;
+        }
+
+        /*  1) Eliminar todos los registros de Product Category que tengan productId ingresado  */
+        productCategoryRepository.deleteByIdProductId(productId);
+        
+        /*  2) Iterar sobre las categories que han sido ingresadas */
+        for (UUID categoryId : categories) {
+            /*  Asignar categoria al product id*/
+            this.assignCategoryToProduct(productId, categoryId);
+        }
+
+        return true;
     }
 }

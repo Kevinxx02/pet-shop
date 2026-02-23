@@ -1,11 +1,13 @@
 package com.petshop.catalog.application.user;
 
+import com.petshop.catalog.domain.user.User;
 import com.petshop.catalog.domain.user.UserRepository;
 import com.petshop.catalog.infrastructure.persistence.user.UserJpaEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -20,10 +22,15 @@ public class GetUserService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    public List<User> listUsers () {
+            return userRepository.findVisible();
+    }
+
+    /* Probablemente seria mas optimo si hiciera el filtrado en la base de datos */
     public Optional<UserJpaEntity> validateUser(String name, String rawPassword) {
         return userRepository.findByName(name)
                 .filter(user ->
-                        passwordEncoder.matches(rawPassword, user.getPassword())
+                        passwordEncoder.matches(rawPassword, user.getPassword()) && user.getIsDeleted() == false
                 );
     }
 }

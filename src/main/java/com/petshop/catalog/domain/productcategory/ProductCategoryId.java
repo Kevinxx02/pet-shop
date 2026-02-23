@@ -1,6 +1,5 @@
 package com.petshop.catalog.domain.productcategory;
 
-import com.petshop.catalog.domain.product.ProductPrice;
 import jakarta.persistence.Embeddable;
 
 import java.io.Serializable;

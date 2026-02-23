@@ -4,7 +4,9 @@ import com.petshop.catalog.domain.user.User;
 import com.petshop.catalog.domain.user.UserRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 public class JpaUserRepository implements UserRepository {
@@ -15,6 +17,20 @@ public class JpaUserRepository implements UserRepository {
     }
     public Optional<UserJpaEntity> findByName(String name) {
         return jpaRepository.findByName(name);
+    }
+
+    @Override
+    public Optional<UserJpaEntity> findById(UUID id) {
+        return jpaRepository.findById(id);
+    }
+
+    @Override
+    public List<User> findVisible() {
+        return jpaRepository.findByIsDeleted(false).stream().map(this::toDomain).toList();
+    }
+
+    private User toDomain(UserJpaEntity user) {
+        return User.rehydrate(user.getId(), user.getName(), user.getPassword(), user.getIsDeleted());
     }
 
     public void save(User user) {
@@ -29,7 +45,8 @@ public class JpaUserRepository implements UserRepository {
         return new UserJpaEntity(
                 user.getId(),
                 user.getName(),
-                user.getPassword()
+                user.getPassword(),
+                user.getIsDeleted()
         );
     }
 }

@@ -81,8 +81,7 @@ public class ProductController {
                 isVisible
         );
 
-        productCategoryService.assignCategory(id, categoryId);
-
+        //productCategoryService.assignCategory(id, categoryId);
         return ResponseEntity.ok(new Object() {
             public final String message = "Producto actualizado correctamente";
             public final UUID productId = id;

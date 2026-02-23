@@ -7,4 +7,6 @@ import java.util.UUID;
 
 public interface SpringDataUserRepository extends JpaRepository<UserJpaEntity, UUID> {
     Optional<UserJpaEntity> findByName(String name);
+
+    Optional<UserJpaEntity> findByIsDeleted(boolean isDeleted);
 }

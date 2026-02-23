@@ -16,6 +16,8 @@ public class UpdateCategoryService {
     public UpdateCategoryService(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
     }
+
+    @Transactional
     public UUID updateCategory(UUID id, String name, String imageName) {
         /* Obtiene el registro */
         CategoryJpaEntity entity = this.categoryRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
