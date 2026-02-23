@@ -11,6 +11,7 @@ import java.util.UUID;
 public interface CategoryRepository {
     /* Method Overload para que funcione correctamente sin importar el tipo de parametro que se le envie */
     void save(Category user);
+    void save(CategoryJpaEntity user);
 
     List<Category> findAll();
     Optional<CategoryJpaEntity> findById(UUID Id);

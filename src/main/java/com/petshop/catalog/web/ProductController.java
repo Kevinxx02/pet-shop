@@ -22,22 +22,19 @@ public class ProductController {
     private final CreateProductService createProductService;
     private final UpdateProductService updateProductService;
     private final ListProductService listProductService;
-    private final ProductCategoryService productCategoryService;
 
     public ProductController(CreateProductService createProductService,
                              ListProductService listProductService,
-                             UpdateProductService updateProductService,
-                             ProductCategoryService productCategoryService) {
+                             UpdateProductService updateProductService) {
         this.createProductService = createProductService;
         this.listProductService = listProductService;
         this.updateProductService = updateProductService;
-        this.productCategoryService = productCategoryService;
     }
 
     @GetMapping
     public List<ProductView> list(@RequestParam(required = false) UUID id,
-                                  @RequestParam(defaultValue = "0") Integer isAdmin) {
-        return listProductService.list(id, isAdmin);
+                                  @RequestParam(required = false) Boolean isCreator) {
+        return listProductService.list(id, isCreator);
     }
 
     @PostMapping
@@ -69,8 +66,7 @@ public class ProductController {
             @RequestParam BigDecimal price,
             /* Al actualizar no es requerido que suban nuevamente la imagen */
             @RequestParam(required = false) MultipartFile file,
-            @RequestParam Boolean isVisible,
-            @RequestParam(required = false) UUID categoryId
+            @RequestParam Boolean isVisible
             ) throws IOException {
         updateProductService.updateProduct(
                 id,
@@ -81,7 +77,6 @@ public class ProductController {
                 isVisible
         );
 
-        //productCategoryService.assignCategory(id, categoryId);
         return ResponseEntity.ok(new Object() {
             public final String message = "Producto actualizado correctamente";
             public final UUID productId = id;

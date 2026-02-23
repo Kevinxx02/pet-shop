@@ -30,12 +30,14 @@ public class ProductCategoryService {
     @Transactional
     public void assignCategoryToProduct(UUID productId, UUID categoryId) {
 
-        productRepository.existsById(productId);
-        categoryRepository.existsById(categoryId);
+        Boolean product = productRepository.existsById(productId);
+        Boolean category = categoryRepository.existsById(categoryId);
 
-        ProductCategory relation = ProductCategory.create(productId, categoryId);
+        if (product && category) {
+            ProductCategory relation = ProductCategory.create(productId, categoryId);
 
-        productCategoryRepository.save(relation);
+            productCategoryRepository.save(relation);
+        }
     }
 
     @Transactional(readOnly = true)
