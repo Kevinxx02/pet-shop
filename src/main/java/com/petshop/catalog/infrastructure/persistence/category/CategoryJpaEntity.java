@@ -19,12 +19,13 @@ public class CategoryJpaEntity {
 
     @Version
     private Long version;
+
     @ManyToOne
     @JoinColumn(name = "parent_id")
-    private Category parent;
+    private CategoryJpaEntity parent;
 
     @OneToMany(mappedBy = "parent")
-    private List<Category> children = new ArrayList<>();
+    private List<CategoryJpaEntity> children = new ArrayList<>();
 
     public CategoryJpaEntity() {} // constructor por JPA
 
