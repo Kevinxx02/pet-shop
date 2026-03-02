@@ -31,14 +31,29 @@ public class JpaProductRepository implements ProductRepository {
 
     // Convertir de dominio a JPA
     private ProductJpaEntity toEntity(Product product) {
-        return new ProductJpaEntity(
-                product.getId(),
-                product.getName(),
-                product.getDescription(),
-                product.getPrice().value(),
-                product.getImage(),
-                product.getVisible(),
-                false
-        );
+        ProductJpaEntity entity = new ProductJpaEntity();
+        entity.setId(product.getId());
+        entity.setName(product.getName());
+        entity.setDescription(product.getDescription());
+        entity.setPrice(product.getPrice().value());
+        entity.setImage(product.getImage());
+        entity.setVisibility(product.getVisible());
+        entity.setIsCreator(false);
+
+
+        Set<ProductMultimediaJpaEntity> multimedia = product.getMultimedia()
+                .stream()
+                .map(productMultimedia -> {
+                    ProductMultimediaJpaEntity mm = new ProductMultimediaJpaEntity();
+                    mm.setId(productMultimedia.getId());
+                    mm.setFileName(productMultimedia.getFileName());
+                    mm.setProduct(entity);
+                    return mm;
+                })
+                .collect(Collectors.toSet());
+
+        entity.setMultimedia(multimedia);
+
+        return entity;
     }
 }

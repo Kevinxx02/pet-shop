@@ -36,7 +36,7 @@ public class CreateProductService {
     @Transactional
     public UUID createProduct(String name, String description, BigDecimal price, MultipartFile image, Boolean isVisible) throws IOException {
         Product product = Product.create(name, description, price, isVisible);
-        product.setImage(image.getOriginalFilename());
+        product.addImage(image.getOriginalFilename());
 
         productRepository.save(product);
 
