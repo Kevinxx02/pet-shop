@@ -4,9 +4,7 @@ import com.petshop.catalog.domain.category.Category;
 import com.petshop.catalog.infrastructure.persistence.product.ProductJpaEntity;
 import jakarta.persistence.*;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Table(name = "categories")
@@ -21,6 +19,12 @@ public class CategoryJpaEntity {
 
     @Version
     private Long version;
+    @ManyToOne
+    @JoinColumn(name = "parent_id")
+    private Category parent;
+
+    @OneToMany(mappedBy = "parent")
+    private List<Category> children = new ArrayList<>();
 
     public CategoryJpaEntity() {} // constructor por JPA
 
