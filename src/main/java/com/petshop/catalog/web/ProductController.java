@@ -33,7 +33,7 @@ public class ProductController {
 
     @GetMapping
     public List<ProductView> list(@RequestParam(required = false) UUID id,
-                                  @RequestParam(required = false) Boolean isCreator) {
+                                  @RequestParam(defaultValue = "false") Boolean isCreator) {
         return listProductService.list(id, isCreator);
     }
 

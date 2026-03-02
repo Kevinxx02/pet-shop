@@ -5,9 +5,7 @@ import com.petshop.catalog.domain.product.events.ProductCreated;
 import com.petshop.catalog.domain.product.events.ProductUpdated;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class Product {
 
@@ -17,6 +15,7 @@ public class Product {
     private ProductPrice price;
     private String image;
     private Boolean isVisible;
+    private Set<ProductMultimedia> multimedia = new HashSet<>();
 
     private final List<DomainEvent> domainEvents = new ArrayList<>();
 
@@ -121,5 +120,25 @@ public class Product {
         List<DomainEvent> events = new ArrayList<>(domainEvents);
         domainEvents.clear();
         return events;
+    }
+
+    public void addImage(String fileName) {
+
+        boolean exists = multimedia.stream()
+                .anyMatch(m -> m.getFileName().equals(fileName));
+
+        if (exists) {
+            throw new IllegalArgumentException("Image already exists");
+        }
+
+        multimedia.add(ProductMultimedia.create(fileName));
+    }
+
+    public void removeImage(UUID multimediaId) {
+        multimedia.removeIf(m -> m.getId().equals(multimediaId));
+    }
+
+    public Set<ProductMultimedia> getMultimedia() {
+        return this.multimedia;
     }
 }

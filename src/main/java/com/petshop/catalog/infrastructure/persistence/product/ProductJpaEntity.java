@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "products")
@@ -26,6 +27,13 @@ public class ProductJpaEntity {
     private Long version;
     private Boolean isVisible;
     private Boolean isCreator;
+
+    @OneToMany(
+            mappedBy = "product",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private Set<ProductMultimediaJpaEntity> multimedia = new HashSet<>();
 
     public ProductJpaEntity() {} // constructor por JPA
 
@@ -68,10 +76,31 @@ public class ProductJpaEntity {
         this.isCreator = isCreator;
     }
     public void updateFrom(Product product) {
+        Set<ProductMultimediaJpaEntity> imgSet = product.getMultimedia()
+                .stream()
+                .map(productMultimedia -> {
+                    ProductMultimediaJpaEntity mm = new ProductMultimediaJpaEntity();
+                    mm.setId(productMultimedia.getId());
+                    mm.setFileName(productMultimedia.getFileName());
+                    mm.setProduct(this);
+                    return mm;
+                })
+                .collect(Collectors.toSet());
+
         this.name = product.getName();
         this.description = product.getDescription();
         this.price = product.getPrice().value();
         this.image = product.getImage();
         this.isVisible = product.getVisible();
+        this.getMultimedia().clear();
+        this.getMultimedia().addAll(imgSet);
+    }
+
+    public void setMultimedia(Set<ProductMultimediaJpaEntity> multimedia) {
+        this.multimedia = multimedia;
+    }
+
+    public Set<ProductMultimediaJpaEntity> getMultimedia() {
+        return multimedia;
     }
 }

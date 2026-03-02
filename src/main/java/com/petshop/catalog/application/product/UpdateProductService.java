@@ -47,7 +47,7 @@ public class UpdateProductService {
 
         if (!Objects.isNull(image)) {
             imageStorageService.saveImage(image, id);
-            product.setImage(image.getOriginalFilename());
+            product.addImage(image.getOriginalFilename());
         }
 
         entity.updateFrom(product);
