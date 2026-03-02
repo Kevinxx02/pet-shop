@@ -13,7 +13,7 @@ public interface CategoryRepository {
     void save(Category user);
     void save(CategoryJpaEntity user);
 
-    List<Category> findAll();
+    List<Category> findVisible();
     Optional<CategoryJpaEntity> findById(UUID Id);
 
     Boolean existsById(UUID categoryId);

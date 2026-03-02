@@ -16,6 +16,7 @@ public class CategoryJpaEntity {
 
     private String name;
     private String imageName;
+    private Boolean isCreator;
 
     @Version
     private Long version;
@@ -62,5 +63,12 @@ public class CategoryJpaEntity {
         this.id = category.getId();
         this.name = category.getName();
         this.imageName = category.getImageName();
+    }
+
+    public Boolean getIsCreator() {
+        return this.isCreator;
+    }
+    public void setIsCreator(Boolean isCreator) {
+        this.isCreator = isCreator;
     }
 }

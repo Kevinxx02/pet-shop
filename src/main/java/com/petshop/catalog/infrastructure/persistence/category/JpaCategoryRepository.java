@@ -20,6 +20,13 @@ public class JpaCategoryRepository implements CategoryRepository {
         return jpaRepository.findAll().stream().map(this::toDomain).toList();
     }
 
+    @Override
+    public List<Category> findVisible() {
+        final Boolean isCreator = false;
+
+        return jpaRepository.findByIsCreator(isCreator).stream().map(this::toDomain).toList();
+    }
+
     public Optional<CategoryJpaEntity> findById(UUID id) {
         return jpaRepository.findById(id);
     }
@@ -43,7 +50,7 @@ public class JpaCategoryRepository implements CategoryRepository {
 
     /* Convertir de jpa a dominio */
     private Category toDomain(CategoryJpaEntity category) {
-        return Category.rehydrate(category.getId(), category.getName(), category.getImageName());
+        return Category.rehydrate(category.getId(), category.getName(), category.getImageName(), category.getIsCreator());
     }
 
     @Override

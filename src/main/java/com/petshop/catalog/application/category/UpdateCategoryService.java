@@ -21,9 +21,9 @@ public class UpdateCategoryService {
     public UUID updateCategory(UUID id, String name, String imageName) {
         /* Obtiene el registro */
         CategoryJpaEntity entity = this.categoryRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
-
+        final Boolean isCreator = false;
         /* Si el registro existe, crea un nuevo objeto en el dominio con el nuevo nombre y nueva imagen para validaciones internas */
-        Category category = Category.rehydrate(id, name, imageName);
+        Category category = Category.rehydrate(id, name, imageName, isCreator);
 
         /* Guarda en el repositorio el nuevo objeto de dominio */
         entity.updateFrom(category);

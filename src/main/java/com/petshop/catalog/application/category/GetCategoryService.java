@@ -14,7 +14,7 @@ public class GetCategoryService {
     }
 
     public List<Category> list() {
-        return categoryRepository.findAll();
+        return categoryRepository.findVisible();
     }
 
 }
