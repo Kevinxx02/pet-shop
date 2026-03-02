@@ -2,6 +2,8 @@ package com.petshop.catalog.infrastructure.persistence.category;
 
 import com.petshop.catalog.domain.category.Category;
 import com.petshop.catalog.domain.category.CategoryRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -11,6 +13,9 @@ import java.util.UUID;
 @Repository
 public class JpaCategoryRepository implements CategoryRepository {
     private final SpringDataCategoryRepository jpaRepository;
+
+    @PersistenceContext
+    EntityManager entityManager;
 
     public JpaCategoryRepository(SpringDataCategoryRepository jpaRepository) {
         this.jpaRepository = jpaRepository;
@@ -41,16 +46,23 @@ public class JpaCategoryRepository implements CategoryRepository {
 
     // Convertir de dominio a JPA
     private CategoryJpaEntity toEntity(Category category) {
+        final CategoryJpaEntity parent = entityManager.getReference(
+                CategoryJpaEntity.class,
+                category.getParentId());
         return new CategoryJpaEntity(
                 category.getId(),
                 category.getName(),
-                category.getImageName()
+                category.getImageName(),
+                parent
         );
     }
 
     /* Convertir de jpa a dominio */
     private Category toDomain(CategoryJpaEntity category) {
-        return Category.rehydrate(category.getId(), category.getName(), category.getImageName(), category.getIsCreator());
+        final CategoryJpaEntity parent = category.getParent();
+        final UUID parentId = (parent != null) ? parent.getId() : null;
+
+        return Category.rehydrate(category.getId(), category.getName(), category.getImageName(), category.getIsCreator(), parentId);
     }
 
     @Override

@@ -1,7 +1,5 @@
 package com.petshop.catalog.infrastructure.persistence.category;
-
 import com.petshop.catalog.domain.category.Category;
-import com.petshop.catalog.infrastructure.persistence.product.ProductJpaEntity;
 import jakarta.persistence.*;
 
 import java.util.*;
@@ -22,7 +20,7 @@ public class CategoryJpaEntity {
     private Long version;
 
     @ManyToOne
-    @JoinColumn(name = "parent_id")
+    @JoinColumn(name = "parent")
     private CategoryJpaEntity parent;
 
     @OneToMany(mappedBy = "parent")
@@ -30,10 +28,12 @@ public class CategoryJpaEntity {
 
     public CategoryJpaEntity() {} // constructor por JPA
 
-    public CategoryJpaEntity(UUID id, String name, String imageName) {
-        this.id = id;
-        this.name = name;
+    public CategoryJpaEntity(UUID id, String name, String imageName, CategoryJpaEntity parent) {
+        setId(id);
+        setName(name);
         this.imageName = imageName;
+        setIsCreator(false);
+        setParent(parent);
     }
 
     public UUID getId() {
@@ -70,5 +70,13 @@ public class CategoryJpaEntity {
     }
     public void setIsCreator(Boolean isCreator) {
         this.isCreator = isCreator;
+    }
+
+    public CategoryJpaEntity getParent() {
+        return this.parent;
+    }
+
+    public void setParent(CategoryJpaEntity parent) {
+        this.parent = parent;
     }
 }

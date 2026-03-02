@@ -34,14 +34,17 @@ public class CategoryController {
 
     @PostMapping
     public UUID create(@RequestParam String name,
-                       @RequestParam String imageName) throws IOException {
-        return createCategoryService.createCategory(name, imageName);
+                       @RequestParam String imageName,
+                       @RequestParam UUID parentId) throws IOException {
+        System.out.println("En el controlador: " + parentId);
+        return createCategoryService.createCategory(name, imageName, parentId);
     }
 
     @PutMapping
     public UUID update( @RequestParam UUID id,
                         @RequestParam String name,
-                        @RequestParam String imageName) throws IOException {
-        return updateCategoryService.updateCategory(id, name, imageName);
+                        @RequestParam String imageName,
+                        @RequestParam UUID parentId) throws IOException {
+        return updateCategoryService.updateCategory(id, name, imageName, parentId);
     }
 }
