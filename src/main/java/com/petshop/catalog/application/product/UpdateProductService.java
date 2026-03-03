@@ -51,7 +51,7 @@ public class UpdateProductService {
         }
 
         entity.updateFrom(product);
-
+/*
         product.pullDomainEvents().forEach(event -> {
             if (event instanceof ProductUpdated productUpdated) {
                 try {
@@ -67,7 +67,7 @@ public class UpdateProductService {
                 }
             }
         });
-
+*/
         return product.getId();
     }
 }

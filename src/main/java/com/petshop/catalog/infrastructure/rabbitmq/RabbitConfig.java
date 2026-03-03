@@ -1,3 +1,4 @@
+/*
 package com.petshop.catalog.infrastructure.rabbitmq;
 
 import org.springframework.amqp.core.Binding;
@@ -32,3 +33,4 @@ public class RabbitConfig {
                 .with(ROUTING_KEY);
     }
 }
+*/

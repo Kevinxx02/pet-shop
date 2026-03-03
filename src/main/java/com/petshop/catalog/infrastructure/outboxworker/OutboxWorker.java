@@ -11,7 +11,7 @@ import java.util.List;
 
 @Component
 public class OutboxWorker {
-
+/*
     private final OutboxRepository repository;
     private final OutboxPublisher publisher;
 
@@ -30,7 +30,7 @@ public class OutboxWorker {
         for (OutboxEventJpaEntity event : events) {
             try {
                 int updated = repository.markAsProcessing(event.getId());
-                /* Usa atomic update para asegurarse que ningun otro worker haya actualizado el campo */
+                // Usa atomic update para asegurarse que ningun otro worker haya actualizado el campo
                 if (updated == 0) {
                     continue;
                 }
@@ -47,4 +47,5 @@ public class OutboxWorker {
             }
         }
     }
+    */
 }

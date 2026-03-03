@@ -41,7 +41,7 @@ public class CreateProductService {
         productRepository.save(product);
 
         imageStorageService.saveImage(image, product.getId());
-
+/*
         product.pullDomainEvents().forEach(event -> {
             if (event instanceof ProductCreated pc) {
                 try {
@@ -57,7 +57,7 @@ public class CreateProductService {
                 }
             }
         });
-
+*/
         return product.getId();
     }
 }

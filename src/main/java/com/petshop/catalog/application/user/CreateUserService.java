@@ -37,7 +37,7 @@ public class CreateUserService {
 
         userRepository.save(user);
 
-
+/*
         user.pullDomainEvents().forEach(event -> {
             if (event instanceof ProductCreated pc) {
                 try {
@@ -53,7 +53,7 @@ public class CreateUserService {
                 }
             }
         });
-
+*/
         return user.getId();
     }
 }

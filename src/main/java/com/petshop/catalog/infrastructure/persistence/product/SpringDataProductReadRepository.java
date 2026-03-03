@@ -20,9 +20,11 @@ public interface SpringDataProductReadRepository
     List<ProductView> findAllProjected();
     @Query("""
         SELECT new com.petshop.catalog.application.product.ProductView(
-            p.id, p.name, p.description, p.price, p.image, p.isVisible, p.isCreator
+            p.id, p.name, p.description, p.price, p.image, p.isVisible, p.isCreator, pc.id.categoryId
         )
         FROM ProductJpaEntity p
+        INNER JOIN ProductCategoryJpaEntity pc
+            ON p.id = pc.id.productId
         WHERE p.isVisible
     """)
     List<ProductView> findVisibleProjected();
