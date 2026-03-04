@@ -24,9 +24,8 @@ public class CreateCategoryService {
     }
 
     @Transactional
-    public UUID createCategory(String name, String imageName, UUID parentId) throws IOException {
-        Category category = Category.create(name, imageName, parentId);
-
+    public UUID createCategory(String name, UUID parentId, Boolean isVisible) throws IOException {
+        Category category = Category.create(name, parentId, isVisible);
         categoryRepository.save(category);
 
         return category.getId();

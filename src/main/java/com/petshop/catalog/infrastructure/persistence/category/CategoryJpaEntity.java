@@ -14,7 +14,7 @@ public class CategoryJpaEntity {
 
     private String name;
     private String imageName;
-    private Boolean isCreator;
+    private Boolean isVisible;
 
     @Version
     private Long version;
@@ -28,11 +28,10 @@ public class CategoryJpaEntity {
 
     public CategoryJpaEntity() {} // constructor por JPA
 
-    public CategoryJpaEntity(UUID id, String name, String imageName, CategoryJpaEntity parent) {
+    public CategoryJpaEntity(UUID id, String name, CategoryJpaEntity parent, Boolean isVisible) {
         setId(id);
         setName(name);
-        this.imageName = imageName;
-        setIsCreator(false);
+        setIsVisible(isVisible);
         setParent(parent);
     }
 
@@ -62,14 +61,14 @@ public class CategoryJpaEntity {
     public void updateFrom(Category category) {
         this.id = category.getId();
         this.name = category.getName();
-        this.imageName = category.getImageName();
+        this.isVisible = category.getIsVisible();
     }
 
-    public Boolean getIsCreator() {
-        return this.isCreator;
+    public Boolean getIsVisible() {
+        return this.isVisible;
     }
-    public void setIsCreator(Boolean isCreator) {
-        this.isCreator = isCreator;
+    public void setIsVisible(Boolean isVisible) {
+        this.isVisible = isVisible;
     }
 
     public CategoryJpaEntity getParent() {

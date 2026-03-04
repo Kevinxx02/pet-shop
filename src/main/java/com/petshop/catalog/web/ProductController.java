@@ -22,13 +22,15 @@ public class ProductController {
     private final CreateProductService createProductService;
     private final UpdateProductService updateProductService;
     private final ListProductService listProductService;
+    private final ProductCategoryService productCategoryService;
 
     public ProductController(CreateProductService createProductService,
                              ListProductService listProductService,
-                             UpdateProductService updateProductService) {
+                             UpdateProductService updateProductService, ProductCategoryService productCategoryService) {
         this.createProductService = createProductService;
         this.listProductService = listProductService;
         this.updateProductService = updateProductService;
+        this.productCategoryService = productCategoryService;
     }
 
     @GetMapping
@@ -43,7 +45,8 @@ public class ProductController {
             @RequestParam String description,
             @RequestParam BigDecimal price,
             @RequestParam MultipartFile file,
-            @RequestParam Boolean isVisible) throws IOException {
+            @RequestParam(defaultValue = "true") Boolean isVisible,
+            @RequestParam UUID categoryId) throws IOException {
         UUID id = createProductService.createProduct(
                 name,
                 description,
@@ -51,6 +54,8 @@ public class ProductController {
                 file,
                 isVisible
         );
+
+        //productCategoryService.assignCategoryToProduct(id, categoryId);
 
         return ResponseEntity.ok(new Object() {
             public final String message = "Producto creado correctamente";

@@ -3,6 +3,7 @@ package com.petshop.catalog.infrastructure.persistence.product;
 
 import com.petshop.catalog.domain.product.Product;
 import com.petshop.catalog.infrastructure.persistence.category.CategoryJpaEntity;
+import com.petshop.catalog.infrastructure.persistence.productcategory.ProductCategoryJpaEntity;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.util.HashSet;
@@ -17,6 +18,9 @@ public class ProductJpaEntity {
     @Id
     @Column(columnDefinition = "uuid")
     private UUID id;
+
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    private Set<ProductCategoryJpaEntity> categories;
 
     private String name;
     private String description;

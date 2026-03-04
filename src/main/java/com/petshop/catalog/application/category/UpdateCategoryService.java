@@ -23,17 +23,13 @@ public class UpdateCategoryService {
     }
 
     @Transactional
-    public UUID updateCategory(UUID id, String name, String imageName, UUID parentId) {
+    public UUID updateCategory(UUID id, String name, UUID parentId, Boolean isVisible) {
         /* Obtiene el registro */
         CategoryJpaEntity entity = this.categoryRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
-        final Boolean isCreator = false;
         /* Si el registro existe, crea un nuevo objeto en el dominio con el nuevo nombre y nueva imagen para validaciones internas */
-        Category category = Category.rehydrate(id, name, imageName, isCreator, parentId);
+        Category category = Category.rehydrate(id, name, parentId, isVisible);
 
         /* Guarda en el repositorio el nuevo objeto de dominio */
-        final CategoryJpaEntity parent = entityManager.getReference(
-                CategoryJpaEntity.class,
-                category.getParentId());;
 
         entity.updateFrom(category);
         return category.getId();

@@ -27,9 +27,9 @@ public class JpaCategoryRepository implements CategoryRepository {
 
     @Override
     public List<Category> findVisible() {
-        final Boolean isCreator = false;
+        final Boolean isVisible = true;
 
-        return jpaRepository.findByIsCreator(isCreator).stream().map(this::toDomain).toList();
+        return jpaRepository.findByIsVisible(isVisible).stream().map(this::toDomain).toList();
     }
 
     public Optional<CategoryJpaEntity> findById(UUID id) {
@@ -46,14 +46,19 @@ public class JpaCategoryRepository implements CategoryRepository {
 
     // Convertir de dominio a JPA
     private CategoryJpaEntity toEntity(Category category) {
-        final CategoryJpaEntity parent = entityManager.getReference(
-                CategoryJpaEntity.class,
-                category.getParentId());
+        CategoryJpaEntity parent = null;
+
+        if (category.getParentId() != null) {
+            parent = entityManager.getReference(
+                    CategoryJpaEntity.class,
+                    category.getParentId());
+        }
+
         return new CategoryJpaEntity(
                 category.getId(),
                 category.getName(),
-                category.getImageName(),
-                parent
+                parent,
+                category.getIsVisible()
         );
     }
 
@@ -62,7 +67,7 @@ public class JpaCategoryRepository implements CategoryRepository {
         final CategoryJpaEntity parent = category.getParent();
         final UUID parentId = (parent != null) ? parent.getId() : null;
 
-        return Category.rehydrate(category.getId(), category.getName(), category.getImageName(), category.getIsCreator(), parentId);
+        return Category.rehydrate(category.getId(), category.getName(), parentId, category.getIsVisible());
     }
 
     @Override

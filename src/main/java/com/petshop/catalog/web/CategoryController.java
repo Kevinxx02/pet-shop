@@ -27,24 +27,22 @@ public class CategoryController {
     }
 
     @GetMapping
-    public List<Category> list(@RequestParam(required = false) UUID id,
-                               @RequestParam(defaultValue = "0") Integer isAdmin) {
+    public List<Category> list() {
         return getCategoryService.list();
     }
 
     @PostMapping
     public UUID create(@RequestParam String name,
-                       @RequestParam String imageName,
-                       @RequestParam UUID parentId) throws IOException {
-        System.out.println("En el controlador: " + parentId);
-        return createCategoryService.createCategory(name, imageName, parentId);
+                       @RequestParam(required = false) UUID parentId,
+                       @RequestParam(defaultValue = "true") Boolean isVisible) throws IOException {
+        return createCategoryService.createCategory(name, parentId, isVisible);
     }
 
     @PutMapping
     public UUID update( @RequestParam UUID id,
                         @RequestParam String name,
-                        @RequestParam String imageName,
-                        @RequestParam UUID parentId) throws IOException {
-        return updateCategoryService.updateCategory(id, name, imageName, parentId);
+                        @RequestParam(required = false) UUID parentId,
+                        @RequestParam Boolean isVisible) throws IOException {
+        return updateCategoryService.updateCategory(id, name, parentId, isVisible);
     }
 }

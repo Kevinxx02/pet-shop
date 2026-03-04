@@ -11,5 +11,5 @@ public record ProductView (
         String image,
         Boolean isVisible,
         Boolean isCreator,
-        UUID parentId
+        UUID categoryId
 ) {}

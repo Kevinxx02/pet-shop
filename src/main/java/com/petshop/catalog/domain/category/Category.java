@@ -5,34 +5,34 @@ import java.util.UUID;
 public class Category {
     private UUID id;
     private String name;
-    private String imageName;
-    private Boolean isCreator;
     private UUID parentId;
+    private Boolean isVisible;
 
-    private Category(UUID id, String name, String imageName, Boolean isCreator, UUID parentId) {
+    private Category(UUID id, String name, UUID parentId, Boolean isVisible) {
         this.id = id;
         updateName(name);
-        updateImageName(imageName);
-        updateIsCreator(isCreator);
         updateParentId(parentId);
+        updateIsVisible(isVisible);
     }
 
-    public static Category create(String name, String imageName, UUID parentId) {
+    private void updateIsVisible(Boolean isVisible) {
+        this.isVisible = isVisible;
+    }
+    public Boolean getIsVisible() {
+        return this.isVisible;
+    }
+
+    public static Category create(String name, UUID parentId, Boolean isVisible) {
         final UUID newId = UUID.randomUUID();
-        final Boolean isCreator = false;
-        return new Category(newId, name, imageName, isCreator, parentId);
+        return new Category(newId, name, parentId, isVisible);
     }
 
-    public static Category rehydrate(UUID id, String name, String imageName, Boolean isCreator, UUID parentId) {
-        return new Category(id, name, imageName, isCreator, parentId);
+    public static Category rehydrate(UUID id, String name, UUID parentId, Boolean isVisible) {
+        return new Category(id, name, parentId, isVisible);
     }
 
     public void updateName(String name) {
         this.name = name;
-    }
-
-    public void updateImageName(String imageName) {
-        this.imageName = imageName;
     }
 
     public UUID getId() {
@@ -43,16 +43,6 @@ public class Category {
         return this.name;
     }
 
-    public String getImageName() {
-        return this.imageName;
-    }
-
-    private void updateIsCreator(Boolean isCreator) {
-        this.isCreator = isCreator;
-    }
-    public Boolean getIsCreator() {
-        return this.isCreator;
-    }
     private void updateParentId(UUID parentId) {
         this.parentId = parentId;
     }
