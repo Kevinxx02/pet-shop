@@ -10,5 +10,7 @@ public interface ProductCategoryRepository {
     /* Method Overload para que funcione correctamente sin importar el tipo de parametro que se le envie */
     void save(ProductCategory productCategory);
 
-    void deleteByIdProductId(UUID productId);
+    void deleteById(UUID productId);
+
+    UUID create(UUID productId, UUID categoryId);
 }

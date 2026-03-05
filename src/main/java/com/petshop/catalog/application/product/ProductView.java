@@ -10,6 +10,5 @@ public record ProductView (
         BigDecimal price,
         String image,
         Boolean isVisible,
-        Boolean isCreator,
         UUID categoryId
 ) {}

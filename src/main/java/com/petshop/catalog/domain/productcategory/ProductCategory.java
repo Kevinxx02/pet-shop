@@ -4,18 +4,30 @@ import java.util.UUID;
 
 public class ProductCategory {
 
+    private final UUID id;
     private final UUID productId;
     private final UUID categoryId;
 
-    private ProductCategory(UUID productId, UUID categoryId) {
+    private ProductCategory(UUID id, UUID productId, UUID categoryId) {
+        this.id = id;
         this.productId = productId;
         this.categoryId = categoryId;
     }
 
     public static ProductCategory create(UUID productId, UUID categoryId) {
-        return new ProductCategory(productId, categoryId);
+        final UUID newId = UUID.randomUUID();
+
+        return new ProductCategory(newId, productId, categoryId);
+    }
+
+    public static ProductCategory rehydrate(UUID id, UUID productId, UUID categoryId) {
+        return new ProductCategory(id, productId, categoryId);
     }
 
     public UUID getProductId() { return productId; }
     public UUID getCategoryId() { return categoryId; }
+
+    public UUID getId() {
+        return this.id;
+    }
 }

@@ -6,5 +6,5 @@ import java.util.UUID;
 
 public interface SpringDataProductCategoryRepository extends JpaRepository<ProductCategoryJpaEntity, UUID> {
     /* Elimina todos los registros cuyo product id sea el parametro recibido */
-    void deleteByIdProductId(UUID productId);
+    void deleteById(UUID id);
 }

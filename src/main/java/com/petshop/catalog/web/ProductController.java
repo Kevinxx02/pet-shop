@@ -5,6 +5,7 @@ import com.petshop.catalog.application.product.ListProductService;
 import com.petshop.catalog.application.product.ProductView;
 import com.petshop.catalog.application.product.UpdateProductService;
 import com.petshop.catalog.application.productcategory.ProductCategoryService;
+import com.petshop.catalog.domain.productcategory.ProductCategory;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,9 +35,8 @@ public class ProductController {
     }
 
     @GetMapping
-    public List<ProductView> list(@RequestParam(required = false) UUID id,
-                                  @RequestParam(defaultValue = "false") Boolean isCreator) {
-        return listProductService.list(id, isCreator);
+    public List<ProductView> list(@RequestParam(required = false) UUID id) {
+        return listProductService.list(id);
     }
 
     @PostMapping

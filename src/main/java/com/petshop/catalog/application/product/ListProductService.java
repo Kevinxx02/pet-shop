@@ -17,7 +17,7 @@ public class ListProductService {
         this.productRepository = productRepository;
     }
 
-    public List<ProductView> list(UUID id, Boolean isCreator) {
-        return productRepository.find(id, isCreator);
+    public List<ProductView> list(UUID id) {
+        return productRepository.find(id);
     }
 }

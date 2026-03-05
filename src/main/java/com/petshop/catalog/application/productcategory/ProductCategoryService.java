@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@Transactional
 public class ProductCategoryService {
     final ProductReadRepository productRepository;
     final CategoryRepository categoryRepository;
@@ -27,9 +28,7 @@ public class ProductCategoryService {
         this.productCategoryReadRepository = productCategoryReadRepository;
     }
 
-    @Transactional
     public void assignCategoryToProduct(UUID productId, UUID categoryId) {
-
         Boolean product = productRepository.existsById(productId);
         Boolean category = categoryRepository.existsById(categoryId);
 
@@ -39,27 +38,15 @@ public class ProductCategoryService {
             productCategoryRepository.save(relation);
         }
     }
-
-    @Transactional(readOnly = true)
-    public List<ProductView> listProductsFromCategory(UUID categoryId) {
-        return productCategoryReadRepository.listProductsFromCategory(categoryId);
+    public List<ProductCategoryView> findWithCategoryName() {
+        return productCategoryReadRepository.findWithCategoryName();
     }
 
-    @Transactional
-    public Boolean updateCategoriesFromProduct(UUID productId, List<UUID> categories) {
-        if (productId == null || categories == null || categories.isEmpty()) {
-            return false;
-        }
+    public UUID create(UUID productId, UUID categoryId) {
+        return productCategoryRepository.create(productId, categoryId);
+    }
 
-        /*  1) Eliminar todos los registros de Product Category que tengan productId ingresado  */
-        productCategoryRepository.deleteByIdProductId(productId);
-        
-        /*  2) Iterar sobre las categories que han sido ingresadas */
-        for (UUID categoryId : categories) {
-            /*  Asignar categoria al product id*/
-            this.assignCategoryToProduct(productId, categoryId);
-        }
-
-        return true;
+    public void delete(UUID id) {
+        productCategoryRepository.deleteById(id);
     }
 }

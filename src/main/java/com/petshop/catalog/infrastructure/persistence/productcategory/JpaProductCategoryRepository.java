@@ -23,8 +23,16 @@ public class JpaProductCategoryRepository implements ProductCategoryRepository {
     }
 
     @Override
-    public void deleteByIdProductId(UUID productId) {
-        jpaRepository.deleteByIdProductId(productId);
+    public void deleteById(UUID id) {
+        jpaRepository.deleteById(id);
+    }
+
+    @Override
+    public UUID create(UUID productId, UUID categoryId) {
+        final ProductCategory productCategory = ProductCategory.create(productId, categoryId);
+        jpaRepository.save(toEntity(productCategory));
+
+        return productCategory.getId();
     }
 
     // Convertir de dominio a JPA
@@ -37,6 +45,7 @@ public class JpaProductCategoryRepository implements ProductCategoryRepository {
                 productCategory.getProductId());
 
         return new ProductCategoryJpaEntity(
+                productCategory.getId(),
                 productJpaEntity,
                 categoryJpaEntity
         );

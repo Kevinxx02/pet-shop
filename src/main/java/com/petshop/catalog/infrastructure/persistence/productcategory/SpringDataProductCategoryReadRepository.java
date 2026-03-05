@@ -1,8 +1,8 @@
 package com.petshop.catalog.infrastructure.persistence.productcategory;
 
 import com.petshop.catalog.application.product.ProductView;
+import com.petshop.catalog.application.productcategory.ProductCategoryView;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -12,14 +12,13 @@ import java.util.UUID;
 public interface SpringDataProductCategoryReadRepository extends JpaRepository<ProductCategoryJpaEntity, UUID>
 {
     @Query("""
-    SELECT new com.petshop.catalog.application.product.ProductView(
-        p.id, p.name, p.description, p.price, p.image, p.isVisible, p.isCreator
-    )
-    FROM ProductJpaEntity p
-    JOIN ProductCategoryJpaEntity pc ON p.id = pc.id.productId
-    JOIN CategoryJpaEntity c ON pc.id.categoryId = c.id
-    WHERE c.id = :categoryId
-      AND p.isVisible = true
+SELECT new com.petshop.catalog.application.productcategory.ProductCategoryView(
+    pc.id,
+    pc.product.id,
+    pc.category.id,
+    pc.category.name
+)
+FROM ProductCategoryJpaEntity pc
 """)
-    List<ProductView> listProductsFromCategory(@Param("categoryId") UUID categoryId);
+    List<ProductCategoryView> findWithCategoryName();
 }

@@ -16,11 +16,7 @@ public class ProductReadRepository {
     }
 
     @Transactional(readOnly = true)
-    public List<ProductView> find(UUID id, Boolean isCreator){
-
-        if (isCreator) {
-            return this.jpaRepository.findAllProjected();
-        }
+    public List<ProductView> find(UUID id){
         if (!Objects.isNull(id)) {
             return this.jpaRepository.findByIdProjected(id);
         }
