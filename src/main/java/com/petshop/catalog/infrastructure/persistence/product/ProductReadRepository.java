@@ -21,7 +21,8 @@ public class ProductReadRepository {
             return this.jpaRepository.findByIdProjected(id);
         }
 
-        return this.jpaRepository.findVisibleProjected();
+        final List<ProductView> response = this.jpaRepository.findVisibleProjected();
+        return response;
     }
 
     public Boolean existsById(UUID id) {

@@ -40,16 +40,10 @@ public class UpdateProductService {
     }
 
     @Transactional
-    public UUID updateProduct(UUID id, String name, String description, BigDecimal price, MultipartFile image, Boolean isVisible) throws IOException {
+    public UUID updateProduct(UUID id, String name, String description, BigDecimal price, Boolean isVisible) throws IOException {
         ProductJpaEntity entity = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
 
         Product product = Product.update(id, name, description, price, isVisible);
-
-        if (!Objects.isNull(image)) {
-            imageStorageService.saveImage(image, id);
-            product.addImage(image.getOriginalFilename());
-        }
-
         entity.updateFrom(product);
 /*
         product.pullDomainEvents().forEach(event -> {

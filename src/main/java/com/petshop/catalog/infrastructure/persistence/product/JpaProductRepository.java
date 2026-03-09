@@ -2,6 +2,7 @@ package com.petshop.catalog.infrastructure.persistence.product;
 
 import com.petshop.catalog.domain.product.Product;
 import com.petshop.catalog.domain.product.ProductRepository;
+import com.petshop.catalog.infrastructure.persistence.multimedia.MultimediaJpaEntity;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
@@ -36,23 +37,7 @@ public class JpaProductRepository implements ProductRepository {
         entity.setName(product.getName());
         entity.setDescription(product.getDescription());
         entity.setPrice(product.getPrice().value());
-        entity.setImage(product.getImage());
         entity.setVisibility(product.getVisible());
-        entity.setIsCreator(false);
-
-
-        Set<ProductMultimediaJpaEntity> multimedia = product.getMultimedia()
-                .stream()
-                .map(productMultimedia -> {
-                    ProductMultimediaJpaEntity mm = new ProductMultimediaJpaEntity();
-                    mm.setId(productMultimedia.getId());
-                    mm.setFileName(productMultimedia.getFileName());
-                    mm.setProduct(entity);
-                    return mm;
-                })
-                .collect(Collectors.toSet());
-
-        entity.setMultimedia(multimedia);
 
         return entity;
     }

@@ -13,9 +13,7 @@ public class Product {
     private String name;
     private String description;
     private ProductPrice price;
-    private String image;
     private Boolean isVisible;
-    private Set<ProductMultimedia> multimedia = new HashSet<>();
 
     private final List<DomainEvent> domainEvents = new ArrayList<>();
 
@@ -24,11 +22,7 @@ public class Product {
         this.changeName(name);
         this.changeDescription(description);
         this.changePrice(price);
-        this.isVisible = isVisible;
-    }
-
-    private void changeImage(String image) {
-        this.image = image;
+        changeVisibility(isVisible);
     }
 
     public static Product create(
@@ -99,19 +93,14 @@ public class Product {
     private void changeName(String name) {
         this.name = name;
     }
-    public String getImage() {
-        return this.image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
 
     public Boolean getVisible() {
         return isVisible;
     }
 
-
+private void changeVisibility(Boolean isVisible) {
+        this.isVisible = isVisible;
+}
     private void recordEvent(DomainEvent event) {
         domainEvents.add(event);
     }
@@ -120,25 +109,5 @@ public class Product {
         List<DomainEvent> events = new ArrayList<>(domainEvents);
         domainEvents.clear();
         return events;
-    }
-
-    public void addImage(String fileName) {
-
-        boolean exists = multimedia.stream()
-                .anyMatch(m -> m.getFileName().equals(fileName));
-
-        if (exists) {
-            throw new IllegalArgumentException("Image already exists");
-        }
-
-        multimedia.add(ProductMultimedia.create(fileName));
-    }
-
-    public void removeImage(UUID multimediaId) {
-        multimedia.removeIf(m -> m.getId().equals(multimediaId));
-    }
-
-    public Set<ProductMultimedia> getMultimedia() {
-        return this.multimedia;
     }
 }

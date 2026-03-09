@@ -35,8 +35,6 @@ public class DatabaseSeeder implements CommandLineRunner {
             entity.setDescription("");
             entity.setPrice(BigDecimal.ZERO);
             entity.setVisibility(false);
-            entity.setIsCreator(true);
-            entity.setImage("agregar.png");
             productRepository.save(entity);
         }
 

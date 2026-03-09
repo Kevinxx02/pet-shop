@@ -1,6 +1,5 @@
 package com.petshop.catalog.application.productcategory;
 
-import com.petshop.catalog.application.product.ProductView;
 import com.petshop.catalog.domain.category.CategoryRepository;
 import com.petshop.catalog.domain.productcategory.ProductCategory;
 import com.petshop.catalog.domain.productcategory.ProductCategoryReadRepository;

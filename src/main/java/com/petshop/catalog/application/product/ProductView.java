@@ -1,6 +1,7 @@
 package com.petshop.catalog.application.product;
 
 import java.math.BigDecimal;
+import java.util.Set;
 import java.util.UUID;
 
 public record ProductView (
@@ -8,7 +9,7 @@ public record ProductView (
         String name,
         String description,
         BigDecimal price,
-        String image,
         Boolean isVisible,
-        UUID categoryId
+        UUID categoryId,
+        String multimedia
 ) {}

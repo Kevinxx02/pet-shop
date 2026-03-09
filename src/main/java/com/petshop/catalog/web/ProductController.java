@@ -4,8 +4,8 @@ import com.petshop.catalog.application.product.CreateProductService;
 import com.petshop.catalog.application.product.ListProductService;
 import com.petshop.catalog.application.product.ProductView;
 import com.petshop.catalog.application.product.UpdateProductService;
-import com.petshop.catalog.application.productcategory.ProductCategoryService;
-import com.petshop.catalog.domain.productcategory.ProductCategory;
+import com.petshop.catalog.domain.multimedia.Multimedia;
+import com.petshop.catalog.infrastructure.persistence.ImageStorageService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,15 +23,14 @@ public class ProductController {
     private final CreateProductService createProductService;
     private final UpdateProductService updateProductService;
     private final ListProductService listProductService;
-    private final ProductCategoryService productCategoryService;
-
+    private final ImageStorageService imageStorageService;
     public ProductController(CreateProductService createProductService,
                              ListProductService listProductService,
-                             UpdateProductService updateProductService, ProductCategoryService productCategoryService) {
+                             UpdateProductService updateProductService, ImageStorageService imageStorageService) {
         this.createProductService = createProductService;
         this.listProductService = listProductService;
         this.updateProductService = updateProductService;
-        this.productCategoryService = productCategoryService;
+        this.imageStorageService = imageStorageService;
     }
 
     @GetMapping
@@ -44,18 +43,13 @@ public class ProductController {
             @RequestParam String name,
             @RequestParam String description,
             @RequestParam BigDecimal price,
-            @RequestParam MultipartFile file,
-            @RequestParam(defaultValue = "true") Boolean isVisible,
-            @RequestParam UUID categoryId) throws IOException {
+            @RequestParam(defaultValue = "true") Boolean isVisible) throws IOException {
         UUID id = createProductService.createProduct(
                 name,
                 description,
                 price,
-                file,
                 isVisible
         );
-
-        //productCategoryService.assignCategoryToProduct(id, categoryId);
 
         return ResponseEntity.ok(new Object() {
             public final String message = "Producto creado correctamente";
@@ -69,8 +63,6 @@ public class ProductController {
             @RequestParam String name,
             @RequestParam String description,
             @RequestParam BigDecimal price,
-            /* Al actualizar no es requerido que suban nuevamente la imagen */
-            @RequestParam(required = false) MultipartFile file,
             @RequestParam Boolean isVisible
             ) throws IOException {
         updateProductService.updateProduct(
@@ -78,7 +70,6 @@ public class ProductController {
                 name,
                 description,
                 price,
-                file,
                 isVisible
         );
 
@@ -87,4 +78,5 @@ public class ProductController {
             public final UUID productId = id;
         });
     }
+
 }
