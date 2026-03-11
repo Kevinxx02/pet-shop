@@ -2,14 +2,11 @@ package com.petshop.catalog.infrastructure.persistence.product;
 
 
 import com.petshop.catalog.domain.product.Product;
-import com.petshop.catalog.infrastructure.persistence.multimedia.MultimediaJpaEntity;
 import com.petshop.catalog.infrastructure.persistence.productcategory.ProductCategoryJpaEntity;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "products")
@@ -63,5 +60,13 @@ public class ProductJpaEntity {
         this.description = product.getDescription();
         this.price = product.getPrice().value();
         this.isVisible = product.getVisible();
+    }
+
+    public Set<ProductCategoryJpaEntity> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(Set<ProductCategoryJpaEntity> categories) {
+        this.categories = categories;
     }
 }
