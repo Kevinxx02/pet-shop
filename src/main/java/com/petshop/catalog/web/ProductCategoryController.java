@@ -1,7 +1,6 @@
 package com.petshop.catalog.web;
 
 import com.petshop.catalog.application.productcategory.ProductCategoryService;
-import com.petshop.catalog.application.productcategory.ProductCategoryView;
 import com.petshop.catalog.domain.productcategory.ProductCategory;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,8 +16,8 @@ public class ProductCategoryController {
     }
 
     @GetMapping
-    public List<ProductCategoryView> list() {
-        return productCategoryService.findWithCategoryName();
+    public List<ProductCategory> list() {
+        return productCategoryService.findAll();
     }
     @PostMapping
     public UUID create(@RequestParam UUID productId, @RequestParam UUID categoryId) {

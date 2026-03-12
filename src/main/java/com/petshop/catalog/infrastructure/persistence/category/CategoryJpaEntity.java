@@ -59,9 +59,9 @@ public class CategoryJpaEntity {
     }
 
     public void updateFrom(Category category) {
-        this.id = category.getId();
-        this.name = category.getName();
-        this.isVisible = category.getIsVisible();
+        setId(category.getId());
+        setName(category.getName());
+        setIsVisible(category.getIsVisible());
     }
 
     public Boolean getIsVisible() {

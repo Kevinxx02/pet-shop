@@ -1,15 +1,11 @@
 package com.petshop.catalog.application.product;
 
 import java.math.BigDecimal;
-import java.util.Set;
 import java.util.UUID;
 
 public record ProductView (
         UUID id,
         String name,
         String description,
-        BigDecimal price,
-        Boolean isVisible,
-        UUID categoryId,
-        String multimedia
+        BigDecimal price
 ) {}

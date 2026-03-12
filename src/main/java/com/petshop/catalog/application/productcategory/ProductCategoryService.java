@@ -37,8 +37,8 @@ public class ProductCategoryService {
             productCategoryRepository.save(relation);
         }
     }
-    public List<ProductCategoryView> findWithCategoryName() {
-        return productCategoryReadRepository.findWithCategoryName();
+    public List<ProductCategory> findAll() {
+        return productCategoryReadRepository.findAll();
     }
 
     public UUID create(UUID productId, UUID categoryId) {

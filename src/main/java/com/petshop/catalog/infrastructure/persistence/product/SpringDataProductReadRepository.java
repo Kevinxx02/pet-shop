@@ -12,7 +12,7 @@ public interface SpringDataProductReadRepository
         extends JpaRepository<ProductJpaEntity, UUID> {
     @Query("""
         SELECT new com.petshop.catalog.application.product.ProductView(
-            p.id, p.name, p.description, p.price, p.isVisible, pc.category.id
+            p.id, p.name, p.description, p.price
         )
         FROM ProductJpaEntity p
         LEFT JOIN ProductCategoryJpaEntity pc
@@ -23,7 +23,7 @@ public interface SpringDataProductReadRepository
 
     @Query("""
         SELECT new com.petshop.catalog.application.product.ProductView(
-            p.id, p.name, p.description, p.price, p.isVisible
+            p.id, p.name, p.description, p.price
         )
         FROM ProductJpaEntity p
         WHERE p.isVisible AND p.id = :id
