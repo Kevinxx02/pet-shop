@@ -32,7 +32,7 @@ public class BlogController {
     }
 
     @PutMapping
-    public UUID create(@RequestParam UUID id,
+    public UUID update(@RequestParam UUID id,
                        @RequestParam String title,
                        @RequestParam String date,
                        @RequestParam String url) {
