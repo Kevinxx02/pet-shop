@@ -1,52 +1,54 @@
 package com.petshop.catalog.domain.user;
 
-import com.petshop.catalog.domain.DomainEvent;
+import com.petshop.catalog.domain.shared.Email;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
-public class User {
-    private UUID id;
-    private String name;
-    private String password;
-    private Boolean isDeleted;
+public class User{
 
-    private final List<DomainEvent> domainEvents = new ArrayList<>();
+    private UserId id;
+    private Email email;
+    private HashedPassword password;
+    private boolean isActive;
 
-    private User(UUID id, String name, String password, Boolean isDeleted) {
-        this.id = id;
-        this.name = name;
-        this.password = password;
-        this.isDeleted = isDeleted;
+    private User(UUID id, String email, String password, boolean active) {
+        this.id = new UserId(id);
+        this.email = new Email(email);
+        this.password = new HashedPassword(password);
+        this.isActive = active;
     }
 
-    public static User create(String name, String password) {
+    public static User create(String email, String password) {
+        final boolean isActive = true;
         final UUID id = UUID.randomUUID();
-        final Boolean isDeleted = false;
-        return new User(id, name, password, isDeleted);
+
+        return new User(id, email, password, isActive);
+    }
+    public static User rehydrate(UUID id, String email, String password, boolean isActive) {
+        return new User(id, email, password, isActive);
     }
 
-    public static User rehydrate(UUID id, String name, String password, Boolean isDeleted) {
-        return new User(id, name, password, isDeleted);
+    public void changePassword(HashedPassword newPassword) {
+        this.password = newPassword;
     }
 
-    public List<DomainEvent> pullDomainEvents() {
-        List<DomainEvent> events = new ArrayList<>(domainEvents);
-        domainEvents.clear();
-        return events;
-    }
-
-    public UUID getId() {
+    public UserId getId() {
         return id;
     }
-    public String getName() {
-        return this.name;
+
+    public boolean getIsActive() {
+        return isActive;
     }
-    public String getPassword() {
-        return this.password;
+
+    public HashedPassword getPassword() {
+        return password;
     }
-    public Boolean getIsDeleted() {
-        return this.isDeleted;
+
+    public Email getEmail() {
+        return email;
+    }
+
+    public void deActivateUser() {
+        this.isActive = false;
     }
 }

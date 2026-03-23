@@ -4,7 +4,6 @@ import com.petshop.catalog.domain.user.User;
 import com.petshop.catalog.domain.user.UserRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -15,38 +14,18 @@ public class JpaUserRepository implements UserRepository {
     public JpaUserRepository(SpringDataUserRepository jpaRepository) {
         this.jpaRepository = jpaRepository;
     }
-    public Optional<UserJpaEntity> findByName(String name) {
-        return jpaRepository.findByName(name);
+
+    @Override
+    public User save(User user) {
+        UserJpaEntity entity = Mapper.toEntity(user);
+        jpaRepository.save(entity);
+
+        return user;
     }
 
     @Override
-    public Optional<UserJpaEntity> findById(UUID id) {
-        return jpaRepository.findById(id);
-    }
-
-    @Override
-    public List<User> findVisible() {
-        return jpaRepository.findByIsDeleted(false).stream().map(this::toDomain).toList();
-    }
-
-    private User toDomain(UserJpaEntity user) {
-        return User.rehydrate(user.getId(), user.getName(), user.getPassword(), user.getIsDeleted());
-    }
-
-    public void save(User user) {
-        jpaRepository.save(toEntity(user));
-    }
-    public void save(UserJpaEntity product) {
-        jpaRepository.save(product);
-    }
-
-    // Convertir de dominio a JPA
-    private UserJpaEntity toEntity(User user) {
-        return new UserJpaEntity(
-                user.getId(),
-                user.getName(),
-                user.getPassword(),
-                user.getIsDeleted()
-        );
+    public Optional<User> findById(UUID id) {
+        return jpaRepository.findById(id)
+                .map(Mapper::toDomain);
     }
 }

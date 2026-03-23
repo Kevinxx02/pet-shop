@@ -3,56 +3,40 @@ package com.petshop.catalog.infrastructure.persistence.user;
 import jakarta.persistence.*;
 
 import java.util.UUID;
-
 @Entity
 @Table(name = "users")
 public class UserJpaEntity {
 
     @Id
-    @Column(columnDefinition = "uuid")
     private UUID id;
 
-    private String name;
+    private String email;
     private String password;
-    private Boolean isDeleted;
+    private boolean isActive;
 
-    @Version
-    private Long version;
-    public UserJpaEntity() {} // constructor por JPA
 
-    public UserJpaEntity(UUID id, String name, String password, Boolean isDeleted) {
+    protected UserJpaEntity() {}
+
+    UserJpaEntity(UUID id, String email, String password, boolean isActive) {
         this.id = id;
-        this.name = name;
+        this.email = email;
         this.password = password;
-        this.isDeleted = isDeleted;
-    }
-    public UUID getId() {
-        return id;
+        this.isActive = isActive;
     }
 
-    public String getName() {
-        return name;
+    public UUID getId() {
+        return this.id;
+    }
+
+    public String getEmail() {
+        return this.email;
     }
 
     public String getPassword() {
-        return password;
+        return this.password;
     }
 
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-    public void setDeleted(Boolean isDeleted) {
-        this.isDeleted = isDeleted;
-    }
-    public Boolean getIsDeleted() {
-        return this.isDeleted;
+    public boolean getIsActive() {
+        return this.isActive;
     }
 }
