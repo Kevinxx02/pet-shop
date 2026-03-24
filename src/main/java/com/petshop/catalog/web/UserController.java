@@ -4,7 +4,7 @@ import com.petshop.catalog.application.user.CreateUserService;
 import com.petshop.catalog.application.user.DeleteUserService;
 import com.petshop.catalog.application.user.GetUserService;
 import com.petshop.catalog.application.user.ValidateUserService;
-import com.petshop.catalog.domain.user.UserResponse;
+import com.petshop.catalog.application.user.UserView;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,43 +31,38 @@ public class UserController {
             @RequestParam String email,
             @RequestParam String password) throws IOException {
 
-        final UUID id = createUserService.createUser(
+        final UserView user = createUserService.createUser(
                 email,
                 password
         );
 
-        return ResponseEntity.ok(new Object() {
-            public final String message = "Usuario creado correctamente";
-            public final UUID userId = id;
-        });
+        final String message = "Se creo el usuario: " + user.email();
+        return ResponseEntity.status(200).body(new BaseResponse<>(message, user));
     }
 
     @GetMapping
-    public List<UserResponse> listUser() {
-        return getUserService.listUsers();
+    public ResponseEntity<?> listUser() {
+        List<UserView> aUser = getUserService.listUsers();
+        return ResponseEntity.status(200).body(new BaseResponse<>("Listando usuarios", aUser));
     }
 
     @PostMapping("/validate")
-    public UserResponse validateUser(@RequestParam String email,
+    public ResponseEntity<?> validateUser(@RequestParam String email,
                                        @RequestParam String password) {
-        UserResponse user = this.validateUserService.validate(
+        UserView user = this.validateUserService.validate(
                 email,
                 password
         );
 
-        /* Debo crear un DTO o un read Respository */
-        return user;
+        final String message = "Bienvenido " + user.email();
+        return ResponseEntity.status(200).body(new BaseResponse<>(message, user));
     }
 
     @DeleteMapping
     public ResponseEntity<?> deleteUser(@RequestParam UUID id) {
-        final Boolean response = deleteUserService.deleteUser(id);
-        if (response) {
-            return ResponseEntity.ok(new Object() {
-                public final String message = "Usuario eliminado";
-            });
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        this.deleteUserService.deleteUser(id);
+
+        final String message = "Usuario eliminado";
+        return ResponseEntity.status(200).body(new BaseResponse<>(message, new Object()));
     }
 }

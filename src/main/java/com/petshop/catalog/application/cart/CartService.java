@@ -2,9 +2,9 @@ package com.petshop.catalog.application.cart;
 
 import com.petshop.catalog.domain.cart.Cart;
 import com.petshop.catalog.domain.cart.CartRepository;
+import com.petshop.catalog.domain.product.Product;
 import com.petshop.catalog.domain.product.ProductRepository;
 import com.petshop.catalog.infrastructure.persistence.cart.CartJpaEntity;
-import com.petshop.catalog.infrastructure.persistence.product.ProductJpaEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -58,18 +58,17 @@ public class CartService {
 
     public Cart addProduct(UUID cartId, UUID productId, Integer quantity) {
 
-        CartJpaEntity entity = cartRepository.findById(cartId)
+        CartJpaEntity cartEntity = cartRepository.findById(cartId)
                 .orElseThrow(() -> new RuntimeException("Cart not found"));
 
-        ProductJpaEntity product = productRepository.findById(productId)
+        Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
 
-        Cart cart = cartRepository.toDomain(entity);
+        Cart cart = cartRepository.toDomain(cartEntity);
 
-        // 🔴 AHORA delegas al dominio
-        cart.addProduct(productId, quantity, product.getPrice());
+        cart.addProduct(productId, quantity, product.getPrice().value());
 
-        CartJpaEntity updated = cartRepository.toEntity(cart, entity);
+        CartJpaEntity updated = cartRepository.toEntity(cart, cartEntity);
 
         cartRepository.save(updated);
 

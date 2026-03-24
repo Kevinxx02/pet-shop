@@ -3,7 +3,7 @@ package com.petshop.catalog.infrastructure.persistence.user;
 import com.petshop.catalog.domain.shared.Email;
 import com.petshop.catalog.domain.user.User;
 import com.petshop.catalog.domain.user.UserReadRepository;
-import com.petshop.catalog.domain.user.UserResponse;
+import com.petshop.catalog.application.user.UserView;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -20,11 +20,11 @@ public class JpaUserReadRepository implements UserReadRepository {
     @Override
     public Optional<User> findByEmail(Email email) {
         return jpaRepository.findByEmail(email.value())
-                .map(Mapper::toDomain);
+                .map(UserMapper::toDomain);
     }
 
     @Override
-    public List<UserResponse> findActive() {
+    public List<UserView> findActive() {
         return jpaRepository.findActive()
                 .stream()
                 .toList();

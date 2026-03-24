@@ -2,7 +2,7 @@ package com.petshop.catalog.infrastructure.persistence.user;
 
 import com.petshop.catalog.domain.user.User;
 
-public class Mapper {
+public class UserMapper {
     public static User toDomain(UserJpaEntity entity) {
         return User.rehydrate(
                 entity.getId(),

@@ -1,15 +1,8 @@
 package com.petshop.catalog.web;
 
-import com.petshop.catalog.application.product.CreateProductService;
-import com.petshop.catalog.application.product.ListProductService;
-import com.petshop.catalog.application.product.ProductView;
-import com.petshop.catalog.application.product.UpdateProductService;
-import com.petshop.catalog.domain.multimedia.Multimedia;
-import com.petshop.catalog.infrastructure.persistence.ImageStorageService;
-import org.springframework.http.MediaType;
+import com.petshop.catalog.application.product.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -23,41 +16,40 @@ public class ProductController {
     private final CreateProductService createProductService;
     private final UpdateProductService updateProductService;
     private final ListProductService listProductService;
-    private final ImageStorageService imageStorageService;
+
     public ProductController(CreateProductService createProductService,
                              ListProductService listProductService,
-                             UpdateProductService updateProductService, ImageStorageService imageStorageService) {
+                             UpdateProductService updateProductService) {
         this.createProductService = createProductService;
         this.listProductService = listProductService;
         this.updateProductService = updateProductService;
-        this.imageStorageService = imageStorageService;
     }
 
     @GetMapping
-    public List<ProductView> list(@RequestParam(required = false) UUID id) {
-        return listProductService.list(id);
+    public ResponseEntity<?> list(@RequestParam(required = false) UUID id) {
+        final List<ProductView> aProduct = listProductService.list(id);
+
+        final String message = "Listado de productos";
+        return ResponseEntity.status(201).body(new BaseResponse<>(message, aProduct));
     }
 
     @PostMapping
     public ResponseEntity<?> createProduct(
             @RequestParam String name,
             @RequestParam String description,
-            @RequestParam BigDecimal price,
-            @RequestParam(defaultValue = "true") Boolean isVisible) throws IOException {
-        UUID id = createProductService.createProduct(
+            @RequestParam BigDecimal price) throws IOException {
+
+        ProductView product = createProductService.createProduct(
                 name,
                 description,
-                price,
-                isVisible
+                price
         );
 
-        return ResponseEntity.ok(new Object() {
-            public final String message = "Producto creado correctamente";
-            public final UUID productId = id;
-        });
+        final String message = "Producto creado correctamente";
+        return ResponseEntity.status(201).body(new BaseResponse<>(message, product));
     }
 
-    @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PutMapping
     public ResponseEntity<?> updateProduct(
             @RequestParam UUID id,
             @RequestParam String name,
@@ -65,7 +57,7 @@ public class ProductController {
             @RequestParam BigDecimal price,
             @RequestParam Boolean isVisible
             ) throws IOException {
-        updateProductService.updateProduct(
+        final ProductView product = updateProductService.updateProduct(
                 id,
                 name,
                 description,
@@ -73,10 +65,8 @@ public class ProductController {
                 isVisible
         );
 
-        return ResponseEntity.ok(new Object() {
-            public final String message = "Producto actualizado correctamente";
-            public final UUID productId = id;
-        });
+        final String message = "Producto actualizado correctamente";
+        return ResponseEntity.status(200).body(new BaseResponse<>(message, product));
     }
 
 }

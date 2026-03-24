@@ -17,7 +17,7 @@ public class JpaUserRepository implements UserRepository {
 
     @Override
     public User save(User user) {
-        UserJpaEntity entity = Mapper.toEntity(user);
+        UserJpaEntity entity = UserMapper.toEntity(user);
         jpaRepository.save(entity);
 
         return user;
@@ -26,6 +26,6 @@ public class JpaUserRepository implements UserRepository {
     @Override
     public Optional<User> findById(UUID id) {
         return jpaRepository.findById(id)
-                .map(Mapper::toDomain);
+                .map(UserMapper::toDomain);
     }
 }

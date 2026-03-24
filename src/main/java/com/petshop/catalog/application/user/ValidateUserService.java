@@ -3,7 +3,6 @@ package com.petshop.catalog.application.user;
 import com.petshop.catalog.domain.shared.Email;
 import com.petshop.catalog.domain.user.User;
 import com.petshop.catalog.domain.user.UserReadRepository;
-import com.petshop.catalog.domain.user.UserResponse;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,12 +19,12 @@ public class ValidateUserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public UserResponse validate(String email, String rawPassword) {
+    public UserView validate(String email, String rawPassword) {
         final User domain = this.userRepository.findByEmail(new Email(email))
                 .filter(user ->
                         passwordEncoder.matches(rawPassword, user.getPassword().value()) && user.getIsActive()
                 ).orElseThrow(() -> new RuntimeException("Email and password doesnt match"));
 
-        return new UserResponse(domain.getId().value(), domain.getEmail().value());
+        return new UserView(domain.getId().value(), domain.getEmail().value());
     }
 }

@@ -7,7 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.UUID;
 
 @Service
 @Transactional
@@ -20,9 +19,10 @@ public class CreateProductService {
     }
 
     @Transactional
-    public UUID createProduct(String name, String description, BigDecimal price, Boolean isVisible) throws IOException {
-        Product product = Product.create(name, description, price, isVisible);
+    public ProductView createProduct(String name, String description, BigDecimal price) {
+        Product product = Product.create(name, description, price);
         productRepository.save(product);
-        return product.getId();
+
+        return ProductMapper.toView(product);
     }
 }

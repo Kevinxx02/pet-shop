@@ -1,9 +1,5 @@
 package com.petshop.catalog.domain.product;
 
-import com.petshop.catalog.domain.DomainEvent;
-import com.petshop.catalog.domain.product.events.ProductCreated;
-import com.petshop.catalog.domain.product.events.ProductUpdated;
-
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -13,25 +9,24 @@ public class Product {
     private String name;
     private String description;
     private ProductPrice price;
-    private Boolean isVisible;
+    private boolean isVisible;
 
-    private final List<DomainEvent> domainEvents = new ArrayList<>();
-
-    private Product(UUID id, String name, String description, BigDecimal price, Boolean isVisible) {
+    private Product(UUID id, String name, String description, BigDecimal price, boolean isVisible) {
         this.id = id;
         this.changeName(name);
         this.changeDescription(description);
         this.changePrice(price);
-        changeVisibility(isVisible);
+        this.changeVisibility(isVisible);
     }
 
     public static Product create(
             String name,
             String description,
-            BigDecimal price,
-            Boolean isVisible
+            BigDecimal price
     ) {
-        UUID newId = UUID.randomUUID();
+        final boolean isVisible = true;
+        final UUID newId = UUID.randomUUID();
+
         Product product = new Product(
                 newId,
                 name,
@@ -40,7 +35,6 @@ public class Product {
                 isVisible
         );
 
-        product.recordEvent(new ProductCreated(newId));
         return product;
     }
 
@@ -49,24 +43,21 @@ public class Product {
             String name,
             String description,
             BigDecimal price,
-            String image,
-            Boolean isVisible
+            boolean isVisible
     ) {
         return new Product(id, name, description, price, isVisible);
     }
 
-    public static Product update(
-            UUID id,
+    public void update(
             String name,
             String description,
             BigDecimal price,
-            Boolean isVisible
+            boolean isVisible
     ) {
-
-        Product product =  new Product(id, name, description, price, isVisible);
-        product.recordEvent(new ProductUpdated(product.id));
-
-        return product;
+        this.changeName(name);
+        this.changeDescription(description);
+        this.changePrice(price);
+        this.changeVisibility(isVisible);
     }
 
     public UUID getId() {
@@ -83,31 +74,35 @@ public class Product {
     }
 
     private void changePrice(BigDecimal price) {
+        /* Las validaciones de price se encuentran en el VO ProductPrice */
         this.price = ProductPrice.from(price);
     }
 
     private void changeDescription(String description) {
+        if (Objects.equals(this.description, description)) return;
+
+        if (description == null || description.isBlank()) {
+            throw new IllegalArgumentException("Description cannot be empty");
+        }
+
         this.description = description;
     }
 
     private void changeName(String name) {
+        if (Objects.equals(this.name, name)) return;
+
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("Name cannot be empty");
+        }
+
         this.name = name;
     }
 
-    public Boolean getVisible() {
+    public boolean getVisible() {
         return isVisible;
     }
 
-private void changeVisibility(Boolean isVisible) {
+    private void changeVisibility(boolean isVisible) {
         this.isVisible = isVisible;
 }
-    private void recordEvent(DomainEvent event) {
-        domainEvents.add(event);
-    }
-
-    public List<DomainEvent> pullDomainEvents() {
-        List<DomainEvent> events = new ArrayList<>(domainEvents);
-        domainEvents.clear();
-        return events;
-    }
 }

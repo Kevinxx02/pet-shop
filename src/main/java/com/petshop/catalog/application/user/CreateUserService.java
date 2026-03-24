@@ -2,13 +2,11 @@ package com.petshop.catalog.application.user;
 
 import com.petshop.catalog.domain.user.User;
 import com.petshop.catalog.domain.user.UserRepository;
-import com.petshop.catalog.infrastructure.persistence.outbox.OutboxRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.util.UUID;
 
 @Service
 @Transactional
@@ -17,19 +15,18 @@ public class CreateUserService {
     private final PasswordEncoder passwordEncoder;
 
     public CreateUserService(UserRepository userRepository,
-                             OutboxRepository outboxRepository,
                              PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
     @Transactional
-    public UUID createUser(String email, String rawPassword) throws IOException {
+    public UserView createUser(String email, String rawPassword) throws IOException {
         String password = passwordEncoder.encode(rawPassword);
         User user = User.create(email, password);
 
         userRepository.save(user);
 
-        return user.getId().value();
+        return new UserView(user.getId().value(), user.getEmail().value());
     }
 }
