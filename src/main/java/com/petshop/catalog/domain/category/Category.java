@@ -44,10 +44,18 @@ public class Category {
     }
 
     private void updateParentId(UUID parentId) {
+        if (this.id.equals(parentId)) {
+            throw new IllegalArgumentException("Category cannot be its own parent");
+        }
         this.parentId = parentId;
     }
 
     public UUID getParentId() {
         return parentId;
+    }
+    public void updateCategory(String name, UUID parentId, Boolean isVisible) {
+        this.updateName(name);
+        this.updateParentId(parentId);
+        this.updateIsVisible(isVisible);
     }
 }
