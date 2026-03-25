@@ -26,8 +26,8 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<?> list(@RequestParam(required = false) UUID id) {
-        final List<ProductView> aProduct = listProductService.list(id);
+    public ResponseEntity<?> list() {
+        final List<ProductView> aProduct = listProductService.list();
 
         final String message = "Listado de productos";
         return ResponseEntity.status(201).body(new BaseResponse<>(message, aProduct));
@@ -37,7 +37,7 @@ public class ProductController {
     public ResponseEntity<?> createProduct(
             @RequestParam String name,
             @RequestParam String description,
-            @RequestParam BigDecimal price) throws IOException {
+            @RequestParam BigDecimal price) {
 
         ProductView product = createProductService.createProduct(
                 name,
@@ -56,7 +56,7 @@ public class ProductController {
             @RequestParam String description,
             @RequestParam BigDecimal price,
             @RequestParam Boolean isVisible
-            ) throws IOException {
+            ) {
         final ProductView product = updateProductService.updateProduct(
                 id,
                 name,

@@ -1,6 +1,5 @@
-package com.petshop.catalog.infrastructure.persistence.productcategory;
+package com.petshop.catalog.domain.productcategory;
 
-import com.petshop.catalog.domain.productcategory.ProductCategory;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
@@ -9,8 +8,7 @@ import java.util.UUID;
 public interface ProductCategoryRepository {
     /* Method Overload para que funcione correctamente sin importar el tipo de parametro que se le envie */
     void save(ProductCategory productCategory);
-
+    boolean existsById(UUID id);
+    boolean existsByProductIdAndCategoryId(UUID productId, UUID categoryId);
     void deleteById(UUID productId);
-
-    UUID create(UUID productId, UUID categoryId);
 }

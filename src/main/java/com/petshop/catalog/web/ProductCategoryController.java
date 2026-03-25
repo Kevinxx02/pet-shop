@@ -1,7 +1,8 @@
 package com.petshop.catalog.web;
 
 import com.petshop.catalog.application.productcategory.ProductCategoryService;
-import com.petshop.catalog.domain.productcategory.ProductCategory;
+import com.petshop.catalog.application.productcategory.ProductCategoryView;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,17 +17,25 @@ public class ProductCategoryController {
     }
 
     @GetMapping
-    public List<ProductCategory> list() {
-        return productCategoryService.findAll();
+    public ResponseEntity<?> list() {
+        final List<ProductCategoryView> productCategories = productCategoryService.findAll();
+
+        final String message = "Relacion productos y categorias obtenidas";
+        return ResponseEntity.status(200).body(new BaseResponse<>(message, productCategories));
     }
+
     @PostMapping
-    public UUID create(@RequestParam UUID productId, @RequestParam UUID categoryId) {
-        return productCategoryService.create(productId, categoryId);
+    public ResponseEntity<?> create(@RequestParam UUID productId, @RequestParam UUID categoryId) {
+        final ProductCategoryView productCategory = productCategoryService.create(productId, categoryId);
+
+        final String message = "Relacion productos y categorias creado";
+        return ResponseEntity.status(200).body(new BaseResponse<>(message, productCategory));
     }
+
     @DeleteMapping("/{id}")
-    public UUID delete(@PathVariable UUID id) {
+    public ResponseEntity<?> delete(@PathVariable UUID id) {
         productCategoryService.delete(id);
 
-        return id;
+        return ResponseEntity.noContent().build();
     }
 }

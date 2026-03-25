@@ -5,6 +5,5 @@ import java.util.UUID;
 public record ProductCategoryView(
         UUID id,
         UUID productId,
-        UUID categoryId,
-        String categoryName
+        UUID categoryId
 ) {}

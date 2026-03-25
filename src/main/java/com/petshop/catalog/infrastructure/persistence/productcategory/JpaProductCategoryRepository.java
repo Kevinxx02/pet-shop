@@ -2,9 +2,7 @@ package com.petshop.catalog.infrastructure.persistence.productcategory;
 
 
 import com.petshop.catalog.domain.productcategory.ProductCategory;
-import com.petshop.catalog.infrastructure.persistence.category.CategoryJpaEntity;
-import com.petshop.catalog.infrastructure.persistence.product.ProductJpaEntity;
-import jakarta.persistence.EntityManager;
+import com.petshop.catalog.domain.productcategory.ProductCategoryRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.UUID;
@@ -12,14 +10,15 @@ import java.util.UUID;
 @Repository
 public class JpaProductCategoryRepository implements ProductCategoryRepository {
     private final SpringDataProductCategoryRepository jpaRepository;
-    private final EntityManager entityManager;
-    public JpaProductCategoryRepository(SpringDataProductCategoryRepository jpaRepository, EntityManager entityManager) {
+    private final ProductCategoryMapper productCategoryMapper;
+
+    public JpaProductCategoryRepository(SpringDataProductCategoryRepository jpaRepository, ProductCategoryMapper productCategoryMapper) {
         this.jpaRepository = jpaRepository;
-        this.entityManager = entityManager;
+        this.productCategoryMapper = productCategoryMapper;
     }
 
     public void save(ProductCategory productCategory) {
-        jpaRepository.save(toEntity(productCategory));
+        jpaRepository.save(this.productCategoryMapper.toEntity(productCategory));
     }
 
     @Override
@@ -28,27 +27,12 @@ public class JpaProductCategoryRepository implements ProductCategoryRepository {
     }
 
     @Override
-    public UUID create(UUID productId, UUID categoryId) {
-        final ProductCategory productCategory = ProductCategory.create(productId, categoryId);
-        jpaRepository.save(toEntity(productCategory));
-
-        return productCategory.getId();
+    public boolean existsById(UUID id) {
+        return jpaRepository.existsById(id);
     }
 
-    // Convertir de dominio a JPA
-    private ProductCategoryJpaEntity toEntity(ProductCategory productCategory) {
-        final CategoryJpaEntity categoryJpaEntity = entityManager.getReference(
-                CategoryJpaEntity.class,
-                productCategory.getCategoryId());
-        final ProductJpaEntity productJpaEntity = entityManager.getReference(
-                ProductJpaEntity.class,
-                productCategory.getProductId());
-
-        return new ProductCategoryJpaEntity(
-                productCategory.getId(),
-                productJpaEntity,
-                categoryJpaEntity
-        );
+    @Override
+    public boolean existsByProductIdAndCategoryId(UUID productId, UUID categoryId) {
+        return jpaRepository.existsByProduct_IdAndCategory_Id(productId, categoryId);
     }
 }
-

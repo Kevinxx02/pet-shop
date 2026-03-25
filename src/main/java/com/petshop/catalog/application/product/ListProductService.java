@@ -1,11 +1,10 @@
 package com.petshop.catalog.application.product;
 
-import com.petshop.catalog.infrastructure.persistence.product.ProductReadRepository;
+import com.petshop.catalog.domain.product.ProductReadRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @Transactional
@@ -17,7 +16,7 @@ public class ListProductService {
         this.productRepository = productRepository;
     }
 
-    public List<ProductView> list(UUID id) {
-        return productRepository.find(id);
+    public List<ProductView> list() {
+        return productRepository.findAllView();
     }
 }
