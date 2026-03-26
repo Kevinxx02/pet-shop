@@ -40,7 +40,7 @@ public class MultimediaController {
         final String message = "Archivo multimedia agregado";
         return ResponseEntity.status(200).body(new BaseResponse<>(message, multimedia));
     }
-
+/* A este metodo le falta, se supone que si elimino, primero debo verificar que existe y ya que es multimedia deberia eliminar el archivo tambien */
     @DeleteMapping("/{id}")
     public void delete(@PathVariable UUID id) {
         this.multimediaService.delete(id);
