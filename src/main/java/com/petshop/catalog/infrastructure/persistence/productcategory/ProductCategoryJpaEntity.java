@@ -1,6 +1,5 @@
 package com.petshop.catalog.infrastructure.persistence.productcategory;
 
-import com.petshop.catalog.domain.productcategory.ProductCategoryId;
 import com.petshop.catalog.infrastructure.persistence.category.CategoryJpaEntity;
 import com.petshop.catalog.infrastructure.persistence.product.ProductJpaEntity;
 import jakarta.persistence.*;
@@ -9,7 +8,6 @@ import java.util.UUID;
 @Entity
 @Table(name = "product_category")
 public class ProductCategoryJpaEntity {
-
     @Id
     @Column(columnDefinition = "uuid")
     private UUID id;

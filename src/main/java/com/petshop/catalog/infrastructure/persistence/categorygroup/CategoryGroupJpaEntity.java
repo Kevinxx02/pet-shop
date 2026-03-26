@@ -1,30 +1,52 @@
 package com.petshop.catalog.infrastructure.persistence.categorygroup;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.petshop.catalog.infrastructure.persistence.category.CategoryJpaEntity;
+import com.petshop.catalog.infrastructure.persistence.group.GroupJpaEntity;
+import jakarta.persistence.*;
 
 import java.util.UUID;
 
 @Entity
 @Table(name = "category_group")
 public class CategoryGroupJpaEntity {
-
     @Id
     private UUID id;
-    private String name;
 
-    /* Definir la relacion con categoria */
+    @Column(name = "group_id", nullable = false)
+    private UUID groupId;
+
+    @Column(name = "category_id", nullable = false)
     private UUID categoryId;
+
+    @Column(nullable = false)
+    private boolean isActive;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "group_id", insertable = false, updatable = false)
+    private GroupJpaEntity group;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", insertable = false, updatable = false)
+    private CategoryJpaEntity category;
 
     public CategoryGroupJpaEntity() {
 
     }
 
-    public CategoryGroupJpaEntity(UUID id, String name, UUID categoryId) {
+    public CategoryGroupJpaEntity(
+            UUID id,
+            UUID groupId,
+            UUID categoryId,
+            boolean isActive
+    ) {
         setId(id);
-        setName(name);
+        setGroupId(groupId);
         setCategoryId(categoryId);
+        setIsActive(isActive);
+    }
+
+    private void setIsActive(boolean isActive) {
+        this.isActive = isActive;
     }
 
     public UUID getId() {
@@ -35,19 +57,23 @@ public class CategoryGroupJpaEntity {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public UUID getCategoryId() {
         return categoryId;
     }
 
     public void setCategoryId(UUID categoryId) {
         this.categoryId = categoryId;
+    }
+
+    public boolean getIsActive() {
+        return this.isActive;
+    }
+
+    public void setGroupId(UUID groupId) {
+        this.groupId = groupId;
+    }
+
+    public UUID getGroupId() {
+        return this.groupId;
     }
 }

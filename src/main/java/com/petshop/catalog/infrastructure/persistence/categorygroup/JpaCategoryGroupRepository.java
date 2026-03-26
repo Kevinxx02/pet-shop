@@ -4,7 +4,7 @@ import com.petshop.catalog.domain.categorygroup.CategoryGroup;
 import com.petshop.catalog.domain.categorygroup.CategoryGroupRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -17,32 +17,22 @@ public class JpaCategoryGroupRepository implements CategoryGroupRepository {
     }
 
     @Override
-    public void save(CategoryGroupJpaEntity categoryGroup) {
-        jpaRepository.save(categoryGroup);
+    public void save(CategoryGroup categoryGroup) {
+        jpaRepository.save(CategoryGroupMapper.toEntity(categoryGroup));
     }
 
     @Override
-    public CategoryGroupJpaEntity toEntity(CategoryGroup categoryGroup) {
-        CategoryGroupJpaEntity entity = new CategoryGroupJpaEntity();
-        entity.setId(categoryGroup.getId());
-        entity.setName(categoryGroup.getName());
-        entity.setCategoryId(categoryGroup.getCategoryId());
-
-        return entity;
+    public Optional<CategoryGroup> findById(UUID id) {
+        return jpaRepository.findById(id)
+                .map(CategoryGroupMapper::toDomain);
     }
 
     @Override
-    public CategoryGroup toDomain(CategoryGroupJpaEntity entity) {
-        return CategoryGroup.rehydrate(entity.getId(), entity.getName(), entity.getCategoryId());
+    public boolean existsByGroupIdAndCategoryIdAndIdNot(UUID groupId, UUID categoryId, UUID id) {
+        return this.jpaRepository.existsByGroupIdAndCategoryIdAndIdNot(groupId, categoryId, id);
     }
-
     @Override
-    public List<CategoryGroup> findAll() {
-        return jpaRepository.findAll().stream().map(this::toDomain).toList();
-    }
-
-    @Override
-    public void deleteById(UUID id) {
-        jpaRepository.deleteById(id);
+    public boolean existsByGroupIdAndCategoryId(UUID groupId, UUID categoryId) {
+        return this.jpaRepository.existsByGroupIdAndCategoryId(groupId, categoryId);
     }
 }

@@ -1,18 +1,14 @@
 package com.petshop.catalog.domain.categorygroup;
 
-import com.petshop.catalog.infrastructure.persistence.categorygroup.CategoryGroupJpaEntity;
-
-import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface CategoryGroupRepository {
-    CategoryGroupJpaEntity toEntity(CategoryGroup multimedia);
+    void save(CategoryGroup categoryGroup);
 
-    CategoryGroup toDomain(CategoryGroupJpaEntity entity);
+    Optional<CategoryGroup> findById(UUID id);
 
-    void save(CategoryGroupJpaEntity multimedia);
+    boolean existsByGroupIdAndCategoryIdAndIdNot(UUID groupId, UUID categoryId, UUID id);
 
-    List<CategoryGroup> findAll();
-
-    void deleteById(UUID id);
+    boolean existsByGroupIdAndCategoryId(UUID groupId, UUID categoryId);
 }
