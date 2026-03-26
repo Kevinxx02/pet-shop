@@ -3,7 +3,7 @@ package com.petshop.catalog.domain.multimedia;
 import java.util.UUID;
 
 public class Multimedia {
-    private UUID id;
+    final private UUID id;
     private String fileName;
     private Boolean isPrimary;
     private UUID ownerId;
@@ -30,5 +30,17 @@ public class Multimedia {
     }
     public Boolean getIsPrimary() {
         return this.isPrimary;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Multimedia that)) return false;
+        return id.equals(that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
     }
 }

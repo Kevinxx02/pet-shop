@@ -1,7 +1,8 @@
 package com.petshop.catalog.web;
 
-import com.petshop.catalog.domain.multimedia.Multimedia;
-import com.petshop.catalog.infrastructure.persistence.ImageStorageService;
+import com.petshop.catalog.application.multimedia.MultimediaView;
+import com.petshop.catalog.application.multimedia.MultimediaService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -12,29 +13,36 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/multimedia")
 public class MultimediaController {
-    private final ImageStorageService imageStorageService;
+    private final MultimediaService multimediaService;
 
-    public MultimediaController(ImageStorageService imageStorageService) {
-        this.imageStorageService = imageStorageService;
+    public MultimediaController(MultimediaService multimediaService) {
+        this.multimediaService = multimediaService;
     }
 
     @GetMapping
-    public List<Multimedia> list() {
-        return imageStorageService.list();
+    public ResponseEntity<BaseResponse<List<MultimediaView>>> list() {
+        final List<MultimediaView> aMultimedia = multimediaService.list();
+
+        final String message = "Relacion con archivos multimedia obtenidos";
+        return ResponseEntity.status(200).body(
+                new BaseResponse<>(message, aMultimedia)
+        );
     }
 
     @PostMapping
-    public UUID add(
+    public ResponseEntity<BaseResponse<MultimediaView>> add(
                 @RequestParam UUID ownerId,
                 @RequestParam MultipartFile file,
                 @RequestParam  Boolean isPrimary
     ) throws IOException {
-        return this.imageStorageService.saveImage(ownerId, file, isPrimary);
+        final MultimediaView multimedia = this.multimediaService.add(ownerId, file, isPrimary);
+
+        final String message = "Archivo multimedia agregado";
+        return ResponseEntity.status(200).body(new BaseResponse<>(message, multimedia));
     }
 
     @DeleteMapping("/{id}")
-    public UUID delete(@PathVariable UUID id) {
-        this.imageStorageService.delete(id);
-        return id;
+    public void delete(@PathVariable UUID id) {
+        this.multimediaService.delete(id);
     }
 }
