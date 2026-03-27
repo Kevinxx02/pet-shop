@@ -1,123 +1,63 @@
 package com.petshop.catalog.domain.cart;
 
-import com.petshop.catalog.domain.cartitem.CartItem;
-
-import java.math.BigDecimal;
 import java.util.*;
 
 public class Cart {
-
     private UUID id;
-    private String status;
-    private List<CartItem> items;
+    private UUID statusId;
     private Date createdAt;
 
-    private Cart(UUID id, String status, List<CartItem> items, Date createdAt) {
+    private Cart(UUID id, UUID statusId, Date createdAt) {
         this.id = id;
-        this.status = status;
-        this.items = new ArrayList<>(items);
+        this.statusId = statusId;
         this.createdAt = createdAt;
     }
 
-    // -------------------------
-    // FACTORIES
-    // -------------------------
-
-    public static Cart create() {
+    public static Cart create(UUID statusId) {
         return new Cart(
                 UUID.randomUUID(),
-                "Pending",
-                new ArrayList<>(),
+                statusId,
                 new Date()
         );
     }
 
-    public static Cart rehydrate(UUID id, String status, List<CartItem> items, Date createdAt) {
-        return new Cart(id, status, items, createdAt);
+    public static Cart rehydrate(
+            UUID id,
+            UUID statusId,
+            Date createdAt
+    ) {
+        return new Cart(id, statusId, createdAt);
     }
-
-    // -------------------------
-    // GETTERS
-    // -------------------------
 
     public UUID getId() {
-        return id;
+        return this.id;
     }
 
-    public String getStatus() {
-        return status;
+    public UUID getStatusId() {
+        return this.statusId;
     }
 
     public Date getCreatedAt() {
-        return createdAt;
+        return this.createdAt;
     }
 
-    public List<CartItem> getItems() {
-        return Collections.unmodifiableList(items);
-    }
-
-    // -------------------------
-    // BEHAVIOR (CORE)
-    // -------------------------
-
-    public void addProduct(UUID productId, int quantity, BigDecimal unitPrice) {
-
-        validateQuantity(quantity);
-
-        Optional<CartItem> existing = findItemByProduct(productId);
-
-        if (existing.isPresent()) {
-            existing.get().increaseQuantity(quantity);
+    public void updateStatus(UUID statusId) {
+        if (this.statusId == statusId) {
             return;
         }
 
-        CartItem newItem = CartItem.create(productId, quantity, unitPrice);
-
-        this.items.add(newItem);
+        this.statusId = statusId;
     }
 
-    public void removeItem(UUID itemId) {
-
-        boolean removed = this.items.removeIf(i -> i.getId().equals(itemId));
-
-        if (!removed) {
-            throw new RuntimeException("Item not found in cart");
-        }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Cart that)) return false;
+        return id.equals(that.id);
     }
 
-    public void updateItemQuantity(UUID itemId, int newQuantity) {
-
-        validateQuantity(newQuantity);
-
-        CartItem item = findItemById(itemId)
-                .orElseThrow(() -> new RuntimeException("Item not found"));
-
-        item.updateQuantity(newQuantity);
-    }
-
-    public void clear() {
-        this.items.clear();
-    }
-
-    // -------------------------
-    // INTERNAL HELPERS
-    // -------------------------
-
-    private Optional<CartItem> findItemByProduct(UUID productId) {
-        return this.items.stream()
-                .filter(i -> i.getProductId().equals(productId))
-                .findFirst();
-    }
-
-    private Optional<CartItem> findItemById(UUID itemId) {
-        return this.items.stream()
-                .filter(i -> i.getId().equals(itemId))
-                .findFirst();
-    }
-
-    private void validateQuantity(int quantity) {
-        if (quantity <= 0) {
-            throw new IllegalArgumentException("Quantity must be greater than zero");
-        }
+    @Override
+    public int hashCode() {
+        return id.hashCode();
     }
 }

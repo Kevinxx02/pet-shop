@@ -4,6 +4,7 @@ import com.petshop.catalog.domain.status.Status;
 import com.petshop.catalog.domain.status.StatusRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -28,5 +29,10 @@ public class JpaStatusRepository implements StatusRepository {
     @Override
     public boolean existsById(UUID id) {
         return this.jpaRepository.existsById(id);
+    }
+
+    @Override
+    public Optional<Status> findByName(String name) {
+        return this.jpaRepository.findByName(name);
     }
 }

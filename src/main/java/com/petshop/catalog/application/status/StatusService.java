@@ -7,6 +7,7 @@ import com.petshop.catalog.domain.status.StatusRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -37,5 +38,21 @@ public class StatusService {
         }
 
         this.statusRepository.deleteById(id);
+    }
+
+    /* Devuelve el id del estado pendiente, si no existe lo crea  */
+    public UUID getPendingId() {
+        final String name = "Pendiente";
+        Optional<Status> pending = this.statusRepository.findByName(name);
+
+        if (pending.isPresent()) {
+            return pending.get().getId();
+        } else {
+            return this.create(name).id();
+        }
+    }
+
+    public boolean existsById(UUID id) {
+        return this.statusRepository.existsById(id);
     }
 }

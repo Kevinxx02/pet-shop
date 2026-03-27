@@ -1,10 +1,9 @@
 package com.petshop.catalog.application.cart;
 
+import com.petshop.catalog.application.status.StatusService;
 import com.petshop.catalog.domain.cart.Cart;
+import com.petshop.catalog.domain.cart.CartReadRepository;
 import com.petshop.catalog.domain.cart.CartRepository;
-import com.petshop.catalog.domain.product.Product;
-import com.petshop.catalog.domain.product.ProductRepository;
-import com.petshop.catalog.infrastructure.persistence.cart.CartJpaEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,110 +15,48 @@ import java.util.UUID;
 public class CartService {
 
     private final CartRepository cartRepository;
-    private final ProductRepository productRepository;
+    private final CartReadRepository cartReadRepository;
+    private final StatusService statusService;
+    final private UUID pendingId;
 
     public CartService(CartRepository cartRepository,
-                       ProductRepository productRepository) {
+                       CartReadRepository cartReadRepository,
+                       StatusService statusService
+    ) {
         this.cartRepository = cartRepository;
-        this.productRepository = productRepository;
+        this.cartReadRepository = cartReadRepository;
+        this.statusService = statusService;
+        this.pendingId = this.statusService.getPendingId();
     }
 
-    // -------------------------
-    // FIND
-    // -------------------------
-
-    public List<Cart> findAll() {
-        return cartRepository.findAll();
+    public List<CartView> findAll() {
+        return this.cartReadRepository.viewAll();
     }
 
-    public Cart findByIdAndStatus(UUID id) {
-        CartJpaEntity entity = cartRepository.findByIdAndStatus(id, "Pending");
-        return cartRepository.toDomain(entity);
+    public CartView create() {
+        final Cart cart = Cart.create(this.pendingId);
+
+        this.cartRepository.save(cart);
+
+        return CartMapper.toView(cart);
     }
 
-    // -------------------------
-    // CREATE
-    // -------------------------
+    public CartView updateStatus(UUID id, UUID statusId) {
+        final Cart cart = this.cartRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Carrito no encontrado"));
 
-    public Cart create() {
+        if (!this.statusService.existsById(statusId)) {
+            throw new IllegalArgumentException("El estado no existe");
+        }
 
-        Cart cart = Cart.create();
+        cart.updateStatus(statusId);
 
-        CartJpaEntity entity = cartRepository.toEntity(cart, new CartJpaEntity());
+        this.cartRepository.save(cart);
 
-        cartRepository.save(entity);
-
-        return cart;
+        return CartMapper.toView(cart);
     }
 
-    // -------------------------
-    // ADD PRODUCT
-    // -------------------------
-
-    public Cart addProduct(UUID cartId, UUID productId, Integer quantity) {
-
-        CartJpaEntity cartEntity = cartRepository.findById(cartId)
-                .orElseThrow(() -> new RuntimeException("Cart not found"));
-
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
-
-        Cart cart = cartRepository.toDomain(cartEntity);
-
-        cart.addProduct(productId, quantity, product.getPrice().value());
-
-        CartJpaEntity updated = cartRepository.toEntity(cart, cartEntity);
-
-        cartRepository.save(updated);
-
-        return cart;
-    }
-
-    // -------------------------
-    // REMOVE ITEM
-    // -------------------------
-
-    public Cart removeItem(UUID cartId, UUID itemId) {
-
-        CartJpaEntity entity = cartRepository.findById(cartId)
-                .orElseThrow(() -> new RuntimeException("Cart not found"));
-
-        Cart cart = cartRepository.toDomain(entity);
-
-        cart.removeItem(itemId);
-
-        CartJpaEntity updated = cartRepository.toEntity(cart, entity);
-
-        cartRepository.save(updated);
-
-        return cart;
-    }
-
-    // -------------------------
-    // UPDATE STATUS
-    // -------------------------
-
-    public UUID updateStatus(UUID id, String status) {
-
-        CartJpaEntity entity = cartRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Cart not found"));
-
-        entity.setStatus(status);
-
-        return id;
-    }
-
-    public Cart updateItemQuantity(UUID cartId, UUID itemId, Integer quantity) {
-        CartJpaEntity entity = cartRepository.findById(cartId)
-                .orElseThrow(() -> new RuntimeException("Cart not found"));
-
-        Cart cart = cartRepository.toDomain(entity);
-        cart.updateItemQuantity(itemId, quantity);
-
-        CartJpaEntity updated = cartRepository.toEntity(cart, entity);
-
-        cartRepository.save(updated);
-
-        return cart;
+    public boolean checkAvailability(UUID id) {
+        return this.cartRepository.existsByIdAndStatusId(id, this.pendingId);
     }
 }

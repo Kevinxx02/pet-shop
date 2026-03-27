@@ -1,20 +1,14 @@
 package com.petshop.catalog.domain.cart;
 
-import com.petshop.catalog.infrastructure.persistence.cart.CartJpaEntity;
-
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 public interface CartRepository {
-    void save(CartJpaEntity faq);
+    void save(Cart cart);
 
-    CartJpaEntity toEntity(Cart cart, CartJpaEntity entity);
-    Cart toDomain(CartJpaEntity cart);
-    List<Cart> findAll();
-    void deleteById(UUID id);
+    Optional<Cart> findById(UUID id);
 
-    Optional<CartJpaEntity> findById(UUID id);
+    boolean existsById(UUID id);
 
-    CartJpaEntity findByIdAndStatus(UUID id, String status);
+    boolean existsByIdAndStatusId(UUID id, UUID pendingId);
 }

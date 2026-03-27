@@ -1,5 +1,6 @@
 package com.petshop.catalog.domain.status;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public interface StatusRepository {
@@ -8,4 +9,6 @@ public interface StatusRepository {
     void deleteById(UUID id);
 
     boolean existsById(UUID id);
+
+    Optional<Status> findByName(String name);
 }
