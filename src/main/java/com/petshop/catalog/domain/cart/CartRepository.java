@@ -10,5 +10,5 @@ public interface CartRepository {
 
     boolean existsById(UUID id);
 
-    boolean existsByIdAndStatusId(UUID id, UUID pendingId);
+    boolean existsByIdAndStatusId(UUID id, UUID statusID);
 }

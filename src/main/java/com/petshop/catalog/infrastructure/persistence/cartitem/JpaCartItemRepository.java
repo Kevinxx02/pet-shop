@@ -4,7 +4,6 @@ import com.petshop.catalog.domain.cartitem.CartItem;
 import com.petshop.catalog.domain.cartitem.CartItemRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -18,22 +17,33 @@ public class JpaCartItemRepository implements CartItemRepository {
     }
 
     @Override
-    public void save(CartItemJpaEntity entity) {
-        jpaRepository.save(entity);
+    public void save(CartItem item) {
+        this.jpaRepository.save(CartItemMapper.toEntity(item));
     }
 
     @Override
-    public List<CartItem> findAll() {
-        return jpaRepository.findAll().stream().map(CartItemJpaEntity::toDomain).toList();
+    public Optional<CartItem> findByCartIdAndProductId(UUID cartId, UUID productId) {
+        return this.jpaRepository.findByCartIdAndProductId(cartId, productId);
+    }
+
+    @Override
+    public boolean existsByCartIdAndProductId(UUID cartId, UUID productId) {
+        return this.jpaRepository.existsByCartIdAndProductId(cartId, productId);
+    }
+
+    @Override
+    public Optional<CartItem> findById(UUID id) {
+        return this.jpaRepository.findById(id)
+                .map(CartItemMapper::toDomain);
     }
 
     @Override
     public void deleteById(UUID id) {
-        jpaRepository.deleteById(id);
+        this.jpaRepository.deleteById(id);
     }
 
     @Override
-    public Optional<CartItemJpaEntity> findById(UUID id) {
-        return jpaRepository.findById(id);
+    public boolean existsById(UUID id) {
+        return this.jpaRepository.existsById(id);
     }
 }

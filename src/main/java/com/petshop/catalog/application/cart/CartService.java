@@ -41,9 +41,14 @@ public class CartService {
         return CartMapper.toView(cart);
     }
 
+    /* Funcionaria mejor con una maquina de estados, pero al menos con el checkAvailability, me aseguro que tenga el estado inicial, seria incomodo si esta en estado pagado y se pasa a estado abandonado, no de estado abandonado a estado pagado */
     public CartView updateStatus(UUID id, UUID statusId) {
         final Cart cart = this.cartRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Carrito no encontrado"));
+
+        if (cart.getStatusId() != this.pendingId) {
+            throw new IllegalArgumentException("El carrito no esta disponible");
+        }
 
         if (!this.statusService.existsById(statusId)) {
             throw new IllegalArgumentException("El estado no existe");

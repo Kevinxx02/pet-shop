@@ -4,13 +4,13 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 public class CartItem {
-
     private final UUID id;
     private final UUID productId;
     private int quantity;
     private final BigDecimal unitPrice;
+    private final UUID cartId;
 
-    private CartItem(UUID id, UUID productId, int quantity, BigDecimal unitPrice) {
+    private CartItem(UUID id, UUID cartId, UUID productId, int quantity, BigDecimal unitPrice) {
         validateProduct(productId);
         validateQuantity(quantity);
         validatePrice(unitPrice);
@@ -19,28 +19,22 @@ public class CartItem {
         this.productId = productId;
         this.quantity = quantity;
         this.unitPrice = unitPrice;
+        this.cartId = cartId;
     }
 
-    // -------------------------
-    // FACTORIES
-    // -------------------------
-
-    public static CartItem create(UUID productId, int quantity, BigDecimal unitPrice) {
+    public static CartItem create(UUID cartId, UUID productId, int quantity, BigDecimal unitPrice) {
         return new CartItem(
                 UUID.randomUUID(),
+                cartId,
                 productId,
                 quantity,
                 unitPrice
         );
     }
 
-    public static CartItem rehydrate(UUID id, UUID productId, int quantity, BigDecimal unitPrice) {
-        return new CartItem(id, productId, quantity, unitPrice);
+    public static CartItem rehydrate(UUID id, UUID cartId, UUID productId, int quantity, BigDecimal unitPrice) {
+        return new CartItem(id, cartId, productId, quantity, unitPrice);
     }
-
-    // -------------------------
-    // GETTERS
-    // -------------------------
 
     public UUID getId() {
         return id;
@@ -58,32 +52,16 @@ public class CartItem {
         return unitPrice;
     }
 
-    // -------------------------
+    public UUID getCartId() {
+        return cartId;
+    }
+// -------------------------
     // BEHAVIOR
     // -------------------------
-
-    public void increaseQuantity(int amount) {
-        validateQuantity(amount);
-        this.quantity += amount;
-    }
-
-    public void decreaseQuantity(int amount) {
-        validateQuantity(amount);
-
-        if (this.quantity - amount <= 0) {
-            throw new IllegalArgumentException("Quantity cannot be zero or negative");
-        }
-
-        this.quantity -= amount;
-    }
 
     public void updateQuantity(int newQuantity) {
         validateQuantity(newQuantity);
         this.quantity = newQuantity;
-    }
-
-    public BigDecimal getTotalPrice() {
-        return unitPrice.multiply(BigDecimal.valueOf(quantity));
     }
 
     // -------------------------

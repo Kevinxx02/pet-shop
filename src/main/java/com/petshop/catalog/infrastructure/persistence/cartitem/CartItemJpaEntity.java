@@ -1,7 +1,5 @@
 package com.petshop.catalog.infrastructure.persistence.cartitem;
 
-import com.petshop.catalog.domain.cartitem.CartItem;
-import com.petshop.catalog.domain.product.ProductPrice;
 import com.petshop.catalog.infrastructure.persistence.cart.CartJpaEntity;
 import jakarta.persistence.*;
 
@@ -17,20 +15,23 @@ public class CartItemJpaEntity {
     private UUID productId;
     private int quantity;
     private BigDecimal unitPrice;
+    @Column(name = "cart_id", nullable = false)
+    private UUID cartId;
 
-    @ManyToOne
-    @JoinColumn(name = "cart_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cart_id", insertable = false, updatable = false)
     private CartJpaEntity cart;
 
-    public CartJpaEntity getCart() {
-        return cart;
-    }
 
-    public void setCart(CartJpaEntity cart) {
-        this.cart = cart;
-    }
 
-    public CartItemJpaEntity() {}
+    protected CartItemJpaEntity() {}
+    public CartItemJpaEntity(UUID id, UUID cartId, UUID productId, int quantity, BigDecimal unitPrice) {
+        this.id = id;
+        this.cartId = cartId;
+        this.productId = productId;
+        this.quantity = quantity;
+        this.unitPrice = unitPrice;
+    }
 
     public UUID getId() {
         return id;
@@ -64,22 +65,11 @@ public class CartItemJpaEntity {
         return unitPrice;
     }
 
-    public CartItem toDomain() {
-        return CartItem.rehydrate(
-                this.id,
-                this.productId,
-                this.quantity,
-                this.unitPrice
-        );
+    public void setCartId(UUID cartId) {
+        this.cartId = cartId;
     }
 
-    public static CartItemJpaEntity toEntity(CartItem cartItem) {
-        CartItemJpaEntity entity = new CartItemJpaEntity();
-        entity.setId(cartItem.getId());
-        entity.setProductId(cartItem.getProductId());
-        entity.setQuantity(cartItem.getQuantity());
-        entity.setUnitPrice(cartItem.getUnitPrice());
-
-        return entity;
+    public UUID getCartId() {
+        return cartId;
     }
 }

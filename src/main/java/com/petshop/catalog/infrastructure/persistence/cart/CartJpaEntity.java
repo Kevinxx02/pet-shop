@@ -1,5 +1,6 @@
 package com.petshop.catalog.infrastructure.persistence.cart;
 
+import com.petshop.catalog.infrastructure.persistence.status.StatusJpaEntity;
 import jakarta.persistence.*;
 
 import java.util.Date;
@@ -11,8 +12,15 @@ public class CartJpaEntity {
 
     @Id
     private UUID id;
+
+    @Column(name = "status_id", nullable = false)
     private UUID statusId;
+
     private Date createdAt;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "status_id", insertable = false, updatable = false)
+    private StatusJpaEntity status;
 
     protected CartJpaEntity() {}
 
