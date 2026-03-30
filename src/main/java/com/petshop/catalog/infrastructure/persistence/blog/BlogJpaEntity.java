@@ -15,16 +15,17 @@ public class BlogJpaEntity {
     private String title;
     private String date;
     private String url;
-
+    private boolean isVisible;
     public BlogJpaEntity() {
 
     }
 
-    public BlogJpaEntity(UUID id, String title, String date, String url) {
+    public BlogJpaEntity(UUID id, String title, String date, String url, boolean isVisible) {
         this.setId(id);
         this.setTitle(title);
         this.setDate(date);
         this.setUrl(url);
+        this.setVisible(isVisible);
     }
 
     public UUID getId() {
@@ -57,5 +58,12 @@ public class BlogJpaEntity {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public boolean getVisible() {
+        return this.isVisible;
+    }
+    public void setVisible(boolean isVisible) {
+        this.isVisible = isVisible;
     }
 }

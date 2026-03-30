@@ -1,8 +1,8 @@
 package com.petshop.catalog.application.blog;
 
 import com.petshop.catalog.domain.blog.Blog;
+import com.petshop.catalog.domain.blog.BlogReadRepository;
 import com.petshop.catalog.domain.blog.BlogRepository;
-import com.petshop.catalog.infrastructure.persistence.blog.BlogJpaEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,46 +13,47 @@ import java.util.UUID;
 @Transactional
 public class BlogService {
     /* Definir el repository del cual obtendra la informacion */
-    final BlogRepository faqRepository;
+    final BlogRepository blogRepository;
+    final BlogReadRepository blogReadRepository;
 
-    public BlogService(BlogRepository faqRepository) {
-        this.faqRepository = faqRepository;
+    public BlogService(
+            BlogRepository blogRepository,
+            BlogReadRepository blogReadRepository
+    ) {
+        this.blogRepository = blogRepository;
+        this.blogReadRepository = blogReadRepository;
     }
 
-    /* Definir metodos que se utilizan desde el contralador */
-
     /* Obtener todos */
-    public List<Blog> findAll() {
-        return this.faqRepository.findAll();
+    public List<BlogView> findAll() {
+        return this.blogReadRepository.viewAll();
     }
 
     /* Crear una nueva vinculacion entre grupos de categorias */
-    public UUID create(String title, String date, String url) {
-        /* Crea la entidad en el dominio */
-        final Blog dominio = Blog.create(title, date, url);
+    public BlogView create(String title, String date, String url) {
+        final Blog blog = Blog.create(title, date, url);
 
-        /* Usa la entidad en el dominio para crear la entidad Jpa */
-        final BlogJpaEntity entidad = faqRepository.toEntity(dominio);
+        this.blogRepository.save(blog);
 
-        /* Guarda la entidad Jpa */
-        faqRepository.save(entidad);
-
-        /* Devuelve el ID */
-        return dominio.getId();
+        return BlogMapper.toView(blog);
     }
 
-    /* Eliminar una categoria */
-    public void delete(UUID id) {
-        this.faqRepository.deleteById(id);
-    }
+    public BlogView update(
+            UUID id,
+            String title,
+            String date,
+            String url,
+            boolean isVisible
+    ) {
+        if(!this.blogRepository.existsById(id)) {
+            throw new RuntimeException("Product not found");
+        }
 
-    public UUID update(UUID id, String title, String date, String url) {
-        BlogJpaEntity entity = faqRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
-        final Blog dominio = Blog.rehydrate(id, title, date, url);
-        entity.setTitle(dominio.getTitle());
-        entity.setDate(dominio.getDate());
-        entity.setUrl(dominio.getUrl());
+        /* El save debe guardar dominio */
+        final Blog blog = Blog.rehydrate(id, title, date, url, isVisible);
 
-        return  dominio.getId();
+        this.blogRepository.save(blog);
+
+        return BlogMapper.toView(blog);
     }
 }

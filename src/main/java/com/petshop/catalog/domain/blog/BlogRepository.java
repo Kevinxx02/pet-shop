@@ -1,18 +1,12 @@
 package com.petshop.catalog.domain.blog;
 
-import com.petshop.catalog.infrastructure.persistence.blog.BlogJpaEntity;
-
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 public interface BlogRepository {
-    void save(BlogJpaEntity faq);
+    void save(Blog blog);
 
-    BlogJpaEntity toEntity(Blog faq);
-    Blog toDomain(BlogJpaEntity faq);
-    List<Blog> findAll();
-    void deleteById(UUID id);
+    Optional<Blog> findById(UUID id);
 
-    Optional<BlogJpaEntity> findById(UUID id);
+    boolean existsById(UUID id);
 }

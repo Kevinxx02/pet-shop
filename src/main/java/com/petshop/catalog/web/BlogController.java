@@ -1,7 +1,8 @@
 package com.petshop.catalog.web;
 
 import com.petshop.catalog.application.blog.BlogService;
-import com.petshop.catalog.domain.blog.Blog;
+import com.petshop.catalog.application.blog.BlogView;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/blog")
+/* Le falta el view y el mapper */
 public class BlogController {
     /* El servicio */
     final BlogService blogService;
@@ -20,29 +22,38 @@ public class BlogController {
 
     /* Lo que devuelve cuando se usa el metodo get */
     @GetMapping
-    public List<Blog> list() {
-        return this.blogService.findAll();
+    public ResponseEntity<BaseResponse<List<BlogView>>> list() {
+        final List<BlogView> lBlog = this.blogService.findAll();
+
+        final String message = "Lista de publicaciones";
+        return ResponseEntity.status(200).body(new BaseResponse<>(message, lBlog));
     }
-    /* Lo que hace cuando recibe el metodo POST */
+
     @PostMapping
-    public UUID create(@RequestParam String title,
-                       @RequestParam String date,
-                       @RequestParam String url) {
-        return this.blogService.create(title, date, url);
+    public ResponseEntity<BaseResponse<BlogView>> create(
+            @RequestParam String title,
+            @RequestParam String date,
+            @RequestParam String url
+    ) {
+
+        final BlogView blog = this.blogService.create(title, date, url);
+
+        final String message = "Publicacion creada";
+        return ResponseEntity.status(201).body(new BaseResponse<>(message, blog));
     }
 
     @PutMapping
-    public UUID update(@RequestParam UUID id,
-                       @RequestParam String title,
-                       @RequestParam String date,
-                       @RequestParam String url) {
-        return this.blogService.update(id, title, date, url);
-    }
+    public ResponseEntity<BaseResponse<BlogView>> update(
+            @RequestParam UUID id,
+            @RequestParam String title,
+            @RequestParam String date,
+            @RequestParam String url,
+            @RequestParam boolean isVisible
+    ) {
 
-    /* Lo que hace cuando recibe el metodo delete */
-    @DeleteMapping("/{id}")
-    public UUID delete(@PathVariable UUID id) {
-        this.blogService.delete(id);
-        return id;
+        final BlogView blog = this.blogService.update(id, title, date, url, isVisible);
+
+        final String message = "Publicacion actualizada";
+        return ResponseEntity.status(200).body(new BaseResponse<>(message, blog));
     }
 }
