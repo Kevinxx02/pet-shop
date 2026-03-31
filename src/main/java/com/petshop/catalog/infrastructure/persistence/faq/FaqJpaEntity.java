@@ -20,6 +20,7 @@ public class FaqJpaEntity {
     }
 
     public FaqJpaEntity(UUID id, String question, String answer, boolean isVisible) {
+        this.setId(id);
         setQuestion(question);
         setAnswer(answer);
         setVisible(isVisible);

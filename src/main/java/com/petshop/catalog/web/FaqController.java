@@ -21,8 +21,11 @@ public class FaqController {
 
     /* Lo que devuelve cuando se usa el metodo get */
     @GetMapping
-    public List<FaqView> list() {
-        return this.faqService.viewAll();
+    public ResponseEntity<BaseResponse<List<FaqView>>> list() {
+        final List<FaqView> faqs = this.faqService.viewAll();
+
+        final String message = "Lista de preguntas frecuentes";
+        return ResponseEntity.status(200).body(new BaseResponse<>(message, faqs));
     }
 
     /* Lo que hace cuando recibe el metodo POST */
@@ -48,6 +51,6 @@ public class FaqController {
         final FaqView faq = this.faqService.update(id, question, answer, isVisible);
 
         final String message = "Pregunta frecuente actualizada";
-        return ResponseEntity.status(201).body(new BaseResponse<>(message, faq));
+        return ResponseEntity.status(200).body(new BaseResponse<>(message, faq));
     }
 }

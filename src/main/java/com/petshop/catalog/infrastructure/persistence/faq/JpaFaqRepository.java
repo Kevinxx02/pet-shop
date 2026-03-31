@@ -4,6 +4,7 @@ import com.petshop.catalog.domain.faq.Faq;
 import com.petshop.catalog.domain.faq.FaqRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -23,5 +24,10 @@ public class JpaFaqRepository implements FaqRepository {
     @Override
     public boolean existsById(UUID id) {
         return this.jpaRepository.existsById(id);
+    }
+
+    @Override
+    public Optional<Faq> findById(UUID id) {
+        return this.jpaRepository.findById(id).map(FaqMapper::toDomain);
     }
 }

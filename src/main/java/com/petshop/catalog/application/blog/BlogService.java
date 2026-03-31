@@ -45,12 +45,11 @@ public class BlogService {
             String url,
             boolean isVisible
     ) {
-        if(!this.blogRepository.existsById(id)) {
-            throw new RuntimeException("Publicacion no encontrada");
-        }
+        final Blog blog = this.blogRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Articulo no encontrado"));
 
-        /* El save debe guardar dominio */
-        final Blog blog = Blog.rehydrate(id, title, date, url, isVisible);
+
+        blog.update(title, date, url, isVisible);
 
         this.blogRepository.save(blog);
 

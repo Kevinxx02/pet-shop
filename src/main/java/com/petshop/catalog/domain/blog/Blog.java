@@ -39,6 +39,13 @@ public class Blog {
         return new Blog(id, title, date, url, isVisible);
     }
 
+    public void update(String title, String date, String url, boolean isVisible) {
+        this.setTitle(title);
+        this.setDate(date);
+        this.setUrl(url);
+        this.setVisible(isVisible);
+    }
+
     public UUID getId() {
         return id;
     }

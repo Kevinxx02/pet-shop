@@ -36,11 +36,10 @@ public class FaqService {
     }
 
     public FaqView update(UUID id, String question, String answer, boolean isVisible) {
-        if (!this.faqRepository.existsById(id)) {
-            throw new RuntimeException("Pregunta no encontrada");
-        }
+        final Faq faq = this.faqRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Pregunta no encontrada"));
 
-        final Faq faq = Faq.rehydrate(id, question, answer, isVisible);
+        faq.update(question, answer, isVisible);
 
         this.faqRepository.save(faq);
 

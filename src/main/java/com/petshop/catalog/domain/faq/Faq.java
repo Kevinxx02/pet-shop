@@ -27,6 +27,12 @@ public class Faq {
         return new Faq(id, question, answer, isVisible);
     }
 
+    public void update(String question, String answer, boolean isVisible) {
+        this.setQuestion(question);
+        this.setAnswer(answer);
+        this.setVisible(isVisible);
+    }
+
     public UUID getId() {
         return id;
     }

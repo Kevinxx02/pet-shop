@@ -8,4 +8,12 @@ public class FaqMapper {
                 faq.getAnswer(), faq.getVisible()
         );
     }
+
+    public static Faq toDomain(FaqJpaEntity entity) {
+        return Faq.rehydrate(entity.getId(),
+                entity.getQuestion(),
+                entity.getAnswer(),
+                entity.getVisible()
+        );
+    }
 }
