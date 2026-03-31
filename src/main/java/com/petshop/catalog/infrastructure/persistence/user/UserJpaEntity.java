@@ -12,16 +12,16 @@ public class UserJpaEntity {
 
     private String email;
     private String password;
-    private boolean isActive;
+    private boolean isVisible;
 
 
     protected UserJpaEntity() {}
 
-    UserJpaEntity(UUID id, String email, String password, boolean isActive) {
+    UserJpaEntity(UUID id, String email, String password, boolean isVisible) {
         this.id = id;
         this.email = email;
         this.password = password;
-        this.isActive = isActive;
+        this.isVisible = isVisible;
     }
 
     public UUID getId() {
@@ -36,7 +36,7 @@ public class UserJpaEntity {
         return this.password;
     }
 
-    public boolean getIsActive() {
-        return this.isActive;
+    public boolean getVisible() {
+        return this.isVisible;
     }
 }

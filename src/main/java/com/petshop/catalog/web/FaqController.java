@@ -1,7 +1,8 @@
 package com.petshop.catalog.web;
 
 import com.petshop.catalog.application.faq.FaqService;
-import com.petshop.catalog.domain.faq.Faq;
+import com.petshop.catalog.application.faq.FaqView;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,26 +21,33 @@ public class FaqController {
 
     /* Lo que devuelve cuando se usa el metodo get */
     @GetMapping
-    public List<Faq> list() {
-        return this.faqService.findAll();
-    }
-    /* Lo que hace cuando recibe el metodo POST */
-    @PostMapping
-    public UUID create(@RequestParam String question,
-                       @RequestParam String answer) {
-        return this.faqService.create(question, answer);
-    }
-    @PutMapping
-    public UUID create(@RequestParam UUID id,
-                       @RequestParam String question,
-                       @RequestParam String answer) {
-        return this.faqService.update(id, question, answer);
+    public List<FaqView> list() {
+        return this.faqService.viewAll();
     }
 
-    /* Lo que hace cuando recibe el metodo delete */
-    @DeleteMapping("/{id}")
-    public UUID delete(@PathVariable UUID id) {
-        this.faqService.delete(id);
-        return id;
+    /* Lo que hace cuando recibe el metodo POST */
+    @PostMapping
+    public ResponseEntity<BaseResponse<FaqView>> create(
+            @RequestParam String question,
+            @RequestParam String answer
+    ) {
+
+        final FaqView faq = this.faqService.create(question, answer);
+
+        final String message = "Pregunta frecuente creada";
+        return ResponseEntity.status(201).body(new BaseResponse<>(message, faq));
+    }
+
+    @PutMapping
+    public ResponseEntity<BaseResponse<FaqView>> update(
+            @RequestParam UUID id,
+            @RequestParam String question,
+            @RequestParam String answer,
+            @RequestParam boolean isVisible
+    ) {
+        final FaqView faq = this.faqService.update(id, question, answer, isVisible);
+
+        final String message = "Pregunta frecuente actualizada";
+        return ResponseEntity.status(201).body(new BaseResponse<>(message, faq));
     }
 }

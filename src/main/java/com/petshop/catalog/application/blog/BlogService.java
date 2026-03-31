@@ -46,7 +46,7 @@ public class BlogService {
             boolean isVisible
     ) {
         if(!this.blogRepository.existsById(id)) {
-            throw new RuntimeException("Product not found");
+            throw new RuntimeException("Publicacion no encontrada");
         }
 
         /* El save debe guardar dominio */

@@ -8,7 +8,7 @@ public class UserMapper {
                 entity.getId(),
                 entity.getEmail(),
                 entity.getPassword(),
-                entity.getIsActive()
+                entity.getVisible()
         );
     }
 
@@ -17,7 +17,7 @@ public class UserMapper {
                 domain.getId().value(),
                 domain.getEmail().value(),
                 domain.getPassword().value(),
-                domain.getIsActive()
+                domain.getVisible()
         );
     }
 }

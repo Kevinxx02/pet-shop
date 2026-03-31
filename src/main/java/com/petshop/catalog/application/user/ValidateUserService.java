@@ -22,7 +22,7 @@ public class ValidateUserService {
     public UserView validate(String email, String rawPassword) {
         final User domain = this.userRepository.findByEmail(new Email(email))
                 .filter(user ->
-                        passwordEncoder.matches(rawPassword, user.getPassword().value()) && user.getIsActive()
+                        passwordEncoder.matches(rawPassword, user.getPassword().value()) && user.getVisible()
                 ).orElseThrow(() -> new RuntimeException("Email and password doesnt match"));
 
         return new UserView(domain.getId().value(), domain.getEmail().value());

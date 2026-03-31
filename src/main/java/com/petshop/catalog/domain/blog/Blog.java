@@ -43,7 +43,7 @@ public class Blog {
         return id;
     }
 
-    public void setId(UUID id) {
+    private void setId(UUID id) {
         this.id = id;
     }
 
@@ -71,7 +71,7 @@ public class Blog {
         this.url = url;
     }
 
-    public void setVisible(boolean visible) {
+    private void setVisible(boolean visible) {
         this.isVisible = visible;
     }
 

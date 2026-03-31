@@ -16,7 +16,7 @@ public interface SpringDataUserReadRepository extends JpaRepository<UserJpaEntit
         u.id, u.email
     )
     FROM UserJpaEntity u
-    WHERE u.isActive = true
+    WHERE u.isVisible = true
 """)
     List<UserView> findActive();
 }

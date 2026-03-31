@@ -9,7 +9,7 @@ public class CategoryGroupMapper {
                 entity.getId(),
                 entity.getGroupId(),
                 entity.getCategoryId(),
-                entity.getIsActive()
+                entity.getVisible()
         );
     }
 
@@ -18,7 +18,7 @@ public class CategoryGroupMapper {
                 categoryGroup.getId(),
                 categoryGroup.getGroupId(),
                 categoryGroup.getCategoryId(),
-                categoryGroup.getIsActive()
+                categoryGroup.getVisible()
         );
     }
 }

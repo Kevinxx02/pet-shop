@@ -41,9 +41,9 @@ public class CategoryGroupController {
             @RequestParam UUID id,
             @RequestParam UUID groupId,
             @RequestParam UUID categoryId,
-            @RequestParam boolean isActive
+            @RequestParam boolean isVisible
     ) {
-        final CategoryGroupView categoryGroup = this.categoryGroupService.update(id, groupId, categoryId, isActive);
+        final CategoryGroupView categoryGroup = this.categoryGroupService.update(id, groupId, categoryId, isVisible);
 
         final String message = "Relacion productos y categorias actualizada";
         return ResponseEntity.status(200).body(new BaseResponse<>(message, categoryGroup));

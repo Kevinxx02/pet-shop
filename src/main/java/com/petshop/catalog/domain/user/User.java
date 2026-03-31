@@ -9,23 +9,23 @@ public class User{
     private UserId id;
     private Email email;
     private HashedPassword password;
-    private boolean isActive;
+    private boolean isVisible;
 
     private User(UUID id, String email, String password, boolean active) {
         this.id = new UserId(id);
         this.email = new Email(email);
         this.password = new HashedPassword(password);
-        this.isActive = active;
+        this.isVisible = active;
     }
 
     public static User create(String email, String password) {
-        final boolean isActive = true;
+        final boolean isVisible = true;
         final UUID id = UUID.randomUUID();
 
-        return new User(id, email, password, isActive);
+        return new User(id, email, password, isVisible);
     }
-    public static User rehydrate(UUID id, String email, String password, boolean isActive) {
-        return new User(id, email, password, isActive);
+    public static User rehydrate(UUID id, String email, String password, boolean isVisible) {
+        return new User(id, email, password, isVisible);
     }
 
     public void changePassword(HashedPassword newPassword) {
@@ -36,8 +36,8 @@ public class User{
         return id;
     }
 
-    public boolean getIsActive() {
-        return isActive;
+    public boolean getVisible() {
+        return isVisible;
     }
 
     public HashedPassword getPassword() {
@@ -49,6 +49,6 @@ public class User{
     }
 
     public void deActivateUser() {
-        this.isActive = false;
+        this.isVisible = false;
     }
 }

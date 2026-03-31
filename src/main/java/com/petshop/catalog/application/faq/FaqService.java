@@ -1,9 +1,8 @@
 package com.petshop.catalog.application.faq;
 
 import com.petshop.catalog.domain.faq.Faq;
+import com.petshop.catalog.domain.faq.FaqReadRepository;
 import com.petshop.catalog.domain.faq.FaqRepository;
-import com.petshop.catalog.infrastructure.persistence.faq.FaqJpaEntity;
-import com.petshop.catalog.infrastructure.persistence.product.ProductJpaEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,44 +14,40 @@ import java.util.UUID;
 public class FaqService {
     /* Definir el repository del cual obtendra la informacion */
     final FaqRepository faqRepository;
+    final FaqReadRepository faqReadRepository;
 
-    public FaqService(FaqRepository faqRepository) {
+    public FaqService(FaqRepository faqRepository,
+                      FaqReadRepository faqReadRepository
+    ) {
         this.faqRepository = faqRepository;
-    }
-
-    /* Definir metodos que se utilizan desde el contralador */
-
-    /* Obtener todos */
-    public List<Faq> findAll() {
-        return this.faqRepository.findAll();
+        this.faqReadRepository = faqReadRepository;
     }
 
     /* Crear una nueva vinculacion entre grupos de categorias */
-    public UUID create(String question, String answer) {
+    public FaqView create(String question, String answer) {
         /* Crea la entidad en el dominio */
-        final Faq dominio = Faq.create(question, answer);
-
-        /* Usa la entidad en el dominio para crear la entidad Jpa */
-        final FaqJpaEntity entidad = faqRepository.toEntity(dominio);
+        final Faq faq = Faq.create(question, answer);
 
         /* Guarda la entidad Jpa */
-        faqRepository.save(entidad);
+        faqRepository.save(faq);
 
         /* Devuelve el ID */
-        return dominio.getId();
+        return FaqMapper.toView(faq);
     }
 
-    /* Eliminar una categoria */
-    public void delete(UUID id) {
-        this.faqRepository.deleteById(id);
+    public FaqView update(UUID id, String question, String answer, boolean isVisible) {
+        if (!this.faqRepository.existsById(id)) {
+            throw new RuntimeException("Pregunta no encontrada");
+        }
+
+        final Faq faq = Faq.rehydrate(id, question, answer, isVisible);
+
+        this.faqRepository.save(faq);
+
+        return FaqMapper.toView(faq);
     }
 
-    public UUID update(UUID id, String question, String answer) {
-        FaqJpaEntity entity = faqRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
-        final Faq dominio = Faq.rehydrate(id, question, answer);
-        entity.setQuestion(dominio.getQuestion());
-        entity.setAnswer(dominio.getAnswer());
-
-        return  dominio.getId();
+    public List<FaqView> viewAll() {
+        return this.faqReadRepository.findAll();
     }
 }

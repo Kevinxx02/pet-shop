@@ -14,14 +14,15 @@ public class FaqJpaEntity {
     private UUID id;
     private String question;
     private String answer;
-
+    private boolean isVisible;
     public FaqJpaEntity() {
 
     }
 
-    public FaqJpaEntity(UUID id, String question, String answer) {
+    public FaqJpaEntity(UUID id, String question, String answer, boolean isVisible) {
         setQuestion(question);
         setAnswer(answer);
+        setVisible(isVisible);
     }
 
     public UUID getId() {
@@ -46,5 +47,13 @@ public class FaqJpaEntity {
 
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    public void setVisible(boolean visible) {
+        this.isVisible = visible;
+    }
+
+    public boolean getVisible() {
+        return this.isVisible;
     }
 }

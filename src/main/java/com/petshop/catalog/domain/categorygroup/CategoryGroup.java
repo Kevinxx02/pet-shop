@@ -6,28 +6,28 @@ public class CategoryGroup {
     private final UUID id;
     private UUID groupId;
     private UUID categoryId;
-    private boolean isActive;
+    private boolean isVisible;
 
     private CategoryGroup(
             UUID id,
             UUID groupId,
             UUID categoryId,
-            boolean isActive
+            boolean isVisible
     ) {
         this.id = id;
         this.setGroupId(groupId);
         this.setCategoryId(categoryId);
-        this.setIsActive(isActive);
+        this.setVisible(isVisible);
     }
 
-    public void update(UUID groupId, UUID categoryId, boolean isActive) {
+    public void update(UUID groupId, UUID categoryId, boolean isVisible) {
         this.setGroupId(groupId);
         this.setCategoryId(categoryId);
-        this.setIsActive(isActive);
+        this.setVisible(isVisible);
     }
 
-    private void setIsActive(boolean isActive) {
-        this.isActive = isActive;
+    private void setVisible(boolean isVisible) {
+        this.isVisible = isVisible;
     }
 
     public static CategoryGroup create(
@@ -35,18 +35,18 @@ public class CategoryGroup {
             UUID categoryId
     ) {
         final UUID id = UUID.randomUUID();
-        final boolean isActive = true;
+        final boolean isVisible = true;
 
-        return new CategoryGroup(id, groupId, categoryId, isActive);
+        return new CategoryGroup(id, groupId, categoryId, isVisible);
     }
 
     public static CategoryGroup rehydrate(
             UUID id,
             UUID groupId,
             UUID categoryId,
-            boolean isActive
+            boolean isVisible
     ) {
-        return new CategoryGroup(id, groupId, categoryId, isActive);
+        return new CategoryGroup(id, groupId, categoryId, isVisible);
     }
 
     public UUID getId() {
@@ -76,8 +76,8 @@ public class CategoryGroup {
         return this.categoryId;
     }
 
-    public boolean getIsActive() {
-        return this.isActive;
+    public boolean getVisible() {
+        return this.isVisible;
     }
 
     @Override

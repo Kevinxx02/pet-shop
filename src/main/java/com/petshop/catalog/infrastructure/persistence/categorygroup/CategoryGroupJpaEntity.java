@@ -19,7 +19,7 @@ public class CategoryGroupJpaEntity {
     private UUID categoryId;
 
     @Column(nullable = false)
-    private boolean isActive;
+    private boolean isVisible;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "group_id", insertable = false, updatable = false)
@@ -37,16 +37,16 @@ public class CategoryGroupJpaEntity {
             UUID id,
             UUID groupId,
             UUID categoryId,
-            boolean isActive
+            boolean isVisible
     ) {
         setId(id);
         setGroupId(groupId);
         setCategoryId(categoryId);
-        setIsActive(isActive);
+        setVisible(isVisible);
     }
 
-    private void setIsActive(boolean isActive) {
-        this.isActive = isActive;
+    private void setVisible(boolean isVisible) {
+        this.isVisible = isVisible;
     }
 
     public UUID getId() {
@@ -65,8 +65,8 @@ public class CategoryGroupJpaEntity {
         this.categoryId = categoryId;
     }
 
-    public boolean getIsActive() {
-        return this.isActive;
+    public boolean getVisible() {
+        return this.isVisible;
     }
 
     public void setGroupId(UUID groupId) {

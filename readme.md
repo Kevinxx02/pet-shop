@@ -77,3 +77,9 @@ Método	Ruta	    Descripción
 POST	/products	Crear producto
 PUT	    /products	Actualizar producto
 GET	    /products	Listar productos (CQRS read) (Acepta parametro id, para devolver ese registro. Y Acepta el parametro isAdmin, para devolver productos ocultos.)
+
+
+Deuda tecnica.
+Retirar el uso de rehydrate de FAQ y BLOG
+Mejorar la relacion entre cart y sus items.
+Uso de DTO en el controller.

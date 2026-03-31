@@ -51,14 +51,14 @@ public class CategoryGroupService {
             UUID id,
             UUID groupId,
             UUID categoryId,
-            boolean isActive
+            boolean isVisible
     ) {
         CategoryGroup categoryGroup = this.categoryGroupRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Relación no encontrada"));
 
         this.validate(id, groupId, categoryId);
 
-        categoryGroup.update(groupId, categoryId, isActive);
+        categoryGroup.update(groupId, categoryId, isVisible);
 
         this.categoryGroupRepository.save(categoryGroup);
 
