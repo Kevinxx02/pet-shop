@@ -1,7 +1,8 @@
-package com.petshop.catalog.web;
+package com.petshop.catalog.web.cart;
 
 import com.petshop.catalog.application.cart.CartService;
 import com.petshop.catalog.application.cart.CartView;
+import com.petshop.catalog.web.BaseResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +24,6 @@ public class CartController {
 
         final String message = "Lista de carritos";
         return ResponseEntity.status(200).body(new BaseResponse<>(message, carts));
-
     }
 
     @GetMapping("/check-availability/{id}")
@@ -38,12 +38,10 @@ public class CartController {
         final String message = "Carrito creado";
         return ResponseEntity.status(201).body(new BaseResponse<>(message, cart));
     }
+
     @PutMapping
-    public ResponseEntity<BaseResponse<CartView>> updateStatus(
-            UUID id,
-            UUID statusId
-    ) {
-        final CartView cart = this.cartService.updateStatus(id, statusId);
+    public ResponseEntity<BaseResponse<CartView>> updateStatus(@RequestBody UpdateCartRequest request) {
+        final CartView cart = this.cartService.updateStatus(request.id(), request.statusId());
 
         final String message = "Carrito actualizado";
         return ResponseEntity.status(200).body(new BaseResponse<>(message, cart));

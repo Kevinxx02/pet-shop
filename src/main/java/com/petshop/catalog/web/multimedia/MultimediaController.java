@@ -1,7 +1,8 @@
-package com.petshop.catalog.web;
+package com.petshop.catalog.web.multimedia;
 
 import com.petshop.catalog.application.multimedia.MultimediaView;
 import com.petshop.catalog.application.multimedia.MultimediaService;
+import com.petshop.catalog.web.BaseResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;

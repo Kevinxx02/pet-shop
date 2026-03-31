@@ -1,12 +1,12 @@
-package com.petshop.catalog.web;
+package com.petshop.catalog.web.blog;
 
 import com.petshop.catalog.application.blog.BlogService;
 import com.petshop.catalog.application.blog.BlogView;
+import com.petshop.catalog.web.BaseResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/blog")
@@ -30,28 +30,24 @@ public class BlogController {
     }
 
     @PostMapping
-    public ResponseEntity<BaseResponse<BlogView>> create(
-            @RequestParam String title,
-            @RequestParam String date,
-            @RequestParam String url
-    ) {
+    public ResponseEntity<BaseResponse<BlogView>> create(@RequestBody BlogCreateRequest request) {
 
-        final BlogView blog = this.blogService.create(title, date, url);
+        final BlogView blog = this.blogService.create(request.title(), request.date(), request.url());
 
         final String message = "Publicacion creada";
         return ResponseEntity.status(201).body(new BaseResponse<>(message, blog));
     }
 
     @PutMapping
-    public ResponseEntity<BaseResponse<BlogView>> update(
-            @RequestParam UUID id,
-            @RequestParam String title,
-            @RequestParam String date,
-            @RequestParam String url,
-            @RequestParam boolean isVisible
+    public ResponseEntity<BaseResponse<BlogView>> update(@RequestBody BlogUpdateRequest request
     ) {
-
-        final BlogView blog = this.blogService.update(id, title, date, url, isVisible);
+        final BlogView blog = this.blogService.update(
+                request.id(),
+                request.title(),
+                request.date(),
+                request.url(),
+                request.isVisible()
+        );
 
         final String message = "Publicacion actualizada";
         return ResponseEntity.status(200).body(new BaseResponse<>(message, blog));

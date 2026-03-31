@@ -5,12 +5,10 @@ import com.petshop.catalog.domain.product.ProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.UUID;
 
 @Service
-@Transactional
 public class UpdateProductService {
 
     private final ProductRepository productRepository;

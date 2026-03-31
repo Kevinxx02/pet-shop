@@ -18,8 +18,8 @@ public class CreateCategoryService {
     }
 
     @Transactional
-    public CategoryView createCategory(String name, UUID parentId, Boolean isVisible) {
-        Category category = Category.create(name, parentId, isVisible);
+    public CategoryView createCategory(String name, UUID parentId) {
+        Category category = Category.create(name, parentId);
         categoryRepository.save(category);
 
         return new CategoryView(category.getId(), category.getName(), category.getParentId());

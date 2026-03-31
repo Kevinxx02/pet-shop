@@ -1,7 +1,5 @@
 package com.petshop.catalog.infrastructure.persistence.productcategory;
 
-import com.petshop.catalog.infrastructure.persistence.category.CategoryJpaEntity;
-import com.petshop.catalog.infrastructure.persistence.product.ProductJpaEntity;
 import jakarta.persistence.*;
 
 import java.util.UUID;
@@ -12,29 +10,30 @@ public class ProductCategoryJpaEntity {
     @Column(columnDefinition = "uuid")
     private UUID id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id")
-    private ProductJpaEntity product;
+    @Column(name = "product_id", nullable = false)
+    private UUID productId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id")
-    private CategoryJpaEntity category;
+    @Column(name = "category_id", nullable = false)
+    private UUID categoryId;
 
     protected ProductCategoryJpaEntity() {}
 
-    public ProductCategoryJpaEntity(UUID id, ProductJpaEntity product, CategoryJpaEntity category) {
+    public ProductCategoryJpaEntity(UUID id, UUID productId, UUID categoryId) {
         this.id = id;
-        this.product = product;
-        this.category = category;
+        this.setCategoryId(categoryId);
+        this.setProductId(productId);
     }
 
     public UUID getId() { return id; }
 
-    public ProductJpaEntity getProduct() { return product; }
+    public UUID getProductId() { return this.productId; }
 
-    public CategoryJpaEntity getCategory() { return category; }
+    public UUID getCategoryId() { return this.categoryId; }
 
-    public UUID getProductId() { return product.getId(); }
-
-    public UUID getCategoryId() { return category.getId(); }
+    public void setProductId(UUID productId) {
+        this.productId = productId;
+    }
+    public void setCategoryId(UUID categoryId) {
+        this.categoryId = categoryId;
+    }
 }

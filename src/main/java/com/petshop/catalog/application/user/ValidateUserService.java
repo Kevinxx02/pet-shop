@@ -20,11 +20,17 @@ public class ValidateUserService {
     }
 
     public UserView validate(String email, String rawPassword) {
-        final User domain = this.userRepository.findByEmail(new Email(email))
-                .filter(user ->
-                        passwordEncoder.matches(rawPassword, user.getPassword().value()) && user.getVisible()
-                ).orElseThrow(() -> new RuntimeException("Email and password doesnt match"));
+        final User user = this.userRepository.findByEmail(new Email(email))
+                .orElseThrow(() -> new IllegalArgumentException("Invalid credentials"));
 
-        return new UserView(domain.getId().value(), domain.getEmail().value());
+        if (!user.getVisible()) {
+            throw new IllegalArgumentException("Invalid credentials");
+        }
+
+        if (!passwordEncoder.matches(rawPassword, user.getPassword().value())) {
+            throw new IllegalArgumentException("Invalid credentials");
+        }
+
+        return UserMapper.toView(user);
     }
 }

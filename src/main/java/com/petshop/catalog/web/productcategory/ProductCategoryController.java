@@ -1,7 +1,8 @@
-package com.petshop.catalog.web;
+package com.petshop.catalog.web.productcategory;
 
 import com.petshop.catalog.application.productcategory.ProductCategoryService;
 import com.petshop.catalog.application.productcategory.ProductCategoryView;
+import com.petshop.catalog.web.BaseResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +18,7 @@ public class ProductCategoryController {
     }
 
     @GetMapping
-    public ResponseEntity<?> list() {
+    public ResponseEntity<BaseResponse<List<ProductCategoryView>>> list() {
         final List<ProductCategoryView> productCategories = productCategoryService.findAll();
 
         final String message = "Relacion productos y categorias obtenidas";
@@ -25,8 +26,13 @@ public class ProductCategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestParam UUID productId, @RequestParam UUID categoryId) {
-        final ProductCategoryView productCategory = productCategoryService.create(productId, categoryId);
+    public ResponseEntity<BaseResponse<ProductCategoryView>> create(
+            @RequestBody CreateProductCategoryRequest request
+    ) {
+        final ProductCategoryView productCategory = productCategoryService.create(
+                request.productId(),
+                request.categoryId()
+        );
 
         final String message = "Relacion productos y categorias creado";
         return ResponseEntity.status(200).body(new BaseResponse<>(message, productCategory));

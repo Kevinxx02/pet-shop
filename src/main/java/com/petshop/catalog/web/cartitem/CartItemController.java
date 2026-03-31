@@ -1,12 +1,12 @@
-package com.petshop.catalog.web;
+package com.petshop.catalog.web.cartitem;
 
 import com.petshop.catalog.application.cartItem.CartItemService;
 import com.petshop.catalog.application.cartItem.CartItemView;
+import com.petshop.catalog.web.BaseResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/cartItem")
@@ -18,21 +18,23 @@ public class CartItemController {
     }
     @GetMapping
     public ResponseEntity<BaseResponse<List<CartItemView>>> getItems(
-            @RequestParam UUID cartId
+            @RequestBody GetCartItemsRequest request
     ) {
-        final List<CartItemView> items = this.cartItemService.getItems(cartId);
+        final List<CartItemView> items = this.cartItemService.getItems(request.cartId());
 
         final String message = "Lista de items";
         return ResponseEntity.status(200).body(new BaseResponse<>(message, items));
     }
 
     @PostMapping
-    public ResponseEntity<BaseResponse<CartItemView>> addItem(
-            @RequestParam UUID cartId,
-            @RequestParam UUID productId,
-            @RequestParam int quantity
+    public ResponseEntity<BaseResponse<CartItemView>> createItem(
+            @RequestBody CreateCartItemRequest request
     ) {
-        final CartItemView cartItem = this.cartItemService.addItem(cartId, productId, quantity);
+        final CartItemView cartItem = this.cartItemService.addItem(
+                request.cartId(),
+                request.productId(),
+                request.quantity()
+        );
 
 
         final String message = "Producto agregado";
@@ -41,10 +43,12 @@ public class CartItemController {
 
     @PutMapping
     public ResponseEntity<BaseResponse<CartItemView>> updateItem(
-            @RequestParam UUID id,
-            int quantity
+            @RequestBody UpdateCartItemRequest request
     ) {
-        final CartItemView cartItem = this.cartItemService.updateItem(id, quantity);
+        final CartItemView cartItem = this.cartItemService.updateItem(
+                request.id(),
+                request.quantity()
+        );
 
 
         final String message = "Producto modificado";
@@ -52,7 +56,7 @@ public class CartItemController {
     }
 
     @DeleteMapping
-    public void deleteItem(@RequestParam UUID id) {
-        this.cartItemService.deleteItem(id);
+    public void deleteItem(@RequestBody DeleteCartItemRequest request) {
+        this.cartItemService.deleteItem(request.id());
     }
 }

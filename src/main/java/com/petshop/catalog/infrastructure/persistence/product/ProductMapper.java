@@ -3,15 +3,14 @@ package com.petshop.catalog.infrastructure.persistence.product;
 import com.petshop.catalog.domain.product.Product;
 
 public class ProductMapper {
-    static ProductJpaEntity toEntity(Product product) {
-        ProductJpaEntity entity = new ProductJpaEntity();
-        entity.setId(product.getId());
-        entity.setName(product.getName());
-        entity.setDescription(product.getDescription());
-        entity.setPrice(product.getPrice().value());
-        entity.setVisibility(product.getVisible());
-
-        return entity;
+    public static ProductJpaEntity toEntity(Product product) {
+        return new ProductJpaEntity(
+                product.getId(),
+                product.getName(),
+                product.getDescription(),
+                product.getPrice().value(),
+                product.getVisible()
+        );
     }
 
     public static Product toDomain(ProductJpaEntity entity) {

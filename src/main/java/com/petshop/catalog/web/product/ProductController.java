@@ -1,13 +1,11 @@
-package com.petshop.catalog.web;
+package com.petshop.catalog.web.product;
 
 import com.petshop.catalog.application.product.*;
+import com.petshop.catalog.web.BaseResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/products")
@@ -26,23 +24,22 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<?> list() {
+    public ResponseEntity<BaseResponse<List<ProductView>>> list() {
         final List<ProductView> aProduct = listProductService.list();
 
         final String message = "Listado de productos";
-        return ResponseEntity.status(201).body(new BaseResponse<>(message, aProduct));
+        return ResponseEntity.status(200).body(new BaseResponse<>(message, aProduct));
     }
 
     @PostMapping
-    public ResponseEntity<?> createProduct(
-            @RequestParam String name,
-            @RequestParam String description,
-            @RequestParam BigDecimal price) {
+    public ResponseEntity<BaseResponse<ProductView>> createProduct(
+            @RequestBody CreateProductRequest request
+    ) {
 
         ProductView product = createProductService.createProduct(
-                name,
-                description,
-                price
+                request.name(),
+                request.description(),
+                request.price()
         );
 
         final String message = "Producto creado correctamente";
@@ -50,19 +47,14 @@ public class ProductController {
     }
 
     @PutMapping
-    public ResponseEntity<?> updateProduct(
-            @RequestParam UUID id,
-            @RequestParam String name,
-            @RequestParam String description,
-            @RequestParam BigDecimal price,
-            @RequestParam Boolean isVisible
-            ) {
+    public ResponseEntity<BaseResponse<ProductView>> updateProduct(
+            @RequestBody UpdateProductRequest request) {
         final ProductView product = updateProductService.updateProduct(
-                id,
-                name,
-                description,
-                price,
-                isVisible
+                request.id(),
+                request.name(),
+                request.description(),
+                request.price(),
+                request.isVisible()
         );
 
         final String message = "Producto actualizado correctamente";

@@ -10,15 +10,13 @@ import java.util.UUID;
 @Repository
 public class JpaProductCategoryRepository implements ProductCategoryRepository {
     private final SpringDataProductCategoryRepository jpaRepository;
-    private final ProductCategoryMapper productCategoryMapper;
 
-    public JpaProductCategoryRepository(SpringDataProductCategoryRepository jpaRepository, ProductCategoryMapper productCategoryMapper) {
+    public JpaProductCategoryRepository(SpringDataProductCategoryRepository jpaRepository) {
         this.jpaRepository = jpaRepository;
-        this.productCategoryMapper = productCategoryMapper;
     }
 
     public void save(ProductCategory productCategory) {
-        jpaRepository.save(this.productCategoryMapper.toEntity(productCategory));
+        jpaRepository.save(ProductCategoryMapper.toEntity(productCategory));
     }
 
     @Override
@@ -33,6 +31,6 @@ public class JpaProductCategoryRepository implements ProductCategoryRepository {
 
     @Override
     public boolean existsByProductIdAndCategoryId(UUID productId, UUID categoryId) {
-        return jpaRepository.existsByProduct_IdAndCategory_Id(productId, categoryId);
+        return jpaRepository.existsByProductIdAndCategoryId(productId, categoryId);
     }
 }

@@ -22,8 +22,10 @@ public class Category {
         return this.isVisible;
     }
 
-    public static Category create(String name, UUID parentId, Boolean isVisible) {
+    public static Category create(String name, UUID parentId) {
         final UUID newId = UUID.randomUUID();
+        final boolean isVisible = true;
+
         return new Category(newId, name, parentId, isVisible);
     }
 

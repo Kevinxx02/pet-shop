@@ -46,7 +46,7 @@ public class CartService {
         final Cart cart = this.cartRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Carrito no encontrado"));
 
-        if (cart.getStatusId() != this.pendingId) {
+        if (!cart.getStatusId().equals(this.pendingId)) {
             throw new IllegalArgumentException("El carrito no esta disponible");
         }
 

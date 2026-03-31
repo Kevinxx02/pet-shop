@@ -11,12 +11,12 @@ public interface SpringDataProductCategoryReadRepository
         extends JpaRepository<ProductCategoryJpaEntity, UUID>
 {
     @Query("""
-SELECT new com.petshop.catalog.application.productcategory.ProductCategoryView(
-    pc.id,
-    pc.product.id,
-    pc.category.id
-)
-FROM ProductCategoryJpaEntity pc
-""")
+        SELECT new com.petshop.catalog.application.productcategory.ProductCategoryView(
+            id,
+            productId,
+            categoryId
+        )
+        FROM ProductCategoryJpaEntity pc
+    """)
     List<ProductCategoryView> findAllView();
 }

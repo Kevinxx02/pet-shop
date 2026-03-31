@@ -14,7 +14,7 @@ public class User{
     private User(UUID id, String email, String password, boolean active) {
         this.id = new UserId(id);
         this.email = new Email(email);
-        this.password = new HashedPassword(password);
+        this.changePassword(password);
         this.isVisible = active;
     }
 
@@ -28,8 +28,8 @@ public class User{
         return new User(id, email, password, isVisible);
     }
 
-    public void changePassword(HashedPassword newPassword) {
-        this.password = newPassword;
+    public void changePassword(String newPassword) {
+        this.password = new HashedPassword(newPassword);
     }
 
     public UserId getId() {
@@ -50,5 +50,15 @@ public class User{
 
     public void deActivateUser() {
         this.isVisible = false;
+    }
+
+    private void setVisible(boolean isVisible) {
+        this.isVisible = isVisible;
+    }
+
+    public void update(String email, String password, boolean isVisible) {
+        this.email = new Email(email);
+        this.changePassword(password);
+        this.setVisible(isVisible);
     }
 }

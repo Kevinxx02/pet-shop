@@ -1,7 +1,8 @@
-package com.petshop.catalog.web;
+package com.petshop.catalog.web.status;
 
 import com.petshop.catalog.application.status.StatusService;
 import com.petshop.catalog.application.status.StatusView;
+import com.petshop.catalog.web.BaseResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,8 +19,8 @@ public class StatusController {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestParam String name) {
-        final StatusView status = this.statusService.create(name);
+    public ResponseEntity<?> create(@RequestBody CreateStatusRequest request) {
+        final StatusView status = this.statusService.create(request.name());
 
         final String message = "Estatus creado correctamente";
         return ResponseEntity.status(201).body(new BaseResponse<>(message, status));

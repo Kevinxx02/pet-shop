@@ -1,7 +1,8 @@
-package com.petshop.catalog.web;
+package com.petshop.catalog.web.categorygroup;
 
 import com.petshop.catalog.application.categorygroup.CategoryGroupService;
 import com.petshop.catalog.application.categorygroup.CategoryGroupView;
+import com.petshop.catalog.web.BaseResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,9 +28,12 @@ public class CategoryGroupController {
 
     @PostMapping
     public ResponseEntity<BaseResponse<CategoryGroupView>> create(
-            @RequestParam UUID groupId,
-            @RequestParam UUID categoryId) {
-        final CategoryGroupView categoryGroup = this.categoryGroupService.create(groupId, categoryId);
+            @RequestBody CreateCategoryGroupRequest request
+    ) {
+        final CategoryGroupView categoryGroup = this.categoryGroupService.create(
+                request.groupId(),
+                request.categoryId()
+        );
 
         final String message = "Categoria asignada al grupo";
         return ResponseEntity.status(201).body(new BaseResponse<>(message, categoryGroup));
@@ -38,12 +42,14 @@ public class CategoryGroupController {
 
     @PutMapping
     public ResponseEntity<BaseResponse<CategoryGroupView>> update(
-            @RequestParam UUID id,
-            @RequestParam UUID groupId,
-            @RequestParam UUID categoryId,
-            @RequestParam boolean isVisible
+            @RequestBody UpdateCategoryGroupRequest request
     ) {
-        final CategoryGroupView categoryGroup = this.categoryGroupService.update(id, groupId, categoryId, isVisible);
+        final CategoryGroupView categoryGroup = this.categoryGroupService.update(
+                request.id(),
+                request.groupId(),
+                request.categoryId(),
+                request.isVisible()
+        );
 
         final String message = "Relacion productos y categorias actualizada";
         return ResponseEntity.status(200).body(new BaseResponse<>(message, categoryGroup));

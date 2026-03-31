@@ -15,7 +15,7 @@ public interface SpringDataProductReadRepository
         )
         FROM ProductJpaEntity p
         LEFT JOIN ProductCategoryJpaEntity pc
-            ON p.id = pc.product.id
+            ON p.id = pc.productId
         WHERE p.isVisible
     """)
     List<ProductView> findAllView();

@@ -1,5 +1,4 @@
 package com.petshop.catalog.infrastructure.persistence.category;
-import com.petshop.catalog.domain.category.Category;
 import jakarta.persistence.*;
 
 import java.util.*;
@@ -15,9 +14,6 @@ public class CategoryJpaEntity {
     private String name;
     private String imageName;
     private Boolean isVisible;
-
-    @Version
-    private Long version;
 
     @ManyToOne
     @JoinColumn(name = "parent")
@@ -49,19 +45,6 @@ public class CategoryJpaEntity {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getImageName() {
-        return this.imageName;
-    }
-    public void setImageName(String newName) {
-        this.imageName = newName;
-    }
-
-    public void updateFrom(Category category) {
-        setId(category.getId());
-        setName(category.getName());
-        setIsVisible(category.getIsVisible());
     }
 
     public Boolean getIsVisible() {

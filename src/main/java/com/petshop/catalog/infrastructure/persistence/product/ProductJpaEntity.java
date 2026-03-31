@@ -1,11 +1,8 @@
 package com.petshop.catalog.infrastructure.persistence.product;
 
 
-import com.petshop.catalog.domain.product.Product;
-import com.petshop.catalog.infrastructure.persistence.productcategory.ProductCategoryJpaEntity;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
-import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -13,31 +10,24 @@ import java.util.UUID;
 public class ProductJpaEntity {
 
     @Id
-    @Column(columnDefinition = "uuid")
     private UUID id;
-
-    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
-    private Set<ProductCategoryJpaEntity> categories;
 
     private String name;
     private String description;
     private BigDecimal price;
 
-    @Version
-    private Long version;
     private Boolean isVisible;
 
     public ProductJpaEntity() {} // constructor por JPA
 
-    public ProductJpaEntity(UUID id, String name, String description, BigDecimal price, String image, Boolean isVisible) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.price = price;
-        this.isVisible = isVisible;
+    public ProductJpaEntity(UUID id, String name, String description, BigDecimal price, boolean isVisible) {
+        this.setId(id);
+        this.setName(name);
+        this.setDescription(description);
+        this.setPrice(price);
+        this.setVisibility(isVisible);
     }
 
-    // Getters y Setters
     public UUID getId() { return id; }
     public void setId(UUID id) { this.id = id; }
 
@@ -54,19 +44,5 @@ public class ProductJpaEntity {
     }
     public void setVisibility(Boolean isVisible) {
         this.isVisible = isVisible;
-    }
-    public void updateFrom(Product product) {
-        this.name = product.getName();
-        this.description = product.getDescription();
-        this.price = product.getPrice().value();
-        this.isVisible = product.getVisible();
-    }
-
-    public Set<ProductCategoryJpaEntity> getCategories() {
-        return categories;
-    }
-
-    public void setCategories(Set<ProductCategoryJpaEntity> categories) {
-        this.categories = categories;
     }
 }

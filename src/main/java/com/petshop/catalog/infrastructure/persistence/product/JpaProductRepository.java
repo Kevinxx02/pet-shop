@@ -16,13 +16,15 @@ public class JpaProductRepository implements ProductRepository {
     }
 
     @Override
-    public Optional<Product> findById(UUID id) {
-        return this.jpaRepository.findById(id).map(ProductMapper::toDomain);
+    public void save(Product product) {
+        ProductJpaEntity entity = ProductMapper.toEntity(product);
+        this.jpaRepository.save(entity);
     }
 
     @Override
-    public void save(Product product) {
-        this.jpaRepository.save(ProductMapper.toEntity(product));
+    public Optional<Product> findById(UUID id) {
+        return this.jpaRepository.findById(id)
+                .map(ProductMapper::toDomain);
     }
 
     @Override

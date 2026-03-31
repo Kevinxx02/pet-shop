@@ -8,5 +8,5 @@ public interface SpringDataProductCategoryRepository extends JpaRepository<Produ
     /* Elimina todos los registros cuyo product id sea el parametro recibido */
     void deleteById(UUID id);
 
-    boolean existsByProduct_IdAndCategory_Id(UUID productId, UUID categoryId);
+    boolean existsByProductIdAndCategoryId(UUID productId, UUID categoryId);
 }
