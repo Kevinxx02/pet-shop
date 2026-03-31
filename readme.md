@@ -21,7 +21,7 @@ Este proyecto es un ejemplo de una **aplicación de catálogo de productos** con
 
 - **Concurrencia y consistencia**
     - Update atómico para evitar doble publicación de eventos.
-    - Locks opcionales: **pessimistic** y **optimistic** (`@Version`) para control de concurrencia.
+    - Locks opcionales: **pessimistic** y **optimistic** (`@Version <- Se retiro para usar DDD de la forma actual`) para control de concurrencia.
 
 - **Transacciones**
     - `@Transactional` para comandos.
@@ -80,6 +80,6 @@ GET	    /products	Listar productos (CQRS read) (Acepta parametro id, para devolv
 
 
 Deuda tecnica.
-Retirar el uso de rehydrate de FAQ y BLOG
 Mejorar la relacion entre cart y sus items.
-Uso de DTO en el controller.
+Excepciones
+Seeders
