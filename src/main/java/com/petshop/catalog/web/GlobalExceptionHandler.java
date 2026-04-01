@@ -25,7 +25,7 @@ public class GlobalExceptionHandler {
                 new BaseResponse<>(ex.getMessage(), null)
         );
     }
-
+/*
     @ExceptionHandler(Exception.class)
     public ResponseEntity<BaseResponse<Object>> handleGeneric(
             Exception ex
@@ -34,4 +34,5 @@ public class GlobalExceptionHandler {
                 new BaseResponse<>("Internal server error", null)
         );
     }
+*/
 }

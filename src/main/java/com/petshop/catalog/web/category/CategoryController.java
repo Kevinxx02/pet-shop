@@ -28,8 +28,11 @@ public class CategoryController {
     }
 
     @GetMapping
-    public List<CategoryView> list() {
-        return getCategoryService.list();
+    public ResponseEntity<BaseResponse<List<CategoryView>>>  list() {
+        final List<CategoryView> categories = getCategoryService.list();
+
+        final String message = "Lista de categorias";
+        return ResponseEntity.status(201).body(new BaseResponse<>(message, categories));
     }
 
     @PostMapping
