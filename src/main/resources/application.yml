@@ -1,4 +1,8 @@
 spring:
+  application:
+    name: petshop-catalog
+  profiles:
+    active: dev
   datasource:
     url: ${DB_URL}
     username: ${DB_USERNAME}
@@ -14,16 +18,3 @@ spring:
         format_sql: true
   flyway:
     baseline-on-migrate: true
-  rabbitmq:
-    host: localhost
-    port: 5672
-    username: kevin
-    password: 1234
-logging:
-  level:
-    org:
-      hibernate:
-        SQL: debug
-        type.descriptor.sql: trace
-      springframework:
-        security=DEBUG:

@@ -37,7 +37,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/products/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/categories/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/blog/**").permitAll()
-                        .requestMatchers("/user/**").permitAll()
+                        .requestMatchers("/user/validate").permitAll()
+                        .requestMatchers("/user/refresh").permitAll()
 
                         .requestMatchers("/user/admin/**").hasRole("ADMIN")
                         .requestMatchers("/user/user/**").hasRole("USER")
@@ -45,7 +46,6 @@ public class SecurityConfig {
                         // privado
                         .requestMatchers("/cart/**").authenticated()
                         .requestMatchers("/cartItem/**").authenticated()
-                        //.requestMatchers("/user/**").hasRole("ADMIN")
 
                         .anyRequest().authenticated()
                 )
