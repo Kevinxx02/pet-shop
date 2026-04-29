@@ -9,11 +9,9 @@ import java.util.UUID;
 
 public interface SpringDataMultimediaReadRepository extends JpaRepository<MultimediaJpaEntity, UUID> {
     @Query("""
-    SELECT new com.petshop.catalog.application.multimedia.MultimediaView(
-        c.id, c.name, c.parent.id
-    )
-    FROM CategoryJpaEntity c
-    WHERE c.isVisible = true
+    SELECT
+        new com.petshop.catalog.application.multimedia.MultimediaView(id, fileName, isPrimary, ownerId)
+    FROM MultimediaJpaEntity c
 """)
-    List<MultimediaView> findAllView();
+    List<MultimediaView> viewAll();
 }

@@ -29,7 +29,7 @@ public class CategoryController {
 
     @GetMapping
     public ResponseEntity<BaseResponse<List<CategoryView>>>  list() {
-        final List<CategoryView> categories = getCategoryService.list();
+        final List<CategoryView> categories = this.getCategoryService.list();
 
         final String message = "Lista de categorias";
         return ResponseEntity.status(201).body(new BaseResponse<>(message, categories));
@@ -38,8 +38,7 @@ public class CategoryController {
     @PostMapping
     public ResponseEntity<?> create(@RequestBody CreateCategoryRequest request) {
         final CategoryView category = createCategoryService.createCategory(
-                request.name(),
-                request.parentId()
+                request.name()
         );
 
         final String message = "Categoria creada correctamente";
@@ -53,7 +52,6 @@ public class CategoryController {
         final CategoryView category = updateCategoryService.updateCategory(
                 request.id(),
                 request.name(),
-                request.parentId(),
                 request.isVisible()
         );
 

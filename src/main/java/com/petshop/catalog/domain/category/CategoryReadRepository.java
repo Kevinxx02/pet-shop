@@ -7,5 +7,5 @@ import java.util.List;
 
 @Component
 public interface CategoryReadRepository {
-    List<CategoryView> findVisible();
+    List<CategoryView> viewAll();
 }

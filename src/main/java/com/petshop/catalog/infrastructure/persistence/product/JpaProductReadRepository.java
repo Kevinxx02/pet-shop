@@ -19,7 +19,7 @@ public class JpaProductReadRepository implements ProductReadRepository  {
     }
 
     @Override
-    public List<ProductView> findAllView() {
-        return jpaRepository.findAllView();
+    public List<ProductView> viewAll() {
+        return jpaRepository.viewAll();
     }
 }

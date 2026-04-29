@@ -13,6 +13,6 @@ public class GetCategoryService {
     }
 
     public List<CategoryView> list() {
-        return categoryRepository.findVisible();
+        return categoryRepository.viewAll();
     }
 }

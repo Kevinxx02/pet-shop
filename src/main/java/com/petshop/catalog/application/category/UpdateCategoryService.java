@@ -17,16 +17,13 @@ public class UpdateCategoryService {
     }
 
     @Transactional
-    public CategoryView updateCategory(UUID id, String name, UUID parentId, Boolean isVisible) {
+    public CategoryView updateCategory(UUID id, String name, Boolean isVisible) {
         Category category = this.categoryRepository.findById(id);
-        if (parentId != null && this.categoryRepository.existsById(parentId)) {
-            throw new IllegalArgumentException("El padre no existe");
-        }
 
-        category.updateCategory(name, parentId, isVisible);
+        category.updateCategory(name, isVisible);
 
         this.categoryRepository.save(category);
 
-        return new CategoryView(id, name, parentId);
+        return CategoryMapper.toView(category);
     }
 }

@@ -9,11 +9,10 @@ import java.util.UUID;
 
 public interface SpringDataCategoryReadRepository extends JpaRepository<CategoryJpaEntity, UUID> {
     @Query("""
-    SELECT new com.petshop.catalog.application.category.CategoryView(
-        c.id, c.name, c.parent.id
-    )
-    FROM CategoryJpaEntity c
-    WHERE c.isVisible = true
-""")
-    List<CategoryView> findVisible();
+        SELECT
+            new com.petshop.catalog.application.category.CategoryView(id, name)
+        FROM CategoryJpaEntity
+        WHERE isVisible = true
+    """)
+    List<CategoryView> viewAll();
 }

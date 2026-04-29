@@ -8,28 +8,44 @@ public class User{
 
     private UserId id;
     private Email email;
-    private HashedPassword password;
+    private String password;
     private boolean isVisible;
+    private Role role;
 
-    private User(UUID id, String email, String password, boolean active) {
+    private User(
+            UUID id,
+            String email,
+            String password,
+            boolean active,
+            Role role
+    ) {
         this.id = new UserId(id);
         this.email = new Email(email);
         this.changePassword(password);
         this.isVisible = active;
+        this.setRole(role);
     }
 
     public static User create(String email, String password) {
         final boolean isVisible = true;
         final UUID id = UUID.randomUUID();
+        final Role role = Role.USER;
 
-        return new User(id, email, password, isVisible);
+        return new User(id, email, password, isVisible, role);
     }
-    public static User rehydrate(UUID id, String email, String password, boolean isVisible) {
-        return new User(id, email, password, isVisible);
+
+    public static User rehydrate(
+            UUID id,
+            String email,
+            String password,
+            boolean isVisible,
+            Role role
+    ) {
+        return new User(id, email, password, isVisible, role);
     }
 
     public void changePassword(String newPassword) {
-        this.password = new HashedPassword(newPassword);
+        this.password = HashedPassword.fromString(newPassword);
     }
 
     public UserId getId() {
@@ -40,7 +56,7 @@ public class User{
         return isVisible;
     }
 
-    public HashedPassword getPassword() {
+    public String getPassword() {
         return password;
     }
 
@@ -60,5 +76,13 @@ public class User{
         this.email = new Email(email);
         this.changePassword(password);
         this.setVisible(isVisible);
+    }
+
+    public Role getRole() {
+        return this.role;
+    }
+
+    private void setRole(Role role) {
+        this.role = role;
     }
 }

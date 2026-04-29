@@ -6,8 +6,6 @@ import com.petshop.catalog.domain.category.CategoryRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.UUID;
-
 @Service
 @Transactional
 public class CreateCategoryService {
@@ -18,10 +16,10 @@ public class CreateCategoryService {
     }
 
     @Transactional
-    public CategoryView createCategory(String name, UUID parentId) {
-        Category category = Category.create(name, parentId);
+    public CategoryView createCategory(String name) {
+        Category category = Category.create(name);
         categoryRepository.save(category);
 
-        return new CategoryView(category.getId(), category.getName(), category.getParentId());
+        return CategoryMapper.toView(category);
     }
 }

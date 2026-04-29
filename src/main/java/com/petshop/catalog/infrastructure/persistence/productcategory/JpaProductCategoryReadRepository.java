@@ -20,6 +20,6 @@ public class JpaProductCategoryReadRepository implements ProductCategoryReadRepo
     }
 
     public List<ProductCategoryView> findAll() {
-        return jpaRepository.findAllView();
+        return jpaRepository.viewAll();
     }
 }

@@ -5,5 +5,5 @@ import com.petshop.catalog.application.multimedia.MultimediaView;
 import java.util.List;
 
 public interface MultimediaReadRepository {
-    List<MultimediaView> findAllView();
+    List<MultimediaView> viewAll();
 }

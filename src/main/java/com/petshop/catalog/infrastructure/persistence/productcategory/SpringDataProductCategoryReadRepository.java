@@ -18,5 +18,5 @@ public interface SpringDataProductCategoryReadRepository
         )
         FROM ProductCategoryJpaEntity pc
     """)
-    List<ProductCategoryView> findAllView();
+    List<ProductCategoryView> viewAll();
 }

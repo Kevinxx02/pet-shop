@@ -10,5 +10,5 @@ import java.util.UUID;
 public interface ProductReadRepository {
     boolean existsById(UUID productId);
 
-    List<ProductView> findAllView();
+    List<ProductView> viewAll();
 }

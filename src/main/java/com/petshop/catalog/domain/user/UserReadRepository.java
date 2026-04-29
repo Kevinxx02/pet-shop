@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserReadRepository {
-    Optional<User> findByEmail(Email email);
-
     List<UserView> findActive();
+
+    Optional<User> findByEmail(Email email);
 }

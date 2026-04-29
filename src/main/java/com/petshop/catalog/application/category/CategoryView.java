@@ -4,6 +4,5 @@ import java.util.UUID;
 
 public record CategoryView(
         UUID id,
-        String name,
-        UUID parentId
+        String name
 ) {}

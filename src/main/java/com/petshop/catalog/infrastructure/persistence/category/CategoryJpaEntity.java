@@ -12,23 +12,14 @@ public class CategoryJpaEntity {
     private UUID id;
 
     private String name;
-    private String imageName;
     private Boolean isVisible;
-
-    @ManyToOne
-    @JoinColumn(name = "parent")
-    private CategoryJpaEntity parent;
-
-    @OneToMany(mappedBy = "parent")
-    private List<CategoryJpaEntity> children = new ArrayList<>();
 
     public CategoryJpaEntity() {} // constructor por JPA
 
-    public CategoryJpaEntity(UUID id, String name, CategoryJpaEntity parent, Boolean isVisible) {
+    public CategoryJpaEntity(UUID id, String name, Boolean isVisible) {
         setId(id);
         setName(name);
         setIsVisible(isVisible);
-        setParent(parent);
     }
 
     public UUID getId() {
@@ -52,13 +43,5 @@ public class CategoryJpaEntity {
     }
     public void setIsVisible(Boolean isVisible) {
         this.isVisible = isVisible;
-    }
-
-    public CategoryJpaEntity getParent() {
-        return this.parent;
-    }
-
-    public void setParent(CategoryJpaEntity parent) {
-        this.parent = parent;
     }
 }

@@ -34,7 +34,7 @@ public class MultimediaService {
     }
 
     public List<MultimediaView> list() {
-        return multimediaReadRepository.findAllView();
+        return multimediaReadRepository.viewAll();
     }
 
     public String saveImage(

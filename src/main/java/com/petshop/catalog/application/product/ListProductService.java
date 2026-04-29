@@ -17,6 +17,6 @@ public class ListProductService {
     }
 
     public List<ProductView> list() {
-        return productRepository.findAllView();
+        return productRepository.viewAll();
     }
 }

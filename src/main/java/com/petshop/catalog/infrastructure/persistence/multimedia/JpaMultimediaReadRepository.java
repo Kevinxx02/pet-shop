@@ -16,7 +16,7 @@ public class JpaMultimediaReadRepository implements MultimediaReadRepository {
     }
 
     @Override
-    public List<MultimediaView> findAllView() {
-        return this.jpaRepository.findAllView();
+    public List<MultimediaView> viewAll() {
+        return this.jpaRepository.viewAll();
     }
 }

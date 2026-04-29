@@ -15,7 +15,7 @@ public class JpaCategoryReadRepository implements CategoryReadRepository {
     }
 
     @Override
-    public List<CategoryView> findVisible() {
-        return jpaRepository.findVisible();
+    public List<CategoryView> viewAll() {
+        return jpaRepository.viewAll();
     }
 }

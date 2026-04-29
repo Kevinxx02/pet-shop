@@ -1,5 +1,6 @@
 package com.petshop.catalog.infrastructure.persistence.user;
 
+import com.petshop.catalog.domain.user.Role;
 import jakarta.persistence.*;
 
 import java.util.UUID;
@@ -14,14 +15,23 @@ public class UserJpaEntity {
     private String password;
     private boolean isVisible;
 
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     protected UserJpaEntity() {}
 
-    UserJpaEntity(UUID id, String email, String password, boolean isVisible) {
+    UserJpaEntity(
+            UUID id,
+            String email,
+            String password,
+            boolean isVisible,
+            Role role
+    ) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.isVisible = isVisible;
+        this.role = role;
     }
 
     public UUID getId() {
@@ -38,5 +48,8 @@ public class UserJpaEntity {
 
     public boolean getVisible() {
         return this.isVisible;
+    }
+    public Role getRole() {
+        return this.role;
     }
 }

@@ -1,8 +1,15 @@
 package com.petshop.catalog.domain.user;
 
-public record HashedPassword(String value) {
+import org.springframework.security.crypto.password.PasswordEncoder;
 
-    public HashedPassword {
+public class HashedPassword {
+    private final PasswordEncoder passwordEncoder;
+
+    public HashedPassword(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    static String fromString(String value) {
         if (value == null) {
             throw new IllegalArgumentException("Password hash cannot be null");
         }
@@ -17,6 +24,8 @@ public record HashedPassword(String value) {
         if (!value.startsWith("$2")) {
             throw new IllegalArgumentException("Invalid password hash format");
         }
+
+        return value;
     }
 
     @Override

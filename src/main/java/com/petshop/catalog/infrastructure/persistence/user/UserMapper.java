@@ -7,8 +7,9 @@ public class UserMapper {
         return new UserJpaEntity(
                 user.getId().value(),
                 user.getEmail().value(),
-                user.getPassword().value(),
-                user.getVisible()
+                user.getPassword(),
+                user.getVisible(),
+                user.getRole()
         );
     }
 
@@ -17,7 +18,8 @@ public class UserMapper {
                 entity.getId(),
                 entity.getEmail(),
                 entity.getPassword(),
-                entity.getVisible()
+                entity.getVisible(),
+                entity.getRole()
         );
     }
 }

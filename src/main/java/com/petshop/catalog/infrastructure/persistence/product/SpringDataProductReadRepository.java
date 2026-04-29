@@ -18,5 +18,5 @@ public interface SpringDataProductReadRepository
             ON p.id = pc.productId
         WHERE p.isVisible
     """)
-    List<ProductView> findAllView();
+    List<ProductView> viewAll();
 }
