@@ -28,6 +28,7 @@ public class RabbitOutboxPublisher implements OutboxPublisher {
         if ("Product created".equals(eventType)) {
             return RabbitConfig.ROUTING_KEY;
         }
+
         return "unknown";
     }
 }
