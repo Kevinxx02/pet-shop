@@ -5,6 +5,7 @@ import com.petshop.catalog.domain.shared.Email;
 import com.petshop.catalog.domain.user.User;
 import com.petshop.catalog.infrastructure.security.JwtService;
 import com.petshop.catalog.web.BaseResponse;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,8 +40,9 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<BaseResponse<UserView>> createUser(@RequestBody UserCreateRequest request) {
-
+    public ResponseEntity<BaseResponse<UserView>> createUser(
+            @RequestBody @Valid UserCreateRequest request
+    ) {
         final UserView user = createUserService.createUser(
                 request.email(),
                 request.password()

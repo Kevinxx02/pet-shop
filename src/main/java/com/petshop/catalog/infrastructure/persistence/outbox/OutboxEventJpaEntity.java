@@ -70,4 +70,8 @@ public class OutboxEventJpaEntity {
     public UUID getId() {
         return this.id;
     }
+
+    public OutboxStatus getStatus() {
+        return status;
+    }
 }

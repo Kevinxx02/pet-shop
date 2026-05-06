@@ -16,13 +16,33 @@ Arquitectura basada en:
 # Stack tecnológico
 
 - Java 17
-- Spring Boot 3
-- Spring Security + JWT
+
+<h3>Spring Boot 3</h3>
+- Spring MVC (REST APIs)
+- Spring Security (JWT authentication)
 - Spring Data JPA (Hibernate)
+
+<h3> Arquitectura</h3>
+
+- DDD (Domain-Driven Design)
+- CQRS (separación de comandos y consultas)
+- Outbox Pattern (consistencia eventual)
+
+<h3> Persistencia</h3>
+
 - PostgreSQL
+
+- Flyway (migraciones)
+
+<h3>Mensajería</h3>
+
 - RabbitMQ
-- Flyway
+
+<h3>Build & tooling</h3>
+
 - Maven
+
+- Docker / Docker Compose
 
 ---
 
@@ -31,23 +51,47 @@ Arquitectura basada en:
 El sistema sigue una arquitectura en capas inspirada en DDD, con separación estricta entre dominio y persistencia.
 
 
-domain<br>
-├── user<br>
+<b>Domain</b><br>
+  ├── user<br>
+&nbsp;&nbsp;&nbsp;├── User (Aggregate) <br>
+&nbsp;&nbsp;&nbsp;├── HashedPassword (Value Object) <br>
+&nbsp;&nbsp;&nbsp;├── UserRepository (Aggregate Repository - commands) <br>
+&nbsp;&nbsp;&nbsp;└── UserReadRepository (Query Repository - CQRS) <br>
 ├── product<br>
 ├── category<br>
 └── shared<br>
+&nbsp;&nbsp;&nbsp;└── Email (Value Object) <br>
 
-application<br>
-├── user (auth/login/register)<br>
-├── product (use cases)<br>
+<b>Application</b><br>
+├── user <br>
+&nbsp;&nbsp;&nbsp;├── AuthUserService <br>
+&nbsp;&nbsp;&nbsp;├── CreateUserService <br>
+&nbsp;&nbsp;&nbsp;├── UserView (Response DTO) <br>
+&nbsp;&nbsp;&nbsp;├── RefreshRequest (Request DTO) <br>
+&nbsp;&nbsp;&nbsp;└── UserMapper (Mapper Domain to View) <br>
+├── product<br>
 └── services<br>
 
-infrastructure<br>
+<b>Infrastructure</b><br>
 ├── persistence (JPA entities + repositories)<br>
+&nbsp;&nbsp;&nbsp;├── JpaUserRepository (Command Repository Adapter - Implementa domain repository y delega en Spring Data) <br>
+&nbsp;&nbsp;&nbsp;├── JpaUserReadRepository (Query Repository Adapter - Implementa domain repository y delega en Spring Data) <br>
+&nbsp;&nbsp;&nbsp;├── SpringDataUserRepository (Spring Data JPA Repository) <br>
+&nbsp;&nbsp;&nbsp;├── SpringDataUserReadRepository (Spring Data JPA Repository) <br>
+&nbsp;&nbsp;&nbsp;├── UserJpaEntity (Jpa Entity) <br>
+&nbsp;&nbsp;&nbsp;└── UserMapper (Mapper Domain to Entity & Entity to Domain) <br>
 ├── security (JWT, filters, config)<br>
 ├── messaging (RabbitMQ)<br>
-└── outboxworker<br>
+├── outboxworker<br>
+└── CorsConfig<br>
 
+<b>Web</b><br>
+├── BaseResponse (Response DTO)<br>
+├── GlobalExceptionHandler (Exceptions)<br>
+├── WebConfig<br>
+└── user <br>
+&nbsp;&nbsp;&nbsp;├── UserController <br>
+&nbsp;&nbsp;&nbsp;└── UserCreateRequest (Request DTO) <br>
 
 ---
 
