@@ -18,9 +18,9 @@ Arquitectura basada en:
 - Java 17
 
 <h3>Spring Boot 3</h3>
-- Spring MVC (REST APIs)
-- Spring Security (JWT authentication)
-- Spring Data JPA (Hibernate)
+- Spring MVC (REST APIs, Validation) <br>
+- Spring Security (JWT authentication) <br>
+- Spring Data JPA (Hibernate) <br>
 
 <h3> Arquitectura</h3>
 
@@ -264,7 +264,12 @@ logging reducido
  JPA desacoplado mediante mappers <br>
  CQRS (ligero) <br>
  Outbox Pattern <br>
+ Consumer Pattern <br>
  RabbitMQ integration <br>
  Worker programado <br>
  Tests <br>
  Dockerización <br>
+ 
+
+## Posibilidad de mejoras:
+Stateful. <br>

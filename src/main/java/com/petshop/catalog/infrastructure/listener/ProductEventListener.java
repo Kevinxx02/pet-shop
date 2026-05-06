@@ -1,4 +1,3 @@
-/*
 package com.petshop.catalog.infrastructure.listener;
 
 import com.petshop.catalog.infrastructure.rabbitmq.RabbitConfig;
@@ -13,4 +12,3 @@ public class ProductEventListener {
         System.out.println("Infrastructure/Listener: " + payload);
     }
 }
-*/
