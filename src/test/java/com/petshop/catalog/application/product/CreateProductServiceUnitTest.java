@@ -15,7 +15,7 @@ import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-class CreateProductServiceTest {
+class CreateProductServiceUnitTest {
 
     @Mock
     ProductRepository productRepository;

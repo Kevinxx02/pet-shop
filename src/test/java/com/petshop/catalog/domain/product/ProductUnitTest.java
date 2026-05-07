@@ -7,8 +7,8 @@ import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ProductTest {
-
+class ProductUnitTest {
+/* Valida el funcionamiento del agregado Producto directamente */
     @Test
     void should_create_product_and_raise_domain_event() {
 

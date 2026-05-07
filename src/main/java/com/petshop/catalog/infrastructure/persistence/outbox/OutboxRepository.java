@@ -17,15 +17,15 @@ public class OutboxRepository {
     }
 
     public Optional<OutboxEventJpaEntity> findById(UUID id) {
-        return jpaRepository.findById(id);
+        return this.jpaRepository.findById(id);
     }
 
     public void save(OutboxMessage outboxMessage) {
-        jpaRepository.save(toEntity(outboxMessage));
+        this.jpaRepository.save(toEntity(outboxMessage));
     }
 
     public List<OutboxEventJpaEntity> findAll() {
-        return new ArrayList<>(jpaRepository.findAll());
+        return new ArrayList<>(this.jpaRepository.findAll());
     }
 
     private OutboxEventJpaEntity toEntity(OutboxMessage outboxMessage) {
@@ -44,7 +44,7 @@ public class OutboxRepository {
     public List<OutboxEventJpaEntity> findProcessable(Instant now) {
         int MAX_ATTEMPTS = 10;
 
-        return jpaRepository.findByStatusInAndNextAttemptAtLessThanEqualAndAttemptsLessThan(
+        return this.jpaRepository.findByStatusInAndNextAttemptAtLessThanEqualAndAttemptsLessThan(
                 List.of(OutboxStatus.PENDING, OutboxStatus.FAILED),
                 now,
                 MAX_ATTEMPTS
@@ -52,6 +52,10 @@ public class OutboxRepository {
     }
 
     public int markAsProcessing(UUID id) {
-        return jpaRepository.markAsProcessingWithAtomicLocking(id);
+        return this.jpaRepository.markAsProcessingWithAtomicLocking(id);
+    }
+
+    public void deleteAll() {
+        this.jpaRepository.deleteAll();
     }
 }
