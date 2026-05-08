@@ -4,10 +4,15 @@ spring:
   profiles:
     active: dev
   datasource:
-    url: jdbc:postgresql://aws-1-eu-west-1.pooler.supabase.com:6543/postgres?sslmode=require&prepareThreshold=0
-    username: postgres.oahzepgsnntbkzauwslh
-    password: CVNonMmxeH8S2ssp
+    url: jdbc:postgresql://postgres:5432/petshop
+    username: postgres
+    password: postgres
     driver-class-name: org.postgresql.Driver
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: guest
+    password: guest
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
