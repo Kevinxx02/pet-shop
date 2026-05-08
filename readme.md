@@ -1,275 +1,401 @@
 # PetShop Catalog API
 
-Backend del sistema de catálogo de PetShop.
+Backend-oriented PetShop catalog system built with Java and Spring Boot.
 
-Arquitectura basada en:
-
-- **DDD (Domain Driven Design) ligero**
-- **CQRS (separación de lectura y escritura a nivel de aplicación)**
-- **JPA desacoplado del dominio mediante mappers**
-- **Outbox Pattern**
-- **Mensajería asíncrona con RabbitMQ**
-- **Transacciones ACID en capa de aplicación**
+Designed using modern backend architecture practices focused on scalability, maintainability and transactional consistency.
 
 ---
 
-# Stack tecnológico
+<h2>Technical Highlights</h2>
 
-- Java 17
-
-<h3>Spring Boot 3</h3>
-- Spring MVC (REST APIs, Validation) <br>
-- Spring Security (JWT authentication) <br>
-- Spring Data JPA (Hibernate) <br>
-
-<h3> Arquitectura</h3>
-
-- DDD (Domain-Driven Design)
-- CQRS (separación de comandos y consultas)
-- Outbox Pattern (consistencia eventual)
-
-<h3> Persistencia</h3>
-
-- PostgreSQL
-
-- Flyway (migraciones)
-
-<h3>Mensajería</h3>
-
-- RabbitMQ
-
-<h3>Build & tooling</h3>
-
-- Maven
-
-- Docker / Docker Compose
+<ul>
+  <li>DDD-inspired layered architecture</li>
+  <li>CQRS separation between commands and queries</li>
+  <li>Transactional Outbox Pattern</li>
+  <li>Asynchronous messaging with RabbitMQ</li>
+  <li>JWT stateless authentication</li>
+  <li>JPA persistence isolated from domain layer</li>
+  <li>Unit and integration testing</li>
+  <li>Dockerized development environment</li>
+  <li>ACID transaction management</li>
+</ul>
 
 ---
 
-# Arquitectura general
+<h2>Technology Stack</h2>
 
-El sistema sigue una arquitectura en capas inspirada en DDD, con separación estricta entre dominio y persistencia.
+<h3>Backend</h3>
 
+<ul>
+  <li>Java 17</li>
+  <li>Spring Boot 3</li>
+  <li>Spring MVC</li>
+  <li>Spring Security</li>
+  <li>Spring Data JPA (Hibernate)</li>
+</ul>
 
-<b>Domain</b><br>
-  ├── user<br>
-&nbsp;&nbsp;&nbsp;├── User (Aggregate) <br>
-&nbsp;&nbsp;&nbsp;├── HashedPassword (Value Object) <br>
-&nbsp;&nbsp;&nbsp;├── UserRepository (Aggregate Repository - commands) <br>
-&nbsp;&nbsp;&nbsp;└── UserReadRepository (Query Repository - CQRS) <br>
-├── product<br>
-├── category<br>
-└── shared<br>
-&nbsp;&nbsp;&nbsp;└── Email (Value Object) <br>
+<h3>Architecture</h3>
 
-<b>Application</b><br>
-├── user <br>
-&nbsp;&nbsp;&nbsp;├── AuthUserService <br>
-&nbsp;&nbsp;&nbsp;├── CreateUserService <br>
-&nbsp;&nbsp;&nbsp;├── UserView (Response DTO) <br>
-&nbsp;&nbsp;&nbsp;├── RefreshRequest (Request DTO) <br>
-&nbsp;&nbsp;&nbsp;└── UserMapper (Mapper Domain to View) <br>
-├── product<br>
-└── services<br>
+<ul>
+  <li>DDD (Domain-Driven Design)</li>
+  <li>CQRS</li>
+  <li>Outbox Pattern</li>
+</ul>
 
-<b>Infrastructure</b><br>
-├── persistence (JPA entities + repositories)<br>
-&nbsp;&nbsp;&nbsp;├── JpaUserRepository (Command Repository Adapter - Implementa domain repository y delega en Spring Data) <br>
-&nbsp;&nbsp;&nbsp;├── JpaUserReadRepository (Query Repository Adapter - Implementa domain repository y delega en Spring Data) <br>
-&nbsp;&nbsp;&nbsp;├── SpringDataUserRepository (Spring Data JPA Repository) <br>
-&nbsp;&nbsp;&nbsp;├── SpringDataUserReadRepository (Spring Data JPA Repository) <br>
-&nbsp;&nbsp;&nbsp;├── UserJpaEntity (Jpa Entity) <br>
-&nbsp;&nbsp;&nbsp;└── UserMapper (Mapper Domain to Entity & Entity to Domain) <br>
-├── security (JWT, filters, config)<br>
-├── messaging (RabbitMQ)<br>
-├── outboxworker<br>
-└── CorsConfig<br>
+<h3>Persistence</h3>
 
-<b>Web</b><br>
-├── BaseResponse (Response DTO)<br>
-├── GlobalExceptionHandler (Exceptions)<br>
-├── WebConfig<br>
-└── user <br>
-&nbsp;&nbsp;&nbsp;├── UserController <br>
-&nbsp;&nbsp;&nbsp;└── UserCreateRequest (Request DTO) <br>
+<ul>
+  <li>PostgreSQL</li>
+  <li>Flyway migrations</li>
+</ul>
 
----
+<h3>Messaging</h3>
 
-# Arquitectura de persistencia (DDD + JPA)
+<ul>
+  <li>RabbitMQ</li>
+</ul>
 
-El proyecto separa completamente el modelo de dominio del modelo de persistencia.
+<h3>Testing</h3>
 
-## Principios
+<ul>
+  <li>JUnit 5</li>
+  <li>Mockito</li>
+  <li>Integration Testing</li>
+</ul>
 
-- El dominio NO depende de JPA
-- Las entidades JPA están en infraestructura
-- La conversión se realiza mediante mappers explícitos
+<h3>Infrastructure & Tooling</h3>
 
-## Flujo de datos
-
-
-Dominio → Mapper → JPA Entity → Repository → DB
-DB → JPA Entity → Mapper → Dominio
-
-
-## Ejemplo conceptual
-
-- `Product` → entidad de dominio
-- `ProductJpaEntity` → modelo persistente
-- `ProductMapper` → traducción entre ambos
+<ul>
+  <li>Docker</li>
+  <li>Docker Compose</li>
+  <li>Maven</li>
+</ul>
 
 ---
 
-# CQRS (Command Query Responsibility Segregation)
+<h2>Architecture Overview</h2>
 
-El sistema aplica CQRS de forma ligera:
+The project follows a layered architecture inspired by Domain-Driven Design, with strict separation between business domain and infrastructure concerns.
 
-## Command side (escritura)
-
-- Creación de productos
-- Registro de usuarios
-- Login
-- Generación de eventos de dominio
-- Uso de transacciones
-
-## Query side (lectura)
-
-- Repositorios de lectura (ReadRepository, etc.)
-- Consultas optimizadas sin lógica de negocio
-- Separación de modelos cuando es necesario
-
----
-
-# Transacciones
-
-La consistencia del sistema depende de transacciones en la capa de aplicación:
-
-## Uso principal
-
-- Creación de entidades de dominio
-- Persistencia en base de datos
-- Inserción en Outbox
-- Registro de eventos
-
-## Ejemplo conceptual
-
-
-@Transactional
-createProduct():
-
-guardar producto
-generar evento de dominio
-persistir outbox event
-
-Esto garantiza:
-
-- atomicidad entre dominio y outbox
-- consistencia eventual con RabbitMQ
+```text
+Client
+   ↓
+REST Controllers
+   ↓
+Application Layer
+   ↓
+Domain Layer
+   ↓
+Persistence + Outbox
+   ↓
+RabbitMQ
+```
 
 ---
 
-# Módulos principales
+<h2>Project Structure</h2>
+
+```text
+Domain
+├── user
+│   ├── User
+│   ├── HashedPassword
+│   ├── UserRepository
+│   └── UserReadRepository
+├── product
+├── category
+└── shared
+    └── Email
+
+Application
+├── user
+│   ├── AuthUserService
+│   ├── CreateUserService
+│   ├── UserView
+│   ├── RefreshRequest
+│   └── UserMapper
+├── product
+└── services
+
+Infrastructure
+├── persistence
+│   ├── JpaUserRepository
+│   ├── JpaUserReadRepository
+│   ├── SpringDataUserRepository
+│   ├── SpringDataUserReadRepository
+│   ├── UserJpaEntity
+│   └── UserMapper
+├── security
+├── messaging
+├── outboxworker
+└── config
+
+Web
+├── BaseResponse
+├── GlobalExceptionHandler
+├── WebConfig
+└── user
+    ├── UserController
+    └── UserCreateRequest
+```
 
 ---
 
-## 1. Autenticación
+<h2>Persistence Architecture</h2>
 
-Sistema basado en Spring Security + JWT.
+The domain model is fully isolated from JPA persistence implementation.
 
-### Flujo
+<h3>Principles</h3>
 
-- Login con email y password
-- AuthenticationManager valida credenciales
-- Se generan:
-  - Access Token
-  - Refresh Token
+<ul>
+  <li>Domain layer has no dependency on JPA</li>
+  <li>Persistence models exist only in infrastructure layer</li>
+  <li>Explicit mappers translate between domain and persistence models</li>
+</ul>
+
+<h3>Data Flow</h3>
+
+```text
+Domain
+   ↓
+Mapper
+   ↓
+JPA Entity
+   ↓
+Repository
+   ↓
+Database
+```
+
+---
+
+<h2>CQRS Approach</h2>
+
+The system applies lightweight CQRS separation.
+
+<h3>Command Side</h3>
+
+<ul>
+  <li>User registration</li>
+  <li>Authentication</li>
+  <li>Product creation</li>
+  <li>Domain event generation</li>
+  <li>Transactional operations</li>
+</ul>
+
+<h3>Query Side</h3>
+
+<ul>
+  <li>Read repositories</li>
+  <li>Optimized queries</li>
+  <li>Separated read models when required</li>
+</ul>
+
+---
+
+<h2>Transactional Consistency</h2>
+
+Application services coordinate transactional consistency between persistence and messaging.
+
+<h3>Example Flow</h3>
+
+```text
+Create Product
+   ↓
+Persist Entity
+   ↓
+Generate Domain Event
+   ↓
+Persist Outbox Event
+   ↓
+Commit Transaction
+```
+
+This guarantees:
+
+<ul>
+  <li>Atomicity between domain persistence and outbox events</li>
+  <li>Eventual consistency with RabbitMQ</li>
+  <li>Reliable event publication</li>
+</ul>
+
+---
+
+<h2>Authentication & Security</h2>
+
+JWT-based stateless authentication implemented with Spring Security.
+
+<h3>Features</h3>
+
+<ul>
+  <li>Access Token</li>
+  <li>Refresh Token</li>
+  <li>Role-based authorization</li>
+  <li>Custom JWT filters</li>
+  <li>Stateless authentication flow</li>
+</ul>
+
+<h3>Authentication Example</h3>
 
 ```java
 Authentication auth = authenticationManager.authenticate(
     new UsernamePasswordAuthenticationToken(email, password)
 );
 ```
-## 2. Productos
 
-Entidad central del dominio.
+---
 
-Flujo de creación<br>
-Se crea entidad en dominio<br>
-Se persiste en base de datos<br>
-Se genera evento de dominio (ProductCreated)<br>
-Se almacena en Outbox dentro de la misma transacción<br>
+<h2>Outbox Pattern</h2>
 
-## 3. Categorías
+The system implements the Transactional Outbox Pattern to ensure consistency between database state and asynchronous messaging.
 
-Relación con productos<br>
-Modelo de referencia de dominio<br>
-Puede extenderse a múltiples productos<br>
+<h3>Flow</h3>
 
-## 4. Outbox Pattern
+```text
+Domain Event Generated
+        ↓
+Persisted in outbox_events table
+        ↓
+Worker processes pending events
+        ↓
+Published to RabbitMQ
+        ↓
+Event marked as SENT
+```
 
-Garantiza consistencia entre base de datos y mensajería.
+<h3>Event States</h3>
 
-Flujo<br>
-Se genera evento de dominio<br>
-Se persiste en tabla outbox_events<br>
-Worker procesa eventos pendientes<br>
-Se publica en RabbitMQ<br>
-Se marca como SENT<br><br>
-Estados:
-PENDING
-PROCESSING
-SENT
-FAILED
+<ul>
+  <li>PENDING</li>
+  <li>PROCESSING</li>
+  <li>SENT</li>
+  <li>FAILED</li>
+</ul>
 
-## 5. Outbox Worker
+---
 
-Proceso en background:
+<h2>Outbox Worker</h2>
 
-@Scheduled(fixedDelay = 5000)<br>
-Responsabilidades<br>
-Leer eventos pendientes<br>
-Bloquear eventos (concurrencia segura)<br>
-Publicar en RabbitMQ<br>
-Actualizar estado final<br>
+Background scheduled worker responsible for event delivery.
 
-## 6. RabbitMQ
+```java
+@Scheduled(fixedDelay = 5000)
+```
 
-Sistema de mensajería basado en exchanges y routing keys.
+<h3>Responsibilities</h3>
 
-Exchange principal: petshop.exchange<br><br>
-Routing keys: product.created<br><br>
-Publicación: rabbitTemplate.convertAndSend(exchange, routingKey, payload);
+<ul>
+  <li>Read pending events</li>
+  <li>Concurrency-safe locking</li>
+  <li>RabbitMQ publication</li>
+  <li>Update event status</li>
+</ul>
 
-## 7. Seguridad
+---
 
-JWT stateless authentication<br>
-Roles en claims<br>
-Refresh token para renovación<br>
-Integración con Spring Security<br>
+<h2>RabbitMQ Integration</h2>
 
-## 8. Configuración de perfiles
-DEV
-logging DEBUG
-RabbitMQ activo
-Worker activo
-configuración flexible
-PROD
-logging reducido
+Asynchronous communication based on exchanges and routing keys.
 
-## -- Estado del proyecto -- 
- Autenticación JWT <br>
- Refresh tokens <br>
- Productos y categorías <br>
- DDD con separación dominio / infraestructura
- JPA desacoplado mediante mappers <br>
- CQRS (ligero) <br>
- Outbox Pattern <br>
- Consumer Pattern <br>
- RabbitMQ integration <br>
- Worker programado <br>
- Tests <br>
- Dockerización <br>
- 
+<h3>Configuration</h3>
 
-## Posibilidad de mejoras:
-Stateful. <br>
+<ul>
+  <li>Main Exchange: <code>petshop.exchange</code></li>
+  <li>Routing Key: <code>product.created</code></li>
+</ul>
+
+<h3>Publishing Example</h3>
+
+```java
+rabbitTemplate.convertAndSend(
+    exchange,
+    routingKey,
+    payload
+);
+```
+
+---
+
+<h2>Testing Strategy</h2>
+
+The project includes both unit and integration testing approaches.
+
+<h3>Unit Testing</h3>
+
+<ul>
+  <li>JUnit 5</li>
+  <li>Mockito</li>
+  <li>Service layer validation</li>
+  <li>Domain behavior testing</li>
+</ul>
+
+<h3>Integration Testing</h3>
+
+<ul>
+  <li>PostgreSQL real database testing in isolated containerized environment</li>
+  <li>Repository integration validation</li>
+  <li>Outbox flow testing</li>
+  <li>Consumer testing</li>
+  <li>Transactional consistency validation</li>
+</ul>
+
+<h3>Messaging Testing</h3>
+
+<ul>
+  <li>RabbitMQ interactions mocked during integration testing</li>
+  <li>Event publication validation</li>
+  <li>Consumer flow validation</li>
+</ul>
+
+---
+
+<h2>Dockerized Environment</h2>
+
+The project includes a fully containerized local environment.
+
+<h3>Services</h3>
+
+<ul>
+  <li>Spring Boot API</li>
+  <li>PostgreSQL</li>
+  <li>RabbitMQ</li>
+</ul>
+
+<h3>Run Locally</h3>
+
+```bash
+docker compose up --build
+```
+
+---
+
+<h2>Current Features</h2>
+
+<ul>
+  <li>JWT Authentication</li>
+  <li>Refresh Tokens</li>
+  <li>Products & Categories</li>
+  <li>DDD-inspired architecture</li>
+  <li>CQRS separation</li>
+  <li>Transactional Outbox Pattern</li>
+  <li>RabbitMQ integration</li>
+  <li>Background workers</li>
+  <li>Unit Testing</li>
+  <li>Integration Testing</li>
+  <li>Dockerized infrastructure</li>
+</ul>
+
+---
+
+<h2>Future Improvements</h2>
+
+<ul>
+  <li>Testcontainers integration</li>
+  <li>CI/CD pipeline</li>
+  <li>Distributed tracing</li>
+  <li>Centralized logging</li>
+  <li>Dead-letter queues</li>
+  <li>Retry policies</li>
+  <li>Observability & metrics</li>
+  <li>API rate limiting</li>
+</ul>
