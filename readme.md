@@ -403,7 +403,6 @@ docker compose up --build
 <h2>Future Improvements</h2>
 
 <ul>
-  <li>CI/CD pipeline</li>
   <li>Distributed tracing</li>
   <li>Centralized logging</li>
   <li>Dead-letter queues</li>
