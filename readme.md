@@ -67,9 +67,13 @@ Designed using modern backend architecture practices focused on scalability, mai
 <h3>CI/CD</h3>
 
 <ul>
-  <li>GitHub Actions (CI pipelines)</li>
-  <li>Automated testing on push and pull requests</li>
-  <li>Maven build automation</li>
+  <li>GitHub Actions for CI/CD automation</li>
+  <li>Continuous Integration on push and pull requests to main branch</li>
+  <li>Automated testing with Maven (JUnit 5, Mockito, Spring Boot tests)</li>
+  <li>Integration testing using Testcontainers (PostgreSQL, RabbitMQ, etc.)</li>
+  <li>Docker image build on successful test pipeline</li>
+  <li>Automated push of Docker images to Docker Hub</li>
+  <li>Tagging strategy: latest + commit SHA</li>
 </ul>
 
 <h3>Infrastructure & Tooling</h3>
