@@ -9,12 +9,16 @@ import com.petshop.catalog.web.exception.UserAlreadyExistsException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@ActiveProfiles("test")
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 class UserRepositoryIntegrationTest
         extends AbstractIntegrationTest {
     @Autowired

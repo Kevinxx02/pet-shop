@@ -390,12 +390,10 @@ docker compose up --build
 <h2>Future Improvements</h2>
 
 <ul>
-  <li>Testcontainers integration</li>
   <li>CI/CD pipeline</li>
   <li>Distributed tracing</li>
   <li>Centralized logging</li>
   <li>Dead-letter queues</li>
-  <li>Retry policies</li>
   <li>Observability & metrics</li>
   <li>API rate limiting</li>
 </ul>

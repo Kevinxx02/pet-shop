@@ -1,5 +1,6 @@
 package com.petshop.catalog.application.product;
 
+import com.petshop.catalog.infrastructure.persistence.AbstractIntegrationTest;
 import com.petshop.catalog.infrastructure.persistence.outbox.SpringDataOutboxRepository;
 import com.petshop.catalog.infrastructure.persistence.product.ProductJpaEntity;
 import com.petshop.catalog.infrastructure.persistence.product.SpringDataProductRepository;
@@ -7,6 +8,7 @@ import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 
 import java.math.BigDecimal;
 import java.util.Optional;
@@ -16,7 +18,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Transactional
 @SpringBootTest
-class CreateProductPersistenceIntegrationTest {
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
+class CreateProductPersistenceIntegrationTest
+        extends AbstractIntegrationTest {
 /* Hace lo mismo que el unit test pero sin usar Mocks, asi que es mas real */
     @Autowired
     CreateProductService service;
