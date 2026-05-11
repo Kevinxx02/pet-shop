@@ -26,12 +26,12 @@ public class User{
         this.setRole(role);
     }
 
-    public static User create(String email, String password) {
+    public static User create(String email, String rawPassword) {
         final boolean isVisible = true;
         final UUID id = UUID.randomUUID();
         final Role role = Role.USER;
 
-        return new User(id, email, password, isVisible, role);
+        return new User(id, email, rawPassword, isVisible, role);
     }
 
     public static User rehydrate(

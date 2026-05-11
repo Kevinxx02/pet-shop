@@ -1,6 +1,7 @@
 package com.petshop.catalog.web;
 
 import com.petshop.catalog.web.exception.InvalidCredentialsException;
+import com.petshop.catalog.web.exception.UserAlreadyExistsException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -14,6 +15,15 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(InvalidCredentialsException.class)
     public ResponseEntity<BaseResponse<Object>> handleInvalidCredentials(
+            InvalidCredentialsException ex
+    ) {
+        return ResponseEntity.status(401).body(
+                new BaseResponse<>(ex.getMessage(), null)
+        );
+    }
+
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    public ResponseEntity<BaseResponse<Object>> handleUserAlreadyExistsException(
             InvalidCredentialsException ex
     ) {
         return ResponseEntity.status(401).body(
