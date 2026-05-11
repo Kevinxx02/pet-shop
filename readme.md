@@ -61,6 +61,15 @@ Designed using modern backend architecture practices focused on scalability, mai
   <li>JUnit 5</li>
   <li>Mockito</li>
   <li>Integration Testing</li>
+  <li>Testcontainers</li>
+</ul>
+
+<h3>CI/CD</h3>
+
+<ul>
+  <li>GitHub Actions (CI pipelines)</li>
+  <li>Automated testing on push and pull requests</li>
+  <li>Maven build automation</li>
 </ul>
 
 <h3>Infrastructure & Tooling</h3>
