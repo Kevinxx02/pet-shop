@@ -20,15 +20,15 @@ public class OutboxRepository {
         return this.jpaRepository.findById(id);
     }
 
-    public void save(OutboxMessage outboxMessage) {
-        this.jpaRepository.save(toEntity(outboxMessage));
+    public OutboxEventJpaEntity save(OutboxMessage outboxMessage) {
+        return this.jpaRepository.save(toEntity(outboxMessage));
     }
 
     public List<OutboxEventJpaEntity> findAll() {
         return new ArrayList<>(this.jpaRepository.findAll());
     }
 
-    private OutboxEventJpaEntity toEntity(OutboxMessage outboxMessage) {
+    public OutboxEventJpaEntity toEntity(OutboxMessage outboxMessage) {
         return new OutboxEventJpaEntity(
             outboxMessage.getId(),
             outboxMessage.getEventType(),
@@ -57,5 +57,9 @@ public class OutboxRepository {
 
     public void deleteAll() {
         this.jpaRepository.deleteAll();
+    }
+
+    public void deleteById(UUID id) {
+        this.jpaRepository.deleteById(id);
     }
 }

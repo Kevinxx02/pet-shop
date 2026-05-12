@@ -31,14 +31,16 @@ public class OutboxEventJpaEntity {
     @Lob
     private String lastError;
 
-    public OutboxEventJpaEntity(UUID id,
-                                String eventType,
-                                String payload,
-                                OutboxStatus status,
-                                Instant occurredAt,
-                                int attempts,
-                                Instant nextAttemptAt,
-                                String lastError) {
+    public OutboxEventJpaEntity(
+            UUID id,
+            String eventType,
+            String payload,
+            OutboxStatus status,
+            Instant occurredAt,
+            int attempts,
+            Instant nextAttemptAt,
+            String lastError
+    ) {
         this.id = id;
         this.eventType = eventType;
         this.payload = payload;
@@ -73,5 +75,21 @@ public class OutboxEventJpaEntity {
 
     public OutboxStatus getStatus() {
         return status;
+    }
+
+    public int getAttempts() {
+        return attempts;
+    }
+
+    public String getLastError() {
+        return lastError;
+    }
+
+    public Instant getOccurredAt() {
+        return occurredAt;
+    }
+
+    public void setAttempts(int attempts) {
+        this.attempts = attempts;
     }
 }

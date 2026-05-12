@@ -2,6 +2,8 @@ package com.petshop.catalog.infrastructure.outboxworker;
 
 import com.petshop.catalog.infrastructure.persistence.outbox.OutboxEventJpaEntity;
 import com.petshop.catalog.infrastructure.persistence.outbox.OutboxRepository;
+import com.petshop.catalog.infrastructure.persistence.outboxdlq.OutboxDLQJpaEntity;
+import com.petshop.catalog.infrastructure.persistence.outboxdlq.OutboxDLQRepository;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,11 +15,18 @@ import java.util.List;
 public class OutboxWorker {
 
     private final OutboxRepository repository;
-    private final OutboxPublisher publisher;
+    private final OutboxDLQRepository DLQRepository;
 
-    public OutboxWorker(OutboxRepository repository,
-                        OutboxPublisher publisher) {
+    private final OutboxPublisher publisher;
+    private static final int MAX_ATTEMPTS = 10;
+
+    public OutboxWorker(
+            OutboxRepository repository,
+            OutboxDLQRepository DLQRepository,
+            OutboxPublisher publisher
+    ) {
         this.repository = repository;
+        this.DLQRepository = DLQRepository;
         this.publisher = publisher;
     }
 
@@ -43,7 +52,14 @@ public class OutboxWorker {
             event.markAsSent();
 
         } catch (Exception e) {
-            event.markAsFailed(e.getMessage());
+            if (event.getAttempts() < MAX_ATTEMPTS) {
+                event.markAsFailed(e.getMessage());
+            } else {
+                final OutboxDLQJpaEntity deadLetter = this.DLQRepository.create(event, e);
+                this.DLQRepository.save(deadLetter);
+
+                this.repository.deleteById(event.getId());
+            }
         }
     }
 }

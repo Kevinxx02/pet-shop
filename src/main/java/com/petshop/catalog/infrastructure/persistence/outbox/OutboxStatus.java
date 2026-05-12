@@ -4,7 +4,8 @@ public enum OutboxStatus {
     FAILED,
     PENDING,
     PROCESSING,
-    SENT;
+    SENT,
+    DLQ;
 
     public static OutboxStatus from(String value) {
         try {
