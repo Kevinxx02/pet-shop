@@ -12,10 +12,10 @@ public class RateLimiterService {
     private final ConcurrentHashMap<String, TokenBucket> buckets =
             new ConcurrentHashMap<>();
 
-    public boolean allowRequest(String ip) {
+    public boolean allowRequest(String clientId) {
 
         TokenBucket bucket = buckets.computeIfAbsent(
-                ip,
+                clientId,
                 key -> new TokenBucket(NUM_MAX_REQUESTS, NUM_MAX_MILLISECONDS)
         );
 

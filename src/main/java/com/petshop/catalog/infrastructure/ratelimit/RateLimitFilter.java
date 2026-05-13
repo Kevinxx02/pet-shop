@@ -49,15 +49,20 @@ public class RateLimitFilter implements Filter {
         HttpServletResponse httpResponse =
                 (HttpServletResponse) response;
 
-        String ip = httpRequest.getRemoteAddr();
+        String clientId =
+                httpRequest.getHeader("X-Client-Id");
+
+        if (clientId == null || clientId.isBlank()) {
+            clientId = httpRequest.getRemoteAddr();
+        }
 
         boolean allowed =
-                rateLimiterService.allowRequest(ip);
+                rateLimiterService.allowRequest(clientId);
 
         if (!allowed) {
             blockedRequests.increment();
             log.warn("rate limit exceeded",
-                    kv("ip", ip),
+                    kv("client", clientId),
                     kv("path", httpRequest.getRequestURI()),
                     kv("method", httpRequest.getMethod())
             );
@@ -71,7 +76,7 @@ public class RateLimitFilter implements Filter {
         }
         allowedRequests.increment();
         log.info("request allowed",
-                kv("ip", ip),
+                kv("client", clientId),
                 kv("path", httpRequest.getRequestURI()),
                 kv("method", httpRequest.getMethod())
         );

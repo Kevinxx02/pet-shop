@@ -5,9 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -21,42 +19,49 @@ class RateLimitIntegrationTest
     @Autowired
     private TestRestTemplate restTemplate;
 
-    @LocalServerPort
-    private int port;
+    private ResponseEntity<String> request(String clientId) {
+        HttpHeaders headers = new HttpHeaders();
+
+        headers.set("X-Client-Id", clientId);
+
+        HttpEntity<Void> entity =
+                new HttpEntity<>(headers);
+
+        return restTemplate.exchange(
+                "/products",
+                HttpMethod.GET,
+                entity,
+                String.class
+        );
+    }
 
     @Test
-    void should_block_requests_when_rate_limit_exceeded() {
-
-        String url =
-                "http://localhost:" + port + "/products";
-
-        ResponseEntity<String> response = null;
+    void should_block_requests_when_limit_exceeded() {
 
         for (int i = 0; i < 5; i++) {
 
-            response =
-                    restTemplate.getForEntity(
-                            url,
-                            String.class
-                    );
-
-            /* Valida que las primeras 5 solicitudes obtengan OK */
             assertEquals(
                     HttpStatus.OK,
-                    response.getStatusCode()
+                    request("user-1").getStatusCode()
             );
         }
 
-        response =
-                restTemplate.getForEntity(
-                        url,
-                        String.class
-                );
-
-        /* Valida que la sexta solicitud reciba too many requests */
         assertEquals(
                 HttpStatus.TOO_MANY_REQUESTS,
-                response.getStatusCode()
+                request("user-1").getStatusCode()
+        );
+    }
+
+    @Test
+    void should_apply_rate_limit_per_client() {
+
+        for (int i = 0; i < 6; i++) {
+            request("user-1");
+        }
+
+        assertEquals(
+                HttpStatus.OK,
+                request("user-2").getStatusCode()
         );
     }
 }
