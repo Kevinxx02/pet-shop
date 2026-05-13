@@ -62,4 +62,8 @@ public class OutboxRepository {
     public void deleteById(UUID id) {
         this.jpaRepository.deleteById(id);
     }
+
+    public void markAsSent(UUID id) {
+        this.jpaRepository.markAsSent(id);
+    }
 }

@@ -65,16 +65,12 @@ public class UserController {
     }
     @PostMapping("/refresh")
     public String refresh(@RequestBody RefreshRequest request) {
-        System.out.println("Entro");
         if (!jwtService.isValid(request.getRefreshToken())) {
             throw new RuntimeException("Invalid refresh token");
         }
 
         String username = jwtService.extractUsername(request.getRefreshToken());
 
-        // ⚠️ aquí puedes recargar roles desde DB (mejor práctica)
-
-        // ✔ obtener usuario real
         User user = getUserService.findByEmail(new Email(username))
                 .orElseThrow(() -> new IllegalArgumentException("Invalid credentials"));
 

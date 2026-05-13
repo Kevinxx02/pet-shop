@@ -1,6 +1,7 @@
 package com.petshop.catalog.infrastructure.outboxworker;
 import static net.logstash.logback.argument.StructuredArguments.kv;
 
+import com.petshop.catalog.infrastructure.kafka.ProductEventProducer;
 import com.petshop.catalog.infrastructure.persistence.outbox.OutboxEventJpaEntity;
 import com.petshop.catalog.infrastructure.persistence.outbox.OutboxRepository;
 import com.petshop.catalog.infrastructure.persistence.outboxdlq.OutboxDLQJpaEntity;
@@ -30,13 +31,15 @@ public class OutboxWorker {
     private final Counter processedEvents;
     private final Counter failedEvents;
     private final Counter dlqEvents;
+    private final ProductEventProducer kafkaEventProducer;
 
     public OutboxWorker(
             OutboxRepository repository,
             OutboxDLQRepository DLQRepository,
             CorrelationIdHolder holder,
             OutboxPublisher publisher,
-            MeterRegistry registry
+            MeterRegistry registry,
+            ProductEventProducer kafkaEventProducer
     ) {
         this.repository = repository;
         this.DLQRepository = DLQRepository;
@@ -46,8 +49,10 @@ public class OutboxWorker {
         this.processedEvents = registry.counter("outbox.processed", "status", "success");
         this.failedEvents = registry.counter("outbox.failed", "status", "retry");
         this.dlqEvents = registry.counter("outbox.dlq", "status", "dead");
+        this.kafkaEventProducer = kafkaEventProducer;
     }
 
+    @Transactional
     @Scheduled(fixedDelay = 5000)
     public void processPendingEvents() {
         List<OutboxEventJpaEntity> events =
@@ -58,7 +63,6 @@ public class OutboxWorker {
         }
     }
 
-    @Transactional
     public void processSingleEvent(OutboxEventJpaEntity event) {
         try {
             int updated = repository.markAsProcessing(event.getId());
@@ -67,7 +71,9 @@ public class OutboxWorker {
 
             publisher.publish(event.getEventType(), event.getPayload());
 
-            event.markAsSent();
+            kafkaEventProducer.publish(event.getEventType(), event.getPayload());
+
+            repository.markAsSent(event.getId());
 
             this.processedEvents.increment();
 

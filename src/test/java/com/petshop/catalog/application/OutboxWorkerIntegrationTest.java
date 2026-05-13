@@ -47,10 +47,10 @@ class OutboxWorkerIntegrationTest
 
         worker.processPendingEvents();
 
-        OutboxEventJpaEntity updated =
+        OutboxEventJpaEntity event =
                 outboxRepository.findById(message.getId()).orElseThrow();
 
-        assertEquals(OutboxStatus.SENT, updated.getStatus());
+        assertEquals(OutboxStatus.SENT, event.getStatus());
 
         verify(rabbitTemplate)
                 .convertAndSend(anyString(), anyString(), anyString());

@@ -12,7 +12,7 @@ public class ProductEventProducer {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    public void publish(String event) {
-        kafkaTemplate.send("product-events", event);
+    public void publish(String eventType, String payload) {
+        kafkaTemplate.send("product-events", payload);
     }
 }

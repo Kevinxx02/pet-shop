@@ -15,7 +15,7 @@ public class OutboxDLQJpaEntity {
 
     private String eventType;
 
-    @Lob
+    @Column(columnDefinition = "TEXT")
     private String payload;
 
     private int attempts;

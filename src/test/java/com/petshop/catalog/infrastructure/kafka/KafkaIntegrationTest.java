@@ -24,7 +24,7 @@ class KafkaIntegrationTest extends AbstractIntegrationTest {
     @Test
     void should_publish_and_consume_event() throws InterruptedException {
 
-        producer.publish("{\"name\":\"product-1\"}");
+        producer.publish("Product created", "{\"name\":\"product-1\"}");
 
         Thread.sleep(2000);
 

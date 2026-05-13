@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface SpringDataOutboxRepository extends JpaRepository<OutboxEventJpaEntity, UUID> {
-    @Modifying
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query("""
         update OutboxEventJpaEntity e
         set e.status = 'PROCESSING',
@@ -27,4 +27,8 @@ public interface SpringDataOutboxRepository extends JpaRepository<OutboxEventJpa
       and e.nextAttemptAt <= :now
 """)
     List<OutboxEventJpaEntity> findByStatusInAndNextAttemptAtLessThanEqualAndAttemptsLessThan(List<OutboxStatus> statuses, Instant now, int max_attempts);
+
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
+    @Query("update OutboxEventJpaEntity e set e.status = 'SENT' where e.id = :id")
+    void markAsSent(@Param("id") UUID id);
 }

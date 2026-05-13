@@ -14,7 +14,7 @@ public class OutboxEventJpaEntity {
 
     private String eventType;
 
-    @Lob
+    @Column(columnDefinition = "TEXT")
     private String payload;
 
     @Enumerated(EnumType.STRING)
