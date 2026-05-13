@@ -1,19 +1,39 @@
 package com.petshop.catalog.infrastructure.ratelimit;
 
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
+import static net.logstash.logback.argument.StructuredArguments.kv;
+
 @Component
+@Slf4j
 public class RateLimitFilter implements Filter {
-
     private final RateLimiterService rateLimiterService;
+    private final Counter allowedRequests;
+    private final Counter blockedRequests;
 
-    public RateLimitFilter(RateLimiterService rateLimiterService) {
+    public RateLimitFilter(
+            RateLimiterService rateLimiterService,
+            MeterRegistry registry
+    ) {
         this.rateLimiterService = rateLimiterService;
+
+        this.allowedRequests =
+                registry.counter(
+                        "ratelimit.allowed"
+                );
+
+        this.blockedRequests =
+                registry.counter(
+                        "ratelimit.blocked"
+                );
     }
 
     @Override
@@ -35,6 +55,12 @@ public class RateLimitFilter implements Filter {
                 rateLimiterService.allowRequest(ip);
 
         if (!allowed) {
+            blockedRequests.increment();
+            log.warn("rate limit exceeded",
+                    kv("ip", ip),
+                    kv("path", httpRequest.getRequestURI()),
+                    kv("method", httpRequest.getMethod())
+            );
 
             httpResponse.setStatus(429);
 
@@ -43,6 +69,12 @@ public class RateLimitFilter implements Filter {
 
             return;
         }
+        allowedRequests.increment();
+        log.info("request allowed",
+                kv("ip", ip),
+                kv("path", httpRequest.getRequestURI()),
+                kv("method", httpRequest.getMethod())
+        );
 
         chain.doFilter(request, response);
     }
