@@ -9,6 +9,7 @@ import org.testcontainers.containers.RabbitMQContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.kafka.KafkaContainer;
 
 @Testcontainers(disabledWithoutDocker = true)
 @SpringBootTest
@@ -29,6 +30,10 @@ public abstract class AbstractIntegrationTest {
     @Container
     static RabbitMQContainer rabbit =
             new RabbitMQContainer("rabbitmq:3-management");
+
+    @Container
+    static KafkaContainer kafka =
+            new KafkaContainer("apache/kafka:3.7.0");
 
     @DynamicPropertySource
     static void configureProperties(DynamicPropertyRegistry registry) {
@@ -66,6 +71,11 @@ public abstract class AbstractIntegrationTest {
         registry.add(
                 "spring.rabbitmq.password",
                 rabbit::getAdminPassword
+        );
+
+        registry.add(
+                "spring.kafka.bootstrap-servers",
+                kafka::getBootstrapServers
         );
     }
 }

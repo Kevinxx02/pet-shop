@@ -1,14 +1,15 @@
-package com.petshop.catalog.infrastructure.listener;
+package com.petshop.catalog.infrastructure.rabbitmq;
 
-import com.petshop.catalog.infrastructure.rabbitmq.RabbitConfig;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 public class ProductEventListener {
 
     @RabbitListener(queues = RabbitConfig.QUEUE)
     public void handle(String payload) {
-        System.out.println("Infrastructure/Listener: " + payload);
+        log.info("Rabbit MQ event received: {}", payload);
     }
 }
