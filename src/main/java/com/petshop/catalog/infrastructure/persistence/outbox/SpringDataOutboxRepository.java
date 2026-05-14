@@ -4,12 +4,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
 public interface SpringDataOutboxRepository extends JpaRepository<OutboxEventJpaEntity, UUID> {
+    @Transactional
     @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query("""
         update OutboxEventJpaEntity e
@@ -27,7 +29,7 @@ public interface SpringDataOutboxRepository extends JpaRepository<OutboxEventJpa
       and e.nextAttemptAt <= :now
 """)
     List<OutboxEventJpaEntity> findByStatusInAndNextAttemptAtLessThanEqualAndAttemptsLessThan(List<OutboxStatus> statuses, Instant now, int max_attempts);
-
+    @Transactional
     @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query("update OutboxEventJpaEntity e set e.status = 'SENT' where e.id = :id")
     void markAsSent(@Param("id") UUID id);

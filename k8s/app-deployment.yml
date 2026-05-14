@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: petshop-app
+  namespace: petshop
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: petshop-app
+
+  template:
+    metadata:
+      labels:
+        app: petshop-app
+
+    spec:
+      containers:
+        - name: petshop-app
+          image: petshop-app:1.0
+
+          ports:
+            - containerPort: 8080
+
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:postgresql://postgres-service:5432/petshop
+
+            - name: SPRING_DATASOURCE_USERNAME
+              value: postgres
+
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: postgres
